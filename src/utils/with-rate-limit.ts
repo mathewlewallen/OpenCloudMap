@@ -16,7 +16,7 @@ export async function withRateLimit<T>(
   const ip = await getIP();
 
   const rateLimitResult = await checkRateLimit({
-    key: ip,
+    key: ip || "",
     options: {
       identifier: config.identifier,
       limit: config.limit,
