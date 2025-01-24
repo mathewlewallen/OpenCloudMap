@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { getSessionFromCookie } from "@/utils/auth";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
+import { getConfig } from "@/flags";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,6 +54,7 @@ export default async function BaseLayout({
   children: React.ReactNode;
 }>) {
   const session = await getSessionFromCookie();
+  const config = await getConfig();
 
   // TODO If the the email is not verified, we have to show a modal with a button to resend the verification email
 
@@ -64,6 +66,7 @@ export default async function BaseLayout({
           defaultTheme="system"
           enableSystem
           session={session}
+          config={config}
         >
           <TooltipProvider
             delayDuration={100}

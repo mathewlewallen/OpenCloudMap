@@ -3,7 +3,7 @@
 import { signUpAction } from "./sign-up.actions";
 import { type SignUpSchema, signUpSchema } from "@/schemas/signup.schema";
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import SSOButtons from "../_components/sso-buttons";
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -27,6 +28,7 @@ const SignUpPage = () => {
     onSuccess: () => {
       toast.dismiss()
       toast.success("Account created successfully")
+      router.push("/dashboard")
     }
   })
 
@@ -35,16 +37,14 @@ const SignUpPage = () => {
   });
 
   const onSubmit = async (data: SignUpSchema) => {
-    signUp(data).then(() => {
-      router.push("/dashboard")
-    })
+    signUp(data)
   }
 
   return (
     <div className="min-h-screen flex items-center px-4 justify-center bg-background">
       <div className="w-full max-w-md space-y-8 p-6 md:p-10 bg-card rounded-xl shadow-lg border border-border">
         <div className="text-center">
-          <h2 className="mt-6 text-3xl font-bold tracking-tight text-foreground">
+        <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Create your account
           </h2>
           <p className="mt-2 text-muted-foreground">
@@ -62,10 +62,10 @@ const SignUpPage = () => {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Email address</FormLabel>
                   <FormControl>
                     <Input
                       type="email"
+                      placeholder="Email address"
                       className="w-full px-3 py-2"
                       {...field}
                     />
@@ -80,9 +80,9 @@ const SignUpPage = () => {
               name="firstName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">First Name</FormLabel>
                   <FormControl>
                     <Input
+                      placeholder="First Name"
                       className="w-full px-3 py-2"
                       {...field}
                     />
@@ -97,9 +97,9 @@ const SignUpPage = () => {
               name="lastName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Last Name</FormLabel>
                   <FormControl>
                     <Input
+                      placeholder="Last Name"
                       className="w-full px-3 py-2"
                       {...field}
                     />
@@ -114,10 +114,10 @@ const SignUpPage = () => {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel className="text-sm font-medium">Password</FormLabel>
                   <FormControl>
                     <Input
                       type="password"
+                      placeholder="Password"
                       className="w-full px-3 py-2"
                       {...field}
                     />
@@ -135,6 +135,8 @@ const SignUpPage = () => {
             </Button>
           </form>
         </Form>
+
+        <SSOButtons />
 
         <div className="mt-6">
           <p className="text-xs text-center text-muted-foreground">

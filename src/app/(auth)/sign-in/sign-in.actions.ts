@@ -5,10 +5,9 @@ import { getDB } from "@/db";
 import { userTable } from "@/db/schema";
 import { signInSchema } from "@/schemas/signin.schema";
 import { verifyPassword } from "@/utils/passwordHasher";
-import { createSession, generateSessionToken, setSessionTokenCookie } from "@/utils/auth";
+import { createAndStoreSession } from "@/utils/auth";
 import { eq } from "drizzle-orm";
-import { withRateLimit } from "@/utils/with-rate-limit";
-import ms from "ms";
+import { RATE_LIMITS, withRateLimit } from "@/utils/with-rate-limit";
 
 export const signInAction = createServerAction()
   .input(signInSchema)
@@ -44,13 +43,7 @@ export const signInAction = createServerAction()
           }
 
           // Create session
-          const sessionToken = generateSessionToken();
-          const session = await createSession(sessionToken, user.id);
-          await setSessionTokenCookie({
-            token: sessionToken,
-            userId: user.id,
-            expiresAt: new Date(session.expiresAt)
-          });
+          await createAndStoreSession(user.id)
 
           return { success: true };
         } catch (error) {
@@ -66,10 +59,7 @@ export const signInAction = createServerAction()
           );
         }
       },
-      {
-        identifier: "sign-in",
-        limit: 15,
-        windowInSeconds: Math.floor(ms("60 minutes") / 1000),
-      }
+      RATE_LIMITS.SIGN_IN
     );
   });
+

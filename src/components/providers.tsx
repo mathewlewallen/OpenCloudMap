@@ -6,17 +6,30 @@ import { HeroUIProvider } from "@heroui/react"
 import type { SessionValidationResult } from "@/types"
 import { useSessionStore } from "@/state/session"
 import { useEffect } from "react"
+import { useConfigStore } from "@/state/config"
+import type { getConfig } from "@/flags"
+
+type Props = {
+  session: SessionValidationResult
+  config: Awaited<ReturnType<typeof getConfig>>
+}
 
 export function ThemeProvider({
   children,
   session,
+  config,
   ...props
-}: React.ComponentProps<typeof NextThemesProvider> & { session: SessionValidationResult }) {
-  const { setSession, session: sessionState } = useSessionStore()
+}: React.ComponentProps<typeof NextThemesProvider> & Props) {
+  const setSession = useSessionStore((store) => store.setSession)
+  const setConfig = useConfigStore((store) => store.setConfig)
 
   useEffect(() => {
     setSession(session)
-  }, [session, sessionState]);
+  }, [session]);
+
+  useEffect(() => {
+    setConfig(config)
+  }, [config])
 
   return (
     <HeroUIProvider>

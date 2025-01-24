@@ -7,6 +7,11 @@ NEXT_PUBLIC_TURNSTILE_SITE_KEY=
 ## Cloudflare Worker Secrets
 TURNSTILE_SECRET_KEY=
 
+# Go to https://console.cloud.google.com/auth/clients/ and create a new OAuth client ID and secret
+# Set the redirect URI to http://localhost:3000/sso/google/callback
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
+
 ### If using Resend
 RESEND_API_KEY=
 

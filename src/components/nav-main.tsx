@@ -17,6 +17,8 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar"
+import Link from "next/link"
+import type { Route } from "next"
 
 export function NavMain({
   items,
@@ -56,9 +58,15 @@ export function NavMain({
                   {item.items?.map((subItem) => (
                     <SidebarMenuSubItem key={subItem.title}>
                       <SidebarMenuSubButton asChild>
-                        <a href={subItem.url}>
-                          <span>{subItem.title}</span>
-                        </a>
+                        {subItem.url.startsWith('/') ? (
+                          <Link href={subItem.url as Route}>
+                            <span>{subItem.title}</span>
+                          </Link>
+                        ) : (
+                          <a href={subItem.url}>
+                            <span>{subItem.title}</span>
+                          </a>
+                        )}
                       </SidebarMenuSubButton>
                     </SidebarMenuSubItem>
                   ))}

@@ -37,14 +37,34 @@ export async function withRateLimit<T>(
 
 // Common rate limit configurations
 export const RATE_LIMITS = {
-  AUTH: {
-    identifier: "auth",
-    limit: 7,
+  SIGN_IN: {
+    identifier: "sign-in",
+    limit: 15,
+    windowInSeconds: Math.floor(ms("60 minutes") / 1000),
+  },
+  GOOGLE_SSO_REQUEST: {
+    identifier: "google-sso-request",
+    limit: 15,
+    windowInSeconds: Math.floor(ms("60 minutes") / 1000),
+  },
+  GOOGLE_SSO_CALLBACK: {
+    identifier: "google-sso-callback",
+    limit: 15,
     windowInSeconds: Math.floor(ms("60 minutes") / 1000),
   },
   SIGN_UP: {
     identifier: "sign-up",
     limit: 3,
+    windowInSeconds: Math.floor(ms("1 hour") / 1000),
+  },
+  SIGN_OUT: {
+    identifier: "sign-out",
+    limit: 5,
+    windowInSeconds: Math.floor(ms("10 minutes") / 1000),
+  },
+  RESET_PASSWORD: {
+    identifier: "auth",
+    limit: 7,
     windowInSeconds: Math.floor(ms("1 hour") / 1000),
   },
   DELETE_SESSION: {
@@ -55,11 +75,11 @@ export const RATE_LIMITS = {
   EMAIL: {
     identifier: "email",
     limit: 10,
-    windowInSeconds: Math.floor(ms("2 hours") / 1000),
+    windowInSeconds: Math.floor(ms("1 hour") / 1000),
   },
   SETTINGS: {
     identifier: "settings",
-    limit: 8,
-    windowInSeconds: Math.floor(ms("10 minutes") / 1000),
+    limit: 10,
+    windowInSeconds: Math.floor(ms("5 minutes") / 1000),
   },
 } as const;

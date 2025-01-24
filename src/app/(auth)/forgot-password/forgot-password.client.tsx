@@ -20,12 +20,13 @@ import { z } from "zod";
 import { useSessionStore } from "@/state/session";
 import { Captcha } from "@/components/captcha";
 import { forgotPasswordSchema } from "@/schemas/forgot-password.schema";
-import { turnstileEnabled } from "@/schemas/catcha.schema";
+import { useConfigStore } from "@/state/config";
 
 type ForgotPasswordSchema = z.infer<typeof forgotPasswordSchema>;
 
 export default function ForgotPasswordClientComponent() {
   const { session } = useSessionStore()
+  const { isTurnstileEnabled } = useConfigStore()
   const router = useRouter();
 
   const form = useForm<ForgotPasswordSchema>({
@@ -119,7 +120,7 @@ export default function ForgotPasswordClientComponent() {
                 <Button
                   type="submit"
                   className="mt-8 mb-2"
-                  disabled={turnstileEnabled && !captchaToken}
+                  disabled={Boolean(isTurnstileEnabled && !captchaToken)}
                 >
                   Send Reset Instructions
                 </Button>

@@ -14,11 +14,10 @@
   ],
   "rules": {
     "import/no-dynamic-require": "error",
-    "import/no-nodejs-modules": "error",
     "import/no-unused-modules": ["error", {
       "unusedExports": true,
       "ignoreExports": [
-        "src/{app/{page.tsx,layout.tsx,**/*/page.tsx,**/*/layout.tsx,**/*/not-found.tsx,**/*/loading.tsx,api/**/*/route.ts},components/ui/**/*.tsx}"
+        "src/{app/{route.ts,page.tsx,layout.tsx,**/*/route.ts,**/*/page.tsx,**/*/layout.tsx,**/*/not-found.tsx,**/*/loading.tsx,api/**/*/route.ts},components/ui/**/*.tsx}"
       ]
     }],
     "import/no-cycle": "error",

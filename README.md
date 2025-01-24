@@ -83,10 +83,11 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 # Running it locally
 
 1. `pnpm install`
-2.  Copy `.env.development.example` to `.env.development` and fill in the values
-3. `pnpm db:migrate:dev` - Creates a local SQLite database and applies migrations
-4. `pnpm dev`
-5.  Open http://localhost:3000
+2.  Copy `.dev.vars.example` to `.dev.vars` and
+3.  Copy `.env.example` to `.env` and fill in the values. Any variables starting with `NEXT_PUBLIC_` should be set in `.env` and the rest in `.dev.vars`.
+4. `pnpm db:migrate:dev` - Creates a local SQLite database and applies migrations
+5. `pnpm dev`
+6.  Open http://localhost:3000
 
 ## Changes to wrangler.toml
 

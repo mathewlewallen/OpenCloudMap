@@ -1,4 +1,4 @@
-import { turnstileEnabled } from "@/schemas/catcha.schema"
+import { isTurnstileEnabled } from "@/flags"
 import { getCloudflareContext } from "@opennextjs/cloudflare"
 
 interface TurnstileResponse {
@@ -7,7 +7,7 @@ interface TurnstileResponse {
 }
 
 export async function validateTurnstileToken(token: string) {
-  if (!turnstileEnabled) {
+  if (!(await isTurnstileEnabled())) {
     return true
   }
 

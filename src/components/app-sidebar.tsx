@@ -166,9 +166,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarContent>
       <SidebarFooter>
         <NavUser user={{
-          name: session?.user.firstName || "",
-          email: session?.user.email || "",
-          avatar: "https://avatar.iran.liara.run/public"
+          name: session?.user?.firstName || "",
+          email: session?.user?.email || "",
+          avatar: session?.user?.avatar || "https://avatar.iran.liara.run/public"
         }} />
       </SidebarFooter>
       <SidebarRail />

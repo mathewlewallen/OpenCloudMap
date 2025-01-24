@@ -54,7 +54,6 @@ async function sendResendEmail({
   tags,
 }: ResendEmailOptions) {
   if (!isProd) {
-    console.warn("\n\n\nEmail content:", { to, subject, html }, "\n\n\n");
     return;
   }
 
@@ -102,7 +101,6 @@ async function sendBrevoEmail({
   tags,
 }: BrevoEmailOptions) {
   if (!isProd) {
-    console.warn("\n\n\nEmail content:", { to, subject, htmlContent }, "\n\n\n");
     return;
   }
 
@@ -155,10 +153,17 @@ export async function sendPasswordResetEmail({
   username: string;
 }) {
   const resetUrl = `${SITE_URL}/reset-password?token=${resetToken}`;
+
+  if (!isProd) {
+    console.warn('\n\n\nPassword reset url: ', resetUrl)
+
+    return
+  }
+
   const html = await render(ResetPasswordEmail({ resetLink: resetUrl, username }));
   const provider = await getEmailProvider();
 
-  if (!provider) {
+  if (!provider && isProd) {
     throw new Error("No email provider configured. Set either RESEND_API_KEY or BREVO_API_KEY in your environment.");
   }
 
@@ -189,10 +194,17 @@ export async function sendVerificationEmail({
   username: string;
 }) {
   const verificationUrl = `${SITE_URL}/verify-email?token=${verificationToken}`;
+
+  if (!isProd) {
+    console.warn('\n\n\nVerification url: ', verificationUrl)
+
+    return
+  }
+
   const html = await render(VerifyEmail({ verificationLink: verificationUrl, username }));
   const provider = await getEmailProvider();
 
-  if (!provider) {
+  if (!provider && isProd) {
     throw new Error("No email provider configured. Set either RESEND_API_KEY or BREVO_API_KEY in your environment.");
   }
 

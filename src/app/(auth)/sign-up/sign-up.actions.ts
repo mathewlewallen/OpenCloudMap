@@ -13,6 +13,7 @@ import { getVerificationTokenKey } from "@/utils/auth-utils";
 import { sendVerificationEmail } from "@/utils/email";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
+import { getIP } from "@/utils/getIP";
 
 export const signUpAction = createServerAction()
   .input(signUpSchema)
@@ -46,6 +47,7 @@ export const signUpAction = createServerAction()
             firstName: input.firstName,
             lastName: input.lastName,
             passwordHash: hashedPassword,
+            signUpIpAddress: await getIP(),
           })
           .returning();
 

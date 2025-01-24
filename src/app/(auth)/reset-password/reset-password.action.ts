@@ -76,6 +76,6 @@ export const resetPasswordAction = createServerAction()
           );
         }
       },
-      RATE_LIMITS.AUTH
+      RATE_LIMITS.RESET_PASSWORD
     );
   });

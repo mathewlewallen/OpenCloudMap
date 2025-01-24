@@ -38,6 +38,7 @@ export const getUserFromDB = async (userId: string) => {
       email: true,
       role: true,
       emailVerified: true,
+      avatar: true,
     }
   })
 }
@@ -76,6 +77,16 @@ export async function createSession(token: string, userId: string): Promise<KVSe
     userId,
     expiresAt,
     user
+  });
+}
+
+export async function createAndStoreSession(userId: string) {
+  const sessionToken = generateSessionToken();
+  const session = await createSession(sessionToken, userId);
+  await setSessionTokenCookie({
+    token: sessionToken,
+    userId,
+    expiresAt: new Date(session.expiresAt)
   });
 }
 

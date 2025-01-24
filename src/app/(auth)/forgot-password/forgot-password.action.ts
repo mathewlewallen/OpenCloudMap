@@ -8,12 +8,12 @@ import { init } from "@paralleldrive/cuid2";
 import { eq } from "drizzle-orm";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getResetTokenKey } from "@/utils/auth-utils";
-import { turnstileEnabled } from "@/schemas/catcha.schema";
 import { validateTurnstileToken } from "@/utils/validateCaptcha";
 import { forgotPasswordSchema } from "@/schemas/forgot-password.schema";
 import { getSessionFromCookie } from "@/utils/auth";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { PASSWORD_RESET_TOKEN_EXPIRATION_SECONDS } from "@/constants";
+import { isTurnstileEnabled } from "@/flags";
 
 const createId = init({
   length: 32,
@@ -24,7 +24,7 @@ export const forgotPasswordAction = createServerAction()
   .handler(async ({ input }) => {
     return withRateLimit(
       async () => {
-        if (turnstileEnabled && input.captchaToken) {
+        if (await isTurnstileEnabled() && input.captchaToken) {
           const success = await validateTurnstileToken(input.captchaToken)
 
           if (!success) {

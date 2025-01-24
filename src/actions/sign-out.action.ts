@@ -5,8 +5,7 @@ import {
   getSessionFromCookie,
   invalidateSession
 } from "@/utils/auth";
-import { withRateLimit } from "@/utils/with-rate-limit";
-import ms from "ms";
+import { RATE_LIMITS, withRateLimit } from "@/utils/with-rate-limit";
 
 export const signOutAction = async () => {
   return withRateLimit(
@@ -22,11 +21,7 @@ export const signOutAction = async () => {
 
       deleteSessionTokenCookie();
     },
-    {
-      identifier: "sign-out",
-      limit: 5,
-      windowInSeconds: Math.floor(ms("10 minutes") / 1000),
-    }
+    RATE_LIMITS.SIGN_OUT
   );
 };
 
