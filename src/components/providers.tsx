@@ -8,6 +8,7 @@ import { useSessionStore } from "@/state/session"
 import { useEffect } from "react"
 import { useConfigStore } from "@/state/config"
 import type { getConfig } from "@/flags"
+import { EmailVerificationDialog } from "./email-verification-dialog"
 
 type Props = {
   session: SessionValidationResult
@@ -35,6 +36,7 @@ export function ThemeProvider({
     <HeroUIProvider>
       <NextThemesProvider {...props} attribute="class">
         {children}
+        <EmailVerificationDialog />
       </NextThemesProvider>
     </HeroUIProvider>
   )

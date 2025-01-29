@@ -16,10 +16,12 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - ✅ Email/Password Sign Up
   - ✅ Forgot Password Flow
   - ✅ Change Password
+  - ✅ Email Verification
   - ✅ Session Management with Cloudflare KV
   - ✅ Turnstile Captcha Integration
   - ✅ Rate Limiting for Auth Endpoints
   - ✅ Protected Routes and Layouts
+  - ✅ Session Listing and Management
 - ✅ Database with Drizzle and Cloudflare D1
   - ✅ Type-safe Database Operations
   - ✅ Automatic Migration Generation
@@ -30,6 +32,7 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - ✅ Email Preview Mode
   - ✅ Local Email Development Server
   - ✅ Transactional Emails
+  - ✅ Email Verification Flow
 - ✅ Deployment with Github Actions
   - ✅ Automatic Deployments
   - ✅ Environment Variables Management
@@ -45,6 +48,7 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - ✅ Settings Dashboard
   - ✅ Landing Page
   - ✅ Beautiful Email Templates
+  - ✅ Profile Settings Page
 - ✅ Validations with Zod and React Hook Form
   - ✅ Type-safe Form Validations
   - ✅ Server-side Validations
@@ -74,7 +78,6 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 - [ ] Multi-language support (i18n)
 - [ ] Billing
 - [ ] Admin dashboard
-- [ ] Email verification on sign up
 - [ ] Notifications
 - [ ] Payments
 - [ ] Webhooks
