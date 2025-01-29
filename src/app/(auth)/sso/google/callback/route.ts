@@ -100,6 +100,7 @@ export async function GET(request: NextRequest) {
 
     const db = await getDB()
 
+    // TODO: Handle the case where the user initially signed up with a password and then later signed up with Google
     const existingUser = await db.query.userTable.findFirst({
       where: eq(userTable.googleAccountId, googleAccountId)
     })
@@ -123,6 +124,9 @@ export async function GET(request: NextRequest) {
       .returning()
 
     await createAndStoreSession(user.id)
+
+    // wait for 500ms before redirecting to the dashboard to allow the KV key to be set
+    await new Promise(resolve => setTimeout(resolve, 500))
 
     redirect('/dashboard')
 

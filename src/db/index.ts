@@ -12,6 +12,7 @@ export const getDB = async () => {
     return db;
   }
 
+  // TODO: Make syncronous after https://github.com/opennextjs/opennextjs-cloudflare/pull/265 is released
   const { env } = await getCloudflareContext();
 
   db = drizzle(env.DATABASE, { schema, logger: true });

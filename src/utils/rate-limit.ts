@@ -35,6 +35,7 @@ function normalizeIP(ip: string): string {
       }
       return `${ipaddr.fromByteArray(bytes).toString()}/64`;
     } else {
+      // TODO Don't normalize IPv4 because it's too restrictive and can lead to unintended consequences
       // For IPv4, use /24 subnet (first three octets)
       const ipv4 = addr as ipaddr.IPv4;
       const octets = ipv4.octets;

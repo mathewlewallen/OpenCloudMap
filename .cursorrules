@@ -41,7 +41,7 @@ Code Style and Structure
 - Never delete any comments in the code unless they are no longer relevant.
 - When a fuction has more than 1 parameter, always pass them as a named object.
 - Add `import "server-only"` at the top of the file (ignore this rule for page.tsx files) if it's only intended to be used on the server.
-- When you have to add a global type, add it to `custom-env.d.ts` instead of `env.d.ts`, because otherwise it will be overridden by `pnpm run cf-typegen`;
+- When you have to add a global type, add it to `custom-env.d.ts` instead of `cloudflare-env.d.ts`, because otherwise it will be overridden by `pnpm run cf-typegen`;
 
 Naming Conventions
 - Use lowercase with dashes for directories (e.g., components/auth-wizard).

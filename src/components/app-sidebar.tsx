@@ -152,6 +152,7 @@ const data = {
   ],
 }
 
+// TODO Add a theme switcher
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { session } = useSessionStore()
 
