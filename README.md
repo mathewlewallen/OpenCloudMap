@@ -86,8 +86,8 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 # Running it locally
 
 1. `pnpm install`
-2.  Copy `.dev.vars.example` to `.dev.vars` and
-3.  Copy `.env.example` to `.env` and fill in the values. Any variables starting with `NEXT_PUBLIC_` should be set in `.env` and the rest in `.dev.vars`.
+2.  Copy `.dev.vars.example` to `.dev.vars` and fill in the values.
+3.  Copy `.env.example` to `.env` and fill in the values.
 4. `pnpm db:migrate:dev` - Creates a local SQLite database and applies migrations
 5. `pnpm dev`
 6.  Open http://localhost:3000

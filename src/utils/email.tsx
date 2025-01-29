@@ -1,7 +1,6 @@
 import "server-only";
 
 import { SITE_DOMAIN, SITE_URL } from "@/constants";
-import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { render } from '@react-email/render'
 import { ResetPasswordEmail } from "@/react-email/reset-password";
 import { VerifyEmail } from "@/react-email/verify-email";
@@ -31,13 +30,11 @@ interface ResendEmailOptions {
 type EmailProvider = "resend" | "brevo" | null;
 
 async function getEmailProvider(): Promise<EmailProvider> {
-  const { env } = await getCloudflareContext();
-
-  if (env.RESEND_API_KEY) {
+  if (process.env.RESEND_API_KEY) {
     return "resend";
   }
 
-  if (env.BREVO_API_KEY) {
+  if (process.env.BREVO_API_KEY) {
     return "brevo";
   }
 
@@ -57,22 +54,20 @@ async function sendResendEmail({
     return;
   }
 
-  const { env } = await getCloudflareContext();
-
-  if (!env.RESEND_API_KEY) {
+  if (!process.env.RESEND_API_KEY) {
     throw new Error("RESEND_API_KEY is not set");
   }
 
-  const replyTo = originalReplyTo ?? env.EMAIL_REPLY_TO;
+  const replyTo = originalReplyTo ?? process.env.EMAIL_REPLY_TO;
 
   const response = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+      "Authorization": `Bearer ${process.env.RESEND_API_KEY}`,
       "Content-Type": "application/json",
     } as const,
     body: JSON.stringify({
-      from: from ?? `${env.EMAIL_FROM_NAME} <${env.EMAIL_FROM}>`,
+      from: from ?? `${process.env.EMAIL_FROM_NAME} <${process.env.EMAIL_FROM}>`,
       to,
       subject,
       html,
@@ -104,25 +99,23 @@ async function sendBrevoEmail({
     return;
   }
 
-  const { env } = await getCloudflareContext();
-
-  if (!env.BREVO_API_KEY) {
+  if (!process.env.BREVO_API_KEY) {
     throw new Error("BREVO_API_KEY is not set");
   }
 
-  const replyTo = originalReplyTo ?? env.EMAIL_REPLY_TO;
+  const replyTo = originalReplyTo ?? process.env.EMAIL_REPLY_TO;
 
   const response = await fetch("https://api.brevo.com/v3/smtp/email", {
     method: "POST",
     headers: {
       "accept": "application/json",
       "content-type": "application/json",
-      "api-key": env.BREVO_API_KEY,
+      "api-key": process.env.BREVO_API_KEY,
     } as const,
     body: JSON.stringify({
       sender: {
-        name: env.EMAIL_FROM_NAME,
-        email: env.EMAIL_FROM,
+        name: process.env.EMAIL_FROM_NAME,
+        email: process.env.EMAIL_FROM,
       },
       to,
       htmlContent,

@@ -11,16 +11,6 @@ You are also excellent at Cloudflare Workers and other tools like D1 serverless 
 - others primitives in `wrangler.toml`
 - After adding a new primitive to `wrangler.toml`, always run `pnpm run cf-typegen` to generate the new types.
 
-Working with env variables and Cloudflare bindings:
-```ts
-import { getCloudflareContext } from "@opennextjs/cloudflare";
-
-const { env } = await getCloudflareContext();
-
-const EXAMPLE_ENV_VARIABLE = env.EXAMPLE_ENV_VARIABLE;
-const db = env.DB;
-```
-
 Authentication:
 - The authentication logic is in `src/utils/auth.ts` and `src/utils/kv-session.ts` and is based on Lucia Auth.
 - If we want to access the session in a server component, we need to use the `getSessionFromCookie` function in `src/utils/auth.ts`.

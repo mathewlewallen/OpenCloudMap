@@ -2,7 +2,7 @@ import {
   GOOGLE_OAUTH_CODE_VERIFIER_COOKIE_NAME,
   GOOGLE_OAUTH_STATE_COOKIE_NAME
 } from "@/constants";
-import getGoogleSSOClient from "@/lib/sso/google-sso";
+import google from "@/lib/sso/google-sso";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { decodeIdToken, type OAuth2Tokens } from "arctic";
 import { cookies } from "next/headers";
@@ -84,8 +84,6 @@ export async function GET(request: NextRequest) {
     let tokens: OAuth2Tokens
 
     try {
-      const google = await getGoogleSSOClient()
-
       tokens = await google.validateAuthorizationCode(queryParamCode, cookieCodeVerifier);
     } catch (error) {
       console.error("Google OAuth callback: Error validating authorization code", error)

@@ -1,19 +1,2 @@
-## Github Actions Secrets - NOT NECESSARY FOR LOCAL DEV ENVIRONMENT
-CLOUDFLARE_ACCOUNT_ID=
-DATABASE_ID=
-CLOUDFLARE_API_TOKEN=
-NEXT_PUBLIC_TURNSTILE_SITE_KEY=
-
-## Cloudflare Worker Secrets
-TURNSTILE_SECRET_KEY=
-
-# Go to https://console.cloud.google.com/auth/clients/ and create a new OAuth client ID and secret
-# Set the redirect URI to http://localhost:3000/sso/google/callback
-GOOGLE_CLIENT_ID=
-GOOGLE_CLIENT_SECRET=
-
-### If using Resend
-RESEND_API_KEY=
-
-### If using Brevo
-BREVO_API_KEY=
+# Load .env.development* files when running `wrangler dev`
+NEXTJS_ENV=development

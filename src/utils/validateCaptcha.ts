@@ -1,5 +1,4 @@
 import { isTurnstileEnabled } from "@/flags"
-import { getCloudflareContext } from "@opennextjs/cloudflare"
 
 interface TurnstileResponse {
   success: boolean
@@ -11,8 +10,6 @@ export async function validateTurnstileToken(token: string) {
     return true
   }
 
-  const { env } = await getCloudflareContext()
-
   const response = await fetch(
     'https://challenges.cloudflare.com/turnstile/v0/siteverify',
     {
@@ -21,7 +18,7 @@ export async function validateTurnstileToken(token: string) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        secret: env.TURNSTILE_SECRET_KEY,
+        secret: process.env.TURNSTILE_SECRET_KEY,
         response: token,
       }),
     }
