@@ -111,17 +111,19 @@ After making a change to wrangler.toml, you need to run `pnpm cf-typegen` to gen
 4. Set `TURNSTILE_SECRET_KEY` as a secret in your Cloudflare Worker.
 5. Update the `wrangler.toml` file with the new database and KV namespaces and env variables. If you change the D1 database name, you also need to update the `db:migrate:dev` script in the `package.json` file.
 6. Go to https://dash.cloudflare.com/profile/api-tokens and click on "Use template" next to "Edit Cloudflare Workers". On the next, page add the following permissions in addition to the ones from the template:
-    - AI Gateway:Edit
-    - Workers AI:Edit
-    - Queues:Edit
-    - Vectorize:Edit
-    - D1:Edit
-    - Cloudflare Images:Edit
-    - Workers KV Storage:Edit
+    - Account:AI Gateway:Edit
+    - Account:Workers AI:Edit
+    - Account:Queues:Edit
+    - Account:Vectorize:Edit
+    - Account:D1:Edit
+    - Account:Cloudflare Images:Edit
+    - Account:Workers KV Storage:Edit
+    - Zone:Cache Purge:Purge
 7. Add the API token to the Github repository secrets as `CLOUDFLARE_API_TOKEN`
 8. Add the Cloudflare account id to the Github repository variables as `CLOUDFLARE_ACCOUNT_ID`
-9. Add the database name to the Github repository variables as `DATABASE_ID`. This should match the database name in the `wrangler.toml` file.
-10. Push to the main branch
+9. Add `CLOUDFLARE_ZONE_ID` to the Github repository variables for the zone id of your domain. This is the zone id of your domain, not the account id.
+10. Add the database name to the Github repository variables as `DATABASE_ID`. This should match the database name in the `wrangler.toml` file.
+11. Push to the main branch
 
 ## Email templates
 If you want to preview and edit the email templates you can:
