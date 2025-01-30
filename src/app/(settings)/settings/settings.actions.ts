@@ -24,6 +24,13 @@ export const updateUserProfileAction = createServerAction()
           );
         }
 
+        if (!session?.user?.emailVerified) {
+          throw new ZSAError(
+            "NOT_AUTHORIZED",
+            "Email not verified"
+          );
+        }
+
         const db = await getDB();
 
         try {

@@ -6,6 +6,7 @@ import { type SignInSchema, signInSchema } from "@/schemas/signin.schema";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import SeparatorWithText from "@/components/separator-with-text";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,6 +51,12 @@ const SignInPage = () => {
             </Link>
           </p>
         </div>
+
+        <SSOButtons isSignIn />
+
+        <SeparatorWithText>
+          <span className="uppercase text-muted-foreground">Or</span>
+        </SeparatorWithText>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-6">
@@ -97,8 +104,6 @@ const SignInPage = () => {
             </Button>
           </form>
         </Form>
-
-        <SSOButtons isSignIn />
       </div>
 
       <div className="mt-6">

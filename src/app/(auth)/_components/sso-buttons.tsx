@@ -1,4 +1,3 @@
-import SeparatorWithText from "@/components/separator-with-text";
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { useConfigStore } from "@/state/config";
@@ -15,10 +14,6 @@ export default function SSOButtons({
     <>
       {isGoogleSSOEnabled && (
         <>
-          <SeparatorWithText>
-            <span className="text-muted-foreground">OR</span>
-          </SeparatorWithText>
-
           <Button className="w-full" asChild size='lg'>
             <Link href="/sso/google">
               <Google className="w-[22px] h-[22px] mr-1" />

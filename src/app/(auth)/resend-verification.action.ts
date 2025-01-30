@@ -24,7 +24,7 @@ export const resendVerificationAction = createServerAction()
           );
         }
 
-        if (session.user.emailVerified) {
+        if (session?.user?.emailVerified) {
           throw new ZSAError(
             "PRECONDITION_FAILED",
             "Email is already verified"

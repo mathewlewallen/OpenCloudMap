@@ -18,6 +18,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { resetPasswordSchema } from "@/schemas/reset-password.schema";
 import type { ResetPasswordSchema } from "@/schemas/reset-password.schema";
+import { useEffect } from "react";
 
 export default function ResetPasswordClientComponent() {
   const router = useRouter();
@@ -32,6 +33,12 @@ export default function ResetPasswordClientComponent() {
       confirmPassword: "",
     },
   });
+
+  useEffect(() => {
+    if (token) {
+      form.setValue("token", token);
+    }
+  }, [token]);
 
   const { execute: resetPassword, isSuccess } = useServerAction(resetPasswordAction, {
     onError: (error) => {

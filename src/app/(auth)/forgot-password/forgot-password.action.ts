@@ -37,7 +37,21 @@ export const forgotPasswordAction = createServerAction()
 
         const session = await getSessionFromCookie()
 
-        if (session?.user && session?.user?.email !== input.email) {
+        if (!session) {
+          throw new ZSAError(
+            "NOT_AUTHORIZED",
+            "Not authenticated"
+          );
+        }
+
+        if (!session?.user?.emailVerified) {
+          throw new ZSAError(
+            "NOT_AUTHORIZED",
+            "Email not verified"
+          );
+        }
+
+        if (session?.user?.email !== input.email) {
           throw new ZSAError(
             "INPUT_PARSE_ERROR",
             "You cannot reset the password for another user"

@@ -6,6 +6,7 @@ import { type SignUpSchema, signUpSchema } from "@/schemas/signup.schema";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import SeparatorWithText from "@/components/separator-with-text";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -44,7 +45,7 @@ const SignUpPage = () => {
     <div className="min-h-screen flex items-center px-4 justify-center bg-background">
       <div className="w-full max-w-md space-y-8 p-6 md:p-10 bg-card rounded-xl shadow-lg border border-border">
         <div className="text-center">
-        <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+          <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Create your account
           </h2>
           <p className="mt-2 text-muted-foreground">
@@ -54,6 +55,12 @@ const SignUpPage = () => {
             </Link>
           </p>
         </div>
+
+        <SSOButtons />
+
+        <SeparatorWithText>
+          <span className="uppercase text-muted-foreground">Or</span>
+        </SeparatorWithText>
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="mt-8 space-y-4">
@@ -135,8 +142,6 @@ const SignUpPage = () => {
             </Button>
           </form>
         </Form>
-
-        <SSOButtons />
 
         <div className="mt-6">
           <p className="text-xs text-center text-muted-foreground">
