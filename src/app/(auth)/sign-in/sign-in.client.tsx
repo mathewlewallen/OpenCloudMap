@@ -14,6 +14,8 @@ import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import Link from "next/link";
 import SSOButtons from "../_components/sso-buttons";
+import { PasskeyAuthenticationButton } from "@/app/(settings)/settings/security/passkey.client";
+import { LockIcon } from "lucide-react";
 
 const SignInPage = () => {
   const { execute: signIn } = useServerAction(signInAction, {
@@ -53,6 +55,11 @@ const SignInPage = () => {
         </div>
 
         <SSOButtons isSignIn />
+
+        <PasskeyAuthenticationButton className="w-full">
+          <LockIcon className="w-5 h-5 mr-2" />
+          Sign in with a Passkey
+        </PasskeyAuthenticationButton>
 
         <SeparatorWithText>
           <span className="uppercase text-muted-foreground">Or</span>

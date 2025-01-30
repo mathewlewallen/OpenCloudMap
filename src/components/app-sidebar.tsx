@@ -123,6 +123,10 @@ const data = {
           url: "/settings",
         },
         {
+          title: "Security",
+          url: "/settings/security",
+        },
+        {
           title: "Sessions",
           url: "/settings/sessions",
         },

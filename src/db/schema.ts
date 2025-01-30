@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text, index } from "drizzle-orm/sqlite-core";
-
+import { relations } from "drizzle-orm";
 import { type InferSelectModel } from "drizzle-orm";
 
 import { createId } from '@paralleldrive/cuid2'
@@ -57,4 +57,28 @@ export const userTable = sqliteTable("user", {
   index('role_idx').on(table.role),
 ]));
 
+export const passKeyCredentialTable = sqliteTable("passkey_credential", {
+  ...commonColumns,
+  userId: text().notNull().references(() => userTable.id),
+  credentialId: text().notNull().unique(),
+  credentialPublicKey: text().notNull(),
+  counter: integer().notNull(),
+  transports: text(), // Optional array of AuthenticatorTransport as JSON string
+}, (table) => ([
+  index('user_id_idx').on(table.userId),
+  index('credential_id_idx').on(table.credentialId),
+]));
+
+export const userRelations = relations(userTable, ({ many }) => ({
+  passkeys: many(passKeyCredentialTable),
+}));
+
+export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [passKeyCredentialTable.userId],
+    references: [userTable.id],
+  }),
+}));
+
 export type User = InferSelectModel<typeof userTable>;
+export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;

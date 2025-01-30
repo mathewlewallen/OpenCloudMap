@@ -29,6 +29,13 @@
       "when": 1737673858119,
       "tag": "0003_add_google_sso",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1738198691136,
+      "tag": "0004_add-passkey-credentials",
+      "breakpoints": true
     }
   ]
 }
