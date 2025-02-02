@@ -24,7 +24,7 @@ export default async function VerifyEmailPage({
     return notFound();
   }
 
-  const { env } = await getCloudflareContext();
+  const { env } = getCloudflareContext();
 
   const success = await withRateLimit(async () => {
     const verificationTokenStr = await env.NEXT_CACHE_WORKERS_KV.get(getVerificationTokenKey(token));
@@ -43,7 +43,7 @@ export default async function VerifyEmailPage({
       return false;
     }
 
-    const db = await getDB();
+    const db = getDB();
 
     // Find user
     const user = await db.query.userTable.findFirst({

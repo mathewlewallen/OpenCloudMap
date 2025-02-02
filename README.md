@@ -136,4 +136,4 @@ If you want to preview and edit the email templates you can:
 ### How to upgrade this template
 Since this template is based on the [OpenNext](https://opennext.js.org/cloudflare) framework we need to make sure that we are following the changes they are making and update this template accordingly.
 
-To see the changes clone https://github.com/cloudflare/workers-sdk and then do `git diff 135dd85...main -- packages/create-cloudflare/templates-experimental/next/` you will see the changes that we need to make to this template.
+To see the changes clone https://github.com/cloudflare/workers-sdk and then do `git diff f9fd9df...main -- packages/create-cloudflare/templates-experimental/next/` you will see the changes that we need to make to this template.

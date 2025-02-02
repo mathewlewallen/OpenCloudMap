@@ -14,7 +14,7 @@ export const signInAction = createServerAction()
   .handler(async ({ input }) => {
     return withRateLimit(
       async () => {
-        const db = await getDB();
+        const db = getDB();
 
         try {
           // Find user by email

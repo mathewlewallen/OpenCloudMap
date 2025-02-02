@@ -50,7 +50,7 @@ export async function checkRateLimit({
   key: string;
   options: RateLimitOptions;
 }): Promise<RateLimitResult> {
-  const { env } = await getCloudflareContext();
+  const { env } = getCloudflareContext();
   const now = Math.floor(Date.now() / 1000);
 
   // Normalize the key if it looks like an IP address

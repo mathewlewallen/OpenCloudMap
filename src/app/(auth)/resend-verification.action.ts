@@ -31,7 +31,7 @@ export const resendVerificationAction = createServerAction()
           );
         }
 
-        const { env } = await getCloudflareContext();
+        const { env } = getCloudflareContext();
 
         // Generate verification token
         const verificationToken = createId();

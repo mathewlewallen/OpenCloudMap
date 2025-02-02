@@ -31,7 +31,7 @@ export interface KVSession {
 }
 
 export async function getKV() {
-  const { env } = await getCloudflareContext();
+  const { env } = getCloudflareContext();
   return env.NEXT_CACHE_WORKERS_KV;
 }
 
@@ -48,7 +48,7 @@ export async function createKVSession({
   authenticationType,
   passkeyCredentialId
 }: CreateKVSessionParams): Promise<KVSession> {
-  const { cf } = await getCloudflareContext();
+  const { cf } = getCloudflareContext();
   const headersList = await headers();
   const kv = await getKV();
 

@@ -96,7 +96,7 @@ export const googleSSOCallbackAction = createServerAction()
       const avatarUrl = claims.picture;
       const email = claims.email;
 
-      const db = await getDB();
+      const db = getDB();
 
       try {
         // First check if user exists with this Google account ID

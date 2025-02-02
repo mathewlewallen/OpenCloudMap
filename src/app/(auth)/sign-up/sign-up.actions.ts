@@ -20,8 +20,8 @@ export const signUpAction = createServerAction()
   .handler(async ({ input }) => {
     return withRateLimit(
       async () => {
-        const db = await getDB();
-        const { env } = await getCloudflareContext();
+        const db = getDB();
+        const { env } = getCloudflareContext();
 
         // TODO Implement a captcha
 

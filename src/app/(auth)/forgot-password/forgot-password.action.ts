@@ -34,8 +34,8 @@ export const forgotPasswordAction = createServerAction()
           }
         }
 
-        const db = await getDB();
-        const { env } = await getCloudflareContext();
+        const db = getDB();
+        const { env } = getCloudflareContext();
 
         try {
           // Find user by email

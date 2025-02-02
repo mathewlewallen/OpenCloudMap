@@ -27,7 +27,7 @@ export const startPasskeyRegistrationAction = createServerAction()
   .handler(async ({ input }) => {
     return withRateLimit(
       async () => {
-        const db = await getDB();
+        const db = getDB();
         const existingUser = await db.query.userTable.findFirst({
           where: eq(userTable.email, input.email),
         });
@@ -128,7 +128,7 @@ export const completePasskeyRegistrationAction = createServerAction()
       });
 
       // Get user details for email verification
-      const db = await getDB();
+      const db = getDB();
       const user = await db.query.userTable.findFirst({
         where: eq(userTable.id, userId),
       });
@@ -141,7 +141,7 @@ export const completePasskeyRegistrationAction = createServerAction()
       }
 
       // Generate verification token
-      const { env } = await getCloudflareContext();
+      const { env } = getCloudflareContext();
       const verificationToken = createId();
       const expiresAt = new Date(Date.now() + EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS * 1000);
 

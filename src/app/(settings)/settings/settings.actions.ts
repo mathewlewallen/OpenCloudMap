@@ -16,7 +16,7 @@ export const updateUserProfileAction = createServerAction()
     return withRateLimit(
       async () => {
         const session = await requireVerifiedEmail();
-        const db = await getDB();
+        const db = getDB();
 
         try {
           await db.update(userTable)

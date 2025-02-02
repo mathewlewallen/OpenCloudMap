@@ -20,7 +20,7 @@ export default async function ResetPasswordPage({
     return notFound();
   }
 
-  const { env } = await getCloudflareContext();
+  const { env } = getCloudflareContext();
   const resetTokenStr = await env.NEXT_CACHE_WORKERS_KV.get(getResetTokenKey(token));
 
   if (!resetTokenStr) {
