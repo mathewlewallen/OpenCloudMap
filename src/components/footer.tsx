@@ -33,8 +33,8 @@ export function Footer() {
               <h3 className="text-sm font-semibold text-foreground text-center sm:text-left">Company</h3>
               <ul className="space-y-2 flex flex-col items-center sm:items-start">
                 <li>
-                  <Link href="/about" className="text-sm text-muted-foreground hover:text-foreground text-center sm:text-left">
-                    About Us
+                  <Link href="/" className="text-sm text-muted-foreground hover:text-foreground text-center sm:text-left">
+                    Home
                   </Link>
                 </li>
               </ul>

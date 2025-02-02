@@ -76,6 +76,9 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 ## Planned features (TODO):
 
 - [ ] Update Meta SEO tags 🔍
+- [ ] Dynamic OpenGraph images 📸
+- [ ] sitemap.xml 📄
+- [ ] robots.txt 📄
 - [ ] Multi-language support (i18n) 🌐
 - [ ] Billing 💰
 - [ ] Admin dashboard 👑
