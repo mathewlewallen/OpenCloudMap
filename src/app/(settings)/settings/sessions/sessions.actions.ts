@@ -1,14 +1,12 @@
 "use server";
 
 import { createServerAction, ZSAError } from "zsa";
-import { getSessionFromCookie } from "@/utils/auth";
+import { getSessionFromCookie, requireVerifiedEmail } from "@/utils/auth";
 import { getAllSessionIdsOfUser, getKVSession, deleteKVSession } from "@/utils/kv-session";
 import { z } from "zod";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { UAParser } from 'ua-parser-js';
 import { SessionWithMeta } from "@/types";
-
-
 
 function isValidSession(session: unknown): session is SessionWithMeta {
   if (!session || typeof session !== 'object') return false;
@@ -21,21 +19,7 @@ export const getSessionsAction = createServerAction()
   .handler(async () => {
     return withRateLimit(
       async () => {
-        const session = await getSessionFromCookie();
-
-        if (!session) {
-          throw new ZSAError(
-            "NOT_AUTHORIZED",
-            "Not authenticated"
-          );
-        }
-
-        if (!session?.user?.emailVerified) {
-          throw new ZSAError(
-            "NOT_AUTHORIZED",
-            "Email not verified"
-          );
-        }
+        const session = await requireVerifiedEmail();
 
         const sessionIds = await getAllSessionIdsOfUser(session.user.id);
         const sessions = await Promise.all(

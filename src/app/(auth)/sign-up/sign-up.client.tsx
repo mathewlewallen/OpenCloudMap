@@ -2,11 +2,15 @@
 
 import { signUpAction } from "./sign-up.actions";
 import { type SignUpSchema, signUpSchema } from "@/schemas/signup.schema";
+import { type PasskeyEmailSchema, passkeyEmailSchema } from "@/schemas/passkey.schema";
+import { startPasskeyRegistrationAction, completePasskeyRegistrationAction } from "./passkey-sign-up.actions";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import SeparatorWithText from "@/components/separator-with-text";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Spinner } from "@/components/ui/spinner";
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -15,9 +19,15 @@ import { useServerAction } from "zsa-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SSOButtons from "../_components/sso-buttons";
+import { useState } from "react";
+import { startRegistration } from "@simplewebauthn/browser";
+import { KeyIcon } from 'lucide-react'
 
 const SignUpPage = () => {
   const router = useRouter();
+  const [isPasskeyModalOpen, setIsPasskeyModalOpen] = useState(false);
+  const [isRegistering, setIsRegistering] = useState(false);
+
   const { execute: signUp } = useServerAction(signUpAction, {
     onError: (error) => {
       toast.dismiss()
@@ -33,12 +43,65 @@ const SignUpPage = () => {
     }
   })
 
+  const { execute: completePasskeyRegistration } = useServerAction(completePasskeyRegistrationAction, {
+    onError: (error) => {
+      toast.dismiss()
+      toast.error(error.err?.message)
+      setIsRegistering(false)
+    },
+    onSuccess: () => {
+      toast.dismiss()
+      toast.success("Account created successfully")
+      router.push("/dashboard")
+    }
+  })
+
+  const { execute: startPasskeyRegistration } = useServerAction(startPasskeyRegistrationAction, {
+    onError: (error) => {
+      toast.dismiss()
+      toast.error(error.err?.message)
+      setIsRegistering(false)
+    },
+    onStart: () => {
+      toast.loading("Starting passkey registration...")
+      setIsRegistering(true)
+    },
+    onSuccess: async (response) => {
+      toast.dismiss()
+      if (!response?.data?.optionsJSON) {
+        toast.error("Failed to start passkey registration")
+        setIsRegistering(false)
+        return;
+      }
+
+      try {
+        const attResp = await startRegistration({
+          optionsJSON: response.data.optionsJSON,
+          useAutoRegister: true,
+        });
+        await completePasskeyRegistration({ response: attResp });
+      } catch (error: unknown) {
+        console.error("Failed to register passkey:", error);
+        toast.error("Failed to register passkey")
+        setIsRegistering(false)
+      }
+    }
+  })
+
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
   });
 
+  const passkeyForm = useForm<PasskeyEmailSchema>({
+    resolver: zodResolver(passkeyEmailSchema),
+  });
+
   const onSubmit = async (data: SignUpSchema) => {
     signUp(data)
+  }
+
+  const onPasskeySubmit = async (data: PasskeyEmailSchema) => {
+    startPasskeyRegistration(data)
   }
 
   return (
@@ -56,7 +119,17 @@ const SignUpPage = () => {
           </p>
         </div>
 
-        <SSOButtons />
+        <div className="space-y-4">
+          <SSOButtons />
+
+          <Button
+            className="w-full"
+            onClick={() => setIsPasskeyModalOpen(true)}
+          >
+            <KeyIcon className="w-5 h-5 mr-2" />
+            Sign up with a Passkey
+          </Button>
+        </div>
 
         <SeparatorWithText>
           <span className="uppercase text-muted-foreground">Or</span>
@@ -138,7 +211,7 @@ const SignUpPage = () => {
               type="submit"
               className="w-full flex justify-center py-2.5"
             >
-              Create Account
+              Create Account with Password
             </Button>
           </form>
         </Form>
@@ -156,6 +229,85 @@ const SignUpPage = () => {
           </p>
         </div>
       </div>
+
+      <Dialog open={isPasskeyModalOpen} onOpenChange={setIsPasskeyModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Sign up with a Passkey</DialogTitle>
+          </DialogHeader>
+          <Form {...passkeyForm}>
+            <form onSubmit={passkeyForm.handleSubmit(onPasskeySubmit)} className="space-y-6 mt-6">
+              <FormField
+                control={passkeyForm.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        type="email"
+                        placeholder="Email address"
+                        className="w-full px-3 py-2"
+                        disabled={isRegistering}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={passkeyForm.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="First Name"
+                        className="w-full px-3 py-2"
+                        disabled={isRegistering}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={passkeyForm.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Last Name"
+                        className="w-full px-3 py-2"
+                        disabled={isRegistering}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit" className="w-full" disabled={isRegistering}>
+                {isRegistering ? (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Registering...
+                  </>
+                ) : (
+                  "Continue"
+                )}
+              </Button>
+              {!isRegistering && (
+                <p className="text-xs text-muted text-center mt-4">
+                  After clicking continue, your browser will prompt you to create and save your Passkey. This will allow you to sign in securely without a password in the future.
+                </p>
+              )}
+            </form>
+          </Form>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

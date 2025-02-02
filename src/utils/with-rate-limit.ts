@@ -77,6 +77,11 @@ export const RATE_LIMITS = {
     limit: 10,
     windowInSeconds: Math.floor(ms("1 hour") / 1000),
   },
+  FORGOT_PASSWORD: {
+    identifier: "forgot-password",
+    limit: 4,
+    windowInSeconds: Math.floor(ms("1 hour") / 1000),
+  },
   SETTINGS: {
     identifier: "settings",
     limit: 10,

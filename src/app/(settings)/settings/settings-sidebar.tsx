@@ -39,6 +39,11 @@ const sidebarNavItems: SidebarNavItem[] = [
     icon: User,
   },
   {
+    title: "Security",
+    href: "/settings/security",
+    icon: Lock,
+  },
+  {
     title: "Sessions",
     href: "/settings/sessions",
     icon: Smartphone,

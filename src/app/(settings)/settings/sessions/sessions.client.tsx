@@ -26,6 +26,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import type { SessionWithMeta } from "@/types";
+import { capitalize } from 'remeda'
 
 
 const regionNames = new Intl.DisplayNames(['en'], { type: 'region' });
@@ -55,8 +56,13 @@ export function SessionsClient({ sessions }: { sessions: SessionWithMeta[] }) {
                       : session.country || "Unknown location"}
                     {session.isCurrentSession && <Badge>Current Session</Badge>}
                   </CardTitle>
+                  {session?.authenticationType && (
+                    <Badge variant='outline'>
+                      Authenticated with {capitalize(session?.authenticationType ?? "password")?.replace("-", " ")}
+                    </Badge>
+                  )}
                   <div className="text-sm text-muted-foreground whitespace-nowrap">
-                    · {formatDistanceToNow(session.createdAt)} ago
+                    &nbsp;· &nbsp;{formatDistanceToNow(session.createdAt)} ago
                   </div>
                 </div>
                 <CardDescription className="text-sm">

@@ -58,7 +58,7 @@ export const signInAction = createServerAction()
           }
 
           // Create session
-          await createAndStoreSession(user.id)
+          await createAndStoreSession(user.id, "password")
 
           return { success: true };
         } catch (error) {

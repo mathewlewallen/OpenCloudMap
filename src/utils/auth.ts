@@ -15,15 +15,21 @@ import {
   deleteKVSession,
   getKV,
   getSessionKey,
-  type KVSession
+  type KVSession,
+  type CreateKVSessionParams
 } from "./kv-session";
 import { cache } from "react"
 import type { SessionValidationResult } from "@/types";
 import { SESSION_COOKIE_NAME } from "@/constants";
+import { ZSAError } from "zsa";
 
 const getSessionLength = () => {
   return ms("30d");
 }
+
+/**
+ * This file is based on https://lucia-auth.com
+ */
 
 export const getUserFromDB = async (userId: string) => {
   const db = await getDB();
@@ -61,8 +67,16 @@ function decodeSessionCookie(cookie: string): { userId: string; token: string } 
   return { userId: parts[0], token: parts[1] };
 }
 
-// Based on https://lucia-auth.com/sessions/overview
-export async function createSession(token: string, userId: string): Promise<KVSession> {
+interface CreateSessionParams extends Pick<CreateKVSessionParams, "authenticationType" | "passkeyCredentialId" | "userId"> {
+  token: string;
+}
+
+export async function createSession({
+  token,
+  userId,
+  authenticationType,
+  passkeyCredentialId
+}: CreateSessionParams): Promise<KVSession> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
   const expiresAt = new Date(Date.now() + getSessionLength());
 
@@ -76,13 +90,24 @@ export async function createSession(token: string, userId: string): Promise<KVSe
     sessionId,
     userId,
     expiresAt,
-    user
+    user,
+    authenticationType,
+    passkeyCredentialId
   });
 }
 
-export async function createAndStoreSession(userId: string) {
+export async function createAndStoreSession(
+  userId: string,
+  authenticationType?: CreateKVSessionParams["authenticationType"],
+  passkeyCredentialId?: CreateKVSessionParams["passkeyCredentialId"]
+) {
   const sessionToken = generateSessionToken();
-  const session = await createSession(sessionToken, userId);
+  const session = await createSession({
+    token: sessionToken,
+    userId,
+    authenticationType,
+    passkeyCredentialId
+  });
   await setSessionTokenCookie({
     token: sessionToken,
     userId,
@@ -174,3 +199,22 @@ export const getSessionFromCookie = cache(async (): Promise<SessionValidationRes
 
   return validateSessionToken(decoded.token, decoded.userId);
 })
+
+/**
+ * Helper function to require a verified email for protected actions
+ * @throws {ZSAError} If user is not authenticated or email is not verified
+ * @returns The verified session
+ */
+export async function requireVerifiedEmail() {
+  const session = await getSessionFromCookie();
+
+  if (!session) {
+    throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
+  }
+
+  if (!session.user.emailVerified) {
+    throw new ZSAError("FORBIDDEN", "Please verify your email first");
+  }
+
+  return session;
+}

@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text, index } from "drizzle-orm/sqlite-core";
-
+import { relations } from "drizzle-orm";
 import { type InferSelectModel } from "drizzle-orm";
 
 import { createId } from '@paralleldrive/cuid2'
@@ -57,4 +57,47 @@ export const userTable = sqliteTable("user", {
   index('role_idx').on(table.role),
 ]));
 
+export const passKeyCredentialTable = sqliteTable("passkey_credential", {
+  ...commonColumns,
+  userId: text().notNull().references(() => userTable.id),
+  credentialId: text({
+    length: 255,
+  }).notNull().unique(),
+  credentialPublicKey: text({
+    length: 255,
+  }).notNull(),
+  counter: integer().notNull(),
+  // Optional array of AuthenticatorTransport as JSON string
+  transports: text({
+    length: 255,
+  }),
+  // Authenticator Attestation GUID. We use this to identify the device/authenticator app that created the passkey
+  aaguid: text({
+    length: 255,
+  }),
+  // The user agent of the device that created the passkey
+  userAgent: text({
+    length: 255,
+  }),
+  // The IP address that created the passkey
+  ipAddress: text({
+    length: 100,
+  }),
+}, (table) => ([
+  index('user_id_idx').on(table.userId),
+  index('credential_id_idx').on(table.credentialId),
+]));
+
+export const userRelations = relations(userTable, ({ many }) => ({
+  passkeys: many(passKeyCredentialTable),
+}));
+
+export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [passKeyCredentialTable.userId],
+    references: [userTable.id],
+  }),
+}));
+
 export type User = InferSelectModel<typeof userTable>;
+export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;

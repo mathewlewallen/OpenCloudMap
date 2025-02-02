@@ -4,7 +4,7 @@ export type SessionValidationResult =
   | KVSession
   | null;
 
-interface ParsedUserAgent {
+export interface ParsedUserAgent {
   ua: string;
   browser: {
     name?: string;

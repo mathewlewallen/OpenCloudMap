@@ -10,7 +10,6 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getResetTokenKey } from "@/utils/auth-utils";
 import { validateTurnstileToken } from "@/utils/validateCaptcha";
 import { forgotPasswordSchema } from "@/schemas/forgot-password.schema";
-import { getSessionFromCookie } from "@/utils/auth";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { PASSWORD_RESET_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 import { isTurnstileEnabled } from "@/flags";
@@ -33,29 +32,6 @@ export const forgotPasswordAction = createServerAction()
               "Please complete the captcha"
             )
           }
-        }
-
-        const session = await getSessionFromCookie()
-
-        if (!session) {
-          throw new ZSAError(
-            "NOT_AUTHORIZED",
-            "Not authenticated"
-          );
-        }
-
-        if (!session?.user?.emailVerified) {
-          throw new ZSAError(
-            "NOT_AUTHORIZED",
-            "Email not verified"
-          );
-        }
-
-        if (session?.user?.email !== input.email) {
-          throw new ZSAError(
-            "INPUT_PARSE_ERROR",
-            "You cannot reset the password for another user"
-          );
         }
 
         const db = await getDB();
@@ -111,6 +87,6 @@ export const forgotPasswordAction = createServerAction()
           );
         }
       },
-      RATE_LIMITS.EMAIL
+      RATE_LIMITS.FORGOT_PASSWORD
     );
   });

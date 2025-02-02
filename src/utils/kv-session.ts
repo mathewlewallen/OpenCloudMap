@@ -26,6 +26,8 @@ export interface KVSession {
   continent?: string;
   ip?: string | null;
   userAgent?: string | null;
+  authenticationType?: "passkey" | "password" | "google-oauth";
+  passkeyCredentialId?: string;
 }
 
 export async function getKV() {
@@ -33,18 +35,18 @@ export async function getKV() {
   return env.NEXT_CACHE_WORKERS_KV;
 }
 
-interface CreateKVSessionParams {
+export interface CreateKVSessionParams extends Omit<KVSession, "id" | "createdAt" | "expiresAt"> {
   sessionId: string;
-  userId: string;
   expiresAt: Date;
-  user: KVSessionUser;
 }
 
 export async function createKVSession({
   sessionId,
   userId,
   expiresAt,
-  user
+  user,
+  authenticationType,
+  passkeyCredentialId
 }: CreateKVSessionParams): Promise<KVSession> {
   const { cf } = await getCloudflareContext();
   const headersList = await headers();
@@ -60,7 +62,9 @@ export async function createKVSession({
     continent: cf?.continent,
     ip: await getIP(),
     userAgent: headersList.get('user-agent'),
-    user
+    user,
+    authenticationType,
+    passkeyCredentialId
   };
 
   // TODO We should limit the number of sessions per user to 10
