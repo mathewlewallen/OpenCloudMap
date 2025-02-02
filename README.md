@@ -11,77 +11,78 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 
 # Supported Features:
 
-- ✅ Authentication with Lucia Auth
-  - ✅ Email/Password Sign In
-  - ✅ Email/Password Sign Up
-  - ✅ Forgot Password Flow
-  - ✅ Change Password
-  - ✅ Email Verification
-  - ✅ Session Management with Cloudflare KV
-  - ✅ Turnstile Captcha Integration
-  - ✅ Rate Limiting for Auth Endpoints
-  - ✅ Protected Routes and Layouts
-  - ✅ Session Listing and Management
-- ✅ Database with Drizzle and Cloudflare D1
-  - ✅ Type-safe Database Operations
-  - ✅ Automatic Migration Generation
-  - ✅ SQLite for Local Development
-  - ✅ Efficient Data Fetching
-- ✅ Email Service with React Email and Resend or Brevo
-  - ✅ Beautiful Email Templates
-  - ✅ Email Preview Mode
-  - ✅ Local Email Development Server
-  - ✅ Transactional Emails
-  - ✅ Email Verification Flow
-- ✅ Deployment with Github Actions
-  - ✅ Automatic Deployments
-  - ✅ Environment Variables Management
-  - ✅ Database Migrations
-  - ✅ Comprehensive CI/CD Pipeline
-- ✅ Modern UI
-  - ✅ Tailwind CSS
-  - ✅ Shadcn UI Components
-  - ✅ Dark/Light Mode
-  - ✅ Responsive Design
-  - ✅ Loading States and Animations
-  - ✅ Toast Notifications
-  - ✅ Settings Dashboard
-  - ✅ Landing Page
-  - ✅ Beautiful Email Templates
-  - ✅ Profile Settings Page
-- ✅ Validations with Zod and React Hook Form
-  - ✅ Type-safe Form Validations
-  - ✅ Server-side Validations
-  - ✅ Client-side Validations
-  - ✅ Input Sanitization
-- ✅ Developer Experience
-  - ✅ TypeScript Support
-  - ✅ ESLint Configuration
-  - ✅ Prettier Configuration
-  - ✅ Type-safe Environment Variables
-  - ✅ Cloudflare Types Generation
-  - ✅ AI-powered Development with Cursor
-  - ✅ Comprehensive Documentation
-  - ✅ Project Structure Best Practices
-- ✅ Edge Computing
-  - ✅ Global Deployment with Cloudflare Workers
-  - ✅ Zero Cold Starts
-  - ✅ Edge Caching
-  - ✅ React Server Components
-  - ✅ Server-side Rendering
-  - ✅ Edge Database with D1
-  - ✅ Session Storage with KV
+- 🔐 Authentication with Lucia Auth
+  - 📧 Email/Password Sign In
+  - 📝 Email/Password Sign Up
+  - 🔑 WebAuthn/Passkey Authentication
+  - 🔄 Forgot Password Flow
+  - 🔒 Change Password
+  - ✉️ Email Verification
+  - 🗝️ Session Management with Cloudflare KV
+  - 🤖 Turnstile Captcha Integration
+  - ⚡ Rate Limiting for Auth Endpoints
+  - 🛡️ Protected Routes and Layouts
+  - 📋 Session Listing and Management
+- 💾 Database with Drizzle and Cloudflare D1
+  - 🏗️ Type-safe Database Operations
+  - 🔄 Automatic Migration Generation
+  - 💻 SQLite for Local Development
+  - ⚡ Efficient Data Fetching
+- 📨 Email Service with React Email and Resend or Brevo
+  - 🎨 Beautiful Email Templates
+  - 👀 Email Preview Mode
+  - 🔧 Local Email Development Server
+  - 📬 Transactional Emails
+  - ✉️ Email Verification Flow
+- 🚀 Deployment with Github Actions
+  - ⚙️ Automatic Deployments
+  - 🔐 Environment Variables Management
+  - 📦 Database Migrations
+  - 🔄 Comprehensive CI/CD Pipeline
+- 🎨 Modern UI
+  - 🎨 Tailwind CSS
+  - 🧩 Shadcn UI Components
+  - 🌓 Dark/Light Mode
+  - 📱 Responsive Design
+  - ⚡ Loading States and Animations
+  - 🔔 Toast Notifications
+  - ⚙️ Settings Dashboard
+  - 🏠 Landing Page
+  - ✨ Beautiful Email Templates
+  - 👤 Profile Settings Page
+- ✨ Validations with Zod and React Hook Form
+  - 🛡️ Type-safe Form Validations
+  - 🔒 Server-side Validations
+  - 🔍 Client-side Validations
+  - 🧹 Input Sanitization
+- 👨‍💻 Developer Experience
+  - 📘 TypeScript Support
+  - 🔍 ESLint Configuration
+  - ✨ Prettier Configuration
+  - 🔐 Type-safe Environment Variables
+  - 🏗️ Cloudflare Types Generation
+  - 🤖 AI-powered Development with Cursor
+  - 📚 Comprehensive Documentation
+  - 📐 Project Structure Best Practices
+- ⚡ Edge Computing
+  - 🌍 Global Deployment with Cloudflare Workers
+  - 🚀 Zero Cold Starts
+  - 💨 Edge Caching
+  - ⚛️ React Server Components
+  - 🖥️ Server-side Rendering
+  - 💾 Edge Database with D1
+  - 🗄️ Session Storage with KV
 
 ## Planned features (TODO):
 
-- [ ] Update Meta SEO tags
-- [ ] Multi-language support (i18n)
-- [ ] Billing
-- [ ] Admin dashboard
-- [ ] Notifications
-- [ ] Payments
-- [ ] Webhooks
-- [ ] Track bundle size with https://www.npmjs.com/package/webpack-bundle-analyzer
+- [ ] Update Meta SEO tags 🔍
+- [ ] Multi-language support (i18n) 🌐
+- [ ] Billing 💰
+- [ ] Admin dashboard 👑
+- [ ] Notifications 🔔
+- [ ] Payments 💳
+- [ ] Webhooks 🔗
+- [ ] Track bundle size with https://www.npmjs.com/package/webpack-bundle-analyzer 📊
 
 # Running it locally
 
