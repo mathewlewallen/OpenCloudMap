@@ -7,7 +7,7 @@ import { getDB } from "@/db";
 import { userTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { createSession, generateSessionToken, setSessionTokenCookie } from "@/utils/auth";
 import type { RegistrationResponseJSON, PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
@@ -16,10 +16,11 @@ import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getVerificationTokenKey } from "@/utils/auth-utils";
 import { sendVerificationEmail } from "@/utils/email";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
+import { passkeyEmailSchema } from "@/schemas/passkey.schema";
+import ms from "ms";
 
-const passkeyEmailSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
+const PASSKEY_CHALLENGE_COOKIE_NAME = "passkey_challenge";
+const PASSKEY_USER_ID_COOKIE_NAME = "passkey_user_id";
 
 export const startPasskeyRegistrationAction = createServerAction()
   .input(passkeyEmailSchema)
@@ -38,14 +39,13 @@ export const startPasskeyRegistrationAction = createServerAction()
           );
         }
 
-        // Create a new user
-        const userId = createId();
         const ipAddress = await getIP();
 
         const [user] = await db.insert(userTable)
           .values({
-            id: userId,
             email: input.email,
+            firstName: input.firstName,
+            lastName: input.lastName,
             signUpIpAddress: ipAddress,
           })
           .returning();
@@ -58,24 +58,24 @@ export const startPasskeyRegistrationAction = createServerAction()
         }
 
         // Generate passkey registration options
-        const options = await generatePasskeyRegistrationOptions(userId, input.email);
+        const options = await generatePasskeyRegistrationOptions(user.id, input.email);
 
         // Store the challenge in a cookie for verification
-        cookies().set("passkey_challenge", options.challenge, {
+        cookies().set(PASSKEY_CHALLENGE_COOKIE_NAME, options.challenge, {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
           path: "/",
-          maxAge: 5 * 60, // 5 minutes
+          maxAge: Math.floor(ms("10 minutes") / 1000),
         });
 
         // Store the user ID in a cookie for verification
-        cookies().set("passkey_user_id", userId, {
+        cookies().set(PASSKEY_USER_ID_COOKIE_NAME, user.id, {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
           path: "/",
-          maxAge: 5 * 60, // 5 minutes
+          maxAge: Math.floor(ms("10 minutes") / 1000),
         });
 
         // Convert options to the expected type
@@ -107,8 +107,8 @@ export const completePasskeyRegistrationAction = createServerAction()
   .input(completePasskeyRegistrationSchema)
   .handler(async ({ input }) => {
     const cookieStore = cookies();
-    const challenge = cookieStore.get("passkey_challenge")?.value;
-    const userId = cookieStore.get("passkey_user_id")?.value;
+    const challenge = cookieStore.get(PASSKEY_CHALLENGE_COOKIE_NAME)?.value;
+    const userId = cookieStore.get(PASSKEY_USER_ID_COOKIE_NAME)?.value;
 
     if (!challenge || !userId) {
       throw new ZSAError(
@@ -119,7 +119,13 @@ export const completePasskeyRegistrationAction = createServerAction()
 
     try {
       // Verify the registration
-      await verifyPasskeyRegistration(userId, input.response, challenge);
+      await verifyPasskeyRegistration({
+        userId,
+        response: input.response,
+        challenge,
+        userAgent: headers().get("user-agent"),
+        ipAddress: await getIP(),
+      });
 
       // Get user details for email verification
       const db = await getDB();
@@ -160,7 +166,12 @@ export const completePasskeyRegistrationAction = createServerAction()
 
       // Create a session
       const sessionToken = generateSessionToken();
-      const session = await createSession(sessionToken, userId);
+      const session = await createSession({
+        token: sessionToken,
+        userId,
+        authenticationType: "passkey",
+        passkeyCredentialId: input.response.id
+      });
 
       // Set the session cookie
       await setSessionTokenCookie({
@@ -170,8 +181,8 @@ export const completePasskeyRegistrationAction = createServerAction()
       });
 
       // Clean up cookies
-      cookieStore.delete("passkey_challenge");
-      cookieStore.delete("passkey_user_id");
+      cookieStore.delete(PASSKEY_CHALLENGE_COOKIE_NAME);
+      cookieStore.delete(PASSKEY_USER_ID_COOKIE_NAME);
 
       return { success: true };
     } catch (error) {

@@ -15,7 +15,7 @@ import { useServerAction } from "zsa-react";
 import Link from "next/link";
 import SSOButtons from "../_components/sso-buttons";
 import { PasskeyAuthenticationButton } from "@/app/(settings)/settings/security/passkey.client";
-import { LockIcon } from "lucide-react";
+import { KeyIcon } from "lucide-react";
 
 const SignInPage = () => {
   const { execute: signIn } = useServerAction(signInAction, {
@@ -43,7 +43,7 @@ const SignInPage = () => {
     <div className="min-h-screen flex flex-col items-center px-4 justify-center bg-background">
       <div className="w-full max-w-md space-y-8 p-6 md:p-10 bg-card rounded-xl shadow-lg border border-border">
         <div className="text-center">
-          <h2 className="mt-6 text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+          <h2 className="mt-2 text-2xl md:text-3xl font-bold tracking-tight text-foreground">
             Sign in to your account
           </h2>
           <p className="mt-2 text-muted-foreground">
@@ -54,12 +54,14 @@ const SignInPage = () => {
           </p>
         </div>
 
-        <SSOButtons isSignIn />
+        <div className="space-y-4">
+          <SSOButtons isSignIn />
 
-        <PasskeyAuthenticationButton className="w-full">
-          <LockIcon className="w-5 h-5 mr-2" />
-          Sign in with a Passkey
-        </PasskeyAuthenticationButton>
+          <PasskeyAuthenticationButton className="w-full">
+            <KeyIcon className="w-5 h-5 mr-2" />
+            Sign in with a Passkey
+          </PasskeyAuthenticationButton>
+        </div>
 
         <SeparatorWithText>
           <span className="uppercase text-muted-foreground">Or</span>
@@ -107,7 +109,7 @@ const SignInPage = () => {
               type="submit"
               className="w-full flex justify-center py-2.5"
             >
-              Sign In
+              Sign In with Password
             </Button>
           </form>
         </Form>

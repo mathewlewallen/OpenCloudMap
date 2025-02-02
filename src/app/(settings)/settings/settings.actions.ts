@@ -3,7 +3,7 @@
 import { createServerAction, ZSAError } from "zsa";
 import { getDB } from "@/db";
 import { userTable } from "@/db/schema";
-import { getSessionFromCookie } from "@/utils/auth";
+import { requireVerifiedEmail } from "@/utils/auth";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { userSettingsSchema } from "@/schemas/settings.schema";
@@ -15,22 +15,7 @@ export const updateUserProfileAction = createServerAction()
   .handler(async ({ input }) => {
     return withRateLimit(
       async () => {
-        const session = await getSessionFromCookie();
-
-        if (!session) {
-          throw new ZSAError(
-            "NOT_AUTHORIZED",
-            "Not authenticated"
-          );
-        }
-
-        if (!session?.user?.emailVerified) {
-          throw new ZSAError(
-            "NOT_AUTHORIZED",
-            "Email not verified"
-          );
-        }
-
+        const session = await requireVerifiedEmail();
         const db = await getDB();
 
         try {

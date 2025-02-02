@@ -38,11 +38,19 @@ export async function generatePasskeyRegistrationOptions(userId: string, email: 
   return options;
 }
 
-export async function verifyPasskeyRegistration(
-  userId: string,
-  response: RegistrationResponseJSON,
-  challenge: string
-) {
+export async function verifyPasskeyRegistration({
+  userId,
+  response,
+  challenge,
+  userAgent,
+  ipAddress,
+}: {
+  userId: string;
+  response: RegistrationResponseJSON;
+  challenge: string;
+  userAgent?: string | null;
+  ipAddress?: string | null;
+}) {
   const verification = await verifyRegistrationResponse({
     response,
     expectedChallenge: challenge,
@@ -54,7 +62,7 @@ export async function verifyPasskeyRegistration(
     throw new Error("Passkey registration failed");
   }
 
-  const { credential } = verification.registrationInfo;
+  const { credential, aaguid } = verification.registrationInfo;
 
   const db = await getDB();
   await db.insert(passKeyCredentialTable).values({
@@ -63,6 +71,9 @@ export async function verifyPasskeyRegistration(
     credentialPublicKey: Buffer.from(credential.publicKey).toString("base64url"),
     counter: 0, // Initial counter value for new registrations
     transports: response.response.transports ? JSON.stringify(response.response.transports) : null,
+    aaguid: aaguid || null,
+    userAgent,
+    ipAddress,
   });
 
   return verification;

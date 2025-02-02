@@ -1,17 +1,21 @@
 "use server";
 
 import { z } from "zod";
-import { generatePasskeyRegistrationOptions, verifyPasskeyRegistration } from "@/utils/webauthn";
-import { createAndStoreSession } from "@/utils/auth";
+import {
+  generatePasskeyRegistrationOptions,
+  verifyPasskeyRegistration,
+  generatePasskeyAuthenticationOptions,
+  verifyPasskeyAuthentication
+} from "@/utils/webauthn";
 import { getDB } from "@/db";
 import { userTable, passKeyCredentialTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createServerAction, ZSAError } from "zsa";
-import { getSessionFromCookie } from "@/utils/auth";
+import { getSessionFromCookie, requireVerifiedEmail, createAndStoreSession } from "@/utils/auth";
 import type { User } from "@/db/schema";
-import type { RegistrationResponseJSON } from "@simplewebauthn/typescript-types";
-import { generatePasskeyAuthenticationOptions, verifyPasskeyAuthentication } from "@/utils/webauthn";
-import type { AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
+import type { RegistrationResponseJSON, AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
+import { headers } from "next/headers";
+import { getIP } from "@/utils/getIP";
 
 const generateRegistrationOptionsSchema = z.object({
   email: z.string().email(),
@@ -20,6 +24,9 @@ const generateRegistrationOptionsSchema = z.object({
 export const generateRegistrationOptionsAction = createServerAction()
   .input(generateRegistrationOptionsSchema)
   .handler(async ({ input }) => {
+    // Check if user is logged in and email is verified
+    const session = await requireVerifiedEmail();
+
     const db = await getDB();
     const user = await db.query.userTable.findFirst({
       where: eq(userTable.email, input.email),
@@ -27,6 +34,24 @@ export const generateRegistrationOptionsAction = createServerAction()
 
     if (!user) {
       throw new ZSAError("NOT_FOUND", "User not found");
+    }
+
+    // Verify the email matches the logged-in user
+    if (user.id !== session.user.id) {
+      throw new ZSAError("FORBIDDEN", "You can only register passkeys for your own account");
+    }
+
+    // Check if user has reached the passkey limit
+    const existingPasskeys = await db
+      .select()
+      .from(passKeyCredentialTable)
+      .where(eq(passKeyCredentialTable.userId, user.id));
+
+    if (existingPasskeys.length >= 5) {
+      throw new ZSAError(
+        "FORBIDDEN",
+        "You have reached the maximum limit of 5 passkeys"
+      );
     }
 
     const options = await generatePasskeyRegistrationOptions(user.id, input.email);
@@ -42,6 +67,9 @@ const verifyRegistrationSchema = z.object({
 export const verifyRegistrationAction = createServerAction()
   .input(verifyRegistrationSchema)
   .handler(async ({ input }) => {
+    // Check if user is logged in and email is verified
+    const session = await requireVerifiedEmail();
+
     const db = await getDB();
     const user = await db.query.userTable.findFirst({
       where: eq(userTable.email, input.email),
@@ -51,27 +79,20 @@ export const verifyRegistrationAction = createServerAction()
       throw new ZSAError("NOT_FOUND", "User not found");
     }
 
-    await verifyPasskeyRegistration(user.id, input.response, input.challenge);
-    await createAndStoreSession(user.id);
-    return { success: true };
-  });
-
-export const getPasskeysAction = createServerAction()
-  .input(z.object({}))
-  .handler(async () => {
-    const session = await getSessionFromCookie();
-
-    if (!session) {
-      throw new ZSAError("NOT_AUTHORIZED", "You must be logged in to view passkeys");
+    // Verify the email matches the logged-in user
+    if (user.id !== session.user.id) {
+      throw new ZSAError("FORBIDDEN", "You can only register passkeys for your own account");
     }
 
-    const db = await getDB();
-    const passkeys = await db
-      .select()
-      .from(passKeyCredentialTable)
-      .where(eq(passKeyCredentialTable.userId, session.user.id));
-
-    return passkeys;
+    await verifyPasskeyRegistration({
+      userId: user.id,
+      response: input.response,
+      challenge: input.challenge,
+      userAgent: headers().get("user-agent"),
+      ipAddress: await getIP(),
+    });
+    await createAndStoreSession(user.id, "passkey", input.response.id);
+    return { success: true };
   });
 
 const deletePasskeySchema = z.object({
@@ -85,6 +106,14 @@ export const deletePasskeyAction = createServerAction()
 
     if (!session) {
       throw new ZSAError("NOT_AUTHORIZED", "You must be logged in to delete passkeys");
+    }
+
+    // Prevent deletion of the current passkey
+    if (session.passkeyCredentialId === input.credentialId) {
+      throw new ZSAError(
+        "FORBIDDEN",
+        "Cannot delete the current passkey"
+      );
     }
 
     const db = await getDB();
@@ -135,9 +164,9 @@ export const verifyAuthenticationAction = createServerAction()
     const { verification, credential } = await verifyPasskeyAuthentication(input.response, input.challenge);
 
     if (!verification.verified) {
-      throw new ZSAError("PRECONDITION_FAILED", "Passkey authentication failed");
+      throw new Error("Passkey authentication failed");
     }
 
-    await createAndStoreSession(credential.userId);
+    await createAndStoreSession(credential.userId, "passkey", input.response.id);
     return { success: true };
   });

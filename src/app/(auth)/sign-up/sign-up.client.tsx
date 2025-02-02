@@ -2,7 +2,8 @@
 
 import { signUpAction } from "./sign-up.actions";
 import { type SignUpSchema, signUpSchema } from "@/schemas/signup.schema";
-import { startPasskeyRegistrationAction, completePasskeyRegistrationAction } from "./passkey.actions";
+import { type PasskeyEmailSchema, passkeyEmailSchema } from "@/schemas/passkey.schema";
+import { startPasskeyRegistrationAction, completePasskeyRegistrationAction } from "./passkey-sign-up.actions";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -19,15 +20,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import SSOButtons from "../_components/sso-buttons";
 import { useState } from "react";
-import { z } from "zod";
 import { startRegistration } from "@simplewebauthn/browser";
-import { LockIcon } from 'lucide-react'
-
-const passkeyEmailSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
-});
-
-type PasskeyEmailSchema = z.infer<typeof passkeyEmailSchema>;
+import { KeyIcon } from 'lucide-react'
 
 const SignUpPage = () => {
   const router = useRouter();
@@ -132,7 +126,7 @@ const SignUpPage = () => {
             className="w-full"
             onClick={() => setIsPasskeyModalOpen(true)}
           >
-            <LockIcon className="w-5 h-5 mr-2" />
+            <KeyIcon className="w-5 h-5 mr-2" />
             Sign up with a Passkey
           </Button>
         </div>
@@ -217,7 +211,7 @@ const SignUpPage = () => {
               type="submit"
               className="w-full flex justify-center py-2.5"
             >
-              Create Account
+              Create Account with Password
             </Button>
           </form>
         </Form>
@@ -261,6 +255,40 @@ const SignUpPage = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={passkeyForm.control}
+                name="firstName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="First Name"
+                        className="w-full px-3 py-2"
+                        disabled={isRegistering}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={passkeyForm.control}
+                name="lastName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormControl>
+                      <Input
+                        placeholder="Last Name"
+                        className="w-full px-3 py-2"
+                        disabled={isRegistering}
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <Button type="submit" className="w-full" disabled={isRegistering}>
                 {isRegistering ? (
                   <>
@@ -271,6 +299,11 @@ const SignUpPage = () => {
                   "Continue"
                 )}
               </Button>
+              {!isRegistering && (
+                <p className="text-xs text-muted text-center mt-4">
+                  After clicking continue, your browser will prompt you to create and save your Passkey. This will allow you to sign in securely without a password in the future.
+                </p>
+              )}
             </form>
           </Form>
         </DialogContent>

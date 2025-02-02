@@ -105,7 +105,7 @@ export const googleSSOCallbackAction = createServerAction()
         });
 
         if (existingUserWithGoogle?.id) {
-          await createAndStoreSession(existingUserWithGoogle.id);
+          await createAndStoreSession(existingUserWithGoogle.id, "google-oauth");
           return { success: true };
         }
 
@@ -126,7 +126,7 @@ export const googleSSOCallbackAction = createServerAction()
             .where(eq(userTable.id, existingUserWithEmail.id))
             .returning();
 
-          await createAndStoreSession(updatedUser.id);
+          await createAndStoreSession(updatedUser.id, "google-oauth");
           return { success: true };
         }
 
@@ -143,7 +143,7 @@ export const googleSSOCallbackAction = createServerAction()
           })
           .returning();
 
-        await createAndStoreSession(user.id);
+        await createAndStoreSession(user.id, "google-oauth");
         return { success: true };
 
       } catch (error) {

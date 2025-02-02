@@ -61,7 +61,11 @@ export const signUpAction = createServerAction()
         try {
           // Create a session
           const sessionToken = generateSessionToken();
-          const session = await createSession(sessionToken, user.id);
+          const session = await createSession({
+            token: sessionToken,
+            userId: user.id,
+            authenticationType: "password",
+          });
 
           // Set the session cookie
           await setSessionTokenCookie({

@@ -60,10 +60,29 @@ export const userTable = sqliteTable("user", {
 export const passKeyCredentialTable = sqliteTable("passkey_credential", {
   ...commonColumns,
   userId: text().notNull().references(() => userTable.id),
-  credentialId: text().notNull().unique(),
-  credentialPublicKey: text().notNull(),
+  credentialId: text({
+    length: 255,
+  }).notNull().unique(),
+  credentialPublicKey: text({
+    length: 255,
+  }).notNull(),
   counter: integer().notNull(),
-  transports: text(), // Optional array of AuthenticatorTransport as JSON string
+  // Optional array of AuthenticatorTransport as JSON string
+  transports: text({
+    length: 255,
+  }),
+  // Authenticator Attestation GUID. We use this to identify the device/authenticator app that created the passkey
+  aaguid: text({
+    length: 255,
+  }),
+  // The user agent of the device that created the passkey
+  userAgent: text({
+    length: 255,
+  }),
+  // The IP address that created the passkey
+  ipAddress: text({
+    length: 100,
+  }),
 }, (table) => ([
   index('user_id_idx').on(table.userId),
   index('credential_id_idx').on(table.credentialId),

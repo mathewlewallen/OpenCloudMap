@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "1772c771-a7b1-4d6c-8d8e-946b1038f09b",
+  "id": "81b88d85-a1d8-4ce9-b10f-26cd5fb6db6c",
   "prevId": "30c7c67d-947f-45a4-8e2d-dc16a090be13",
   "tables": {
     "passkey_credential": {
@@ -37,14 +37,14 @@
         },
         "credentialId": {
           "name": "credentialId",
-          "type": "text",
+          "type": "text(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
         "credentialPublicKey": {
           "name": "credentialPublicKey",
-          "type": "text",
+          "type": "text(255)",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
@@ -58,7 +58,28 @@
         },
         "transports": {
           "name": "transports",
-          "type": "text",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "aaguid": {
+          "name": "aaguid",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "userAgent": {
+          "name": "userAgent",
+          "type": "text(255)",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "ipAddress": {
+          "name": "ipAddress",
+          "type": "text(100)",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
