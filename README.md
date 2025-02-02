@@ -121,7 +121,7 @@ After making a change to wrangler.toml, you need to run `pnpm cf-typegen` to gen
     - Zone:Cache Purge:Purge
 7. Add the API token to the Github repository secrets as `CLOUDFLARE_API_TOKEN`
 8. Add the Cloudflare account id to the Github repository variables as `CLOUDFLARE_ACCOUNT_ID`
-9. Add `CLOUDFLARE_ZONE_ID` to the Github repository variables for the zone id of your domain. This is the zone id of your domain, not the account id.
+9. Optional: If you want clear the CDN cache on deploy, add `CLOUDFLARE_ZONE_ID` to the Github repository variables for the zone id of your domain. This is the zone id of your domain, not the account id.
 10. Add the database name to the Github repository variables as `DATABASE_ID`. This should match the database name in the `wrangler.toml` file.
 11. Push to the main branch
 
