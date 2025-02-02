@@ -59,6 +59,7 @@ jobs:
           command: d1 migrations apply ${{ vars.DATABASE_ID }} --remote
 
       - name: Purge Cloudflare CDN cache
+        if: ${{ vars.CLOUDFLARE_ZONE_ID != '' }}
         uses: nathanvaughn/actions-cloudflare-purge@master
         with:
           cf_zone: ${{ vars.CLOUDFLARE_ZONE_ID }}
