@@ -10,7 +10,7 @@ import { decodeIdToken } from "arctic";
 import { getDB } from "@/db";
 import { eq } from "drizzle-orm";
 import { userTable } from "@/db/schema";
-import { createAndStoreSession } from "@/utils/auth";
+import { createAndStoreSession, canSignUp } from "@/utils/auth";
 import { isGoogleSSOEnabled } from "@/flags";
 import { getIP } from "@/utils/getIP";
 
@@ -95,6 +95,9 @@ export const googleSSOCallbackAction = createServerAction()
       const googleAccountId = claims.sub;
       const avatarUrl = claims.picture;
       const email = claims.email;
+
+      // Check if email is disposable
+      await canSignUp({ email });
 
       const db = getDB();
 

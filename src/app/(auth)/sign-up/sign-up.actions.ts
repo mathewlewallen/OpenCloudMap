@@ -5,7 +5,7 @@ import { getDB } from "@/db"
 import { userTable } from "@/db/schema"
 import { signUpSchema } from "@/schemas/signup.schema";
 import { hashPassword } from "@/utils/passwordHasher";
-import { createSession, generateSessionToken, setSessionTokenCookie } from "@/utils/auth";
+import { createSession, generateSessionToken, setSessionTokenCookie, canSignUp } from "@/utils/auth";
 import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -24,6 +24,9 @@ export const signUpAction = createServerAction()
         const { env } = getCloudflareContext();
 
         // TODO Implement a captcha
+
+        // Check if email is disposable
+        await canSignUp({ email: input.email });
 
         // Check if email is already taken
         const existingUser = await db.query.userTable.findFirst({

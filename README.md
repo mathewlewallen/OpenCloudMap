@@ -15,6 +15,7 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - 📧 Email/Password Sign In
   - 📝 Email/Password Sign Up
   - 🔑 WebAuthn/Passkey Authentication
+  - 🌐 Google OAuth/SSO Integration
   - 🔄 Forgot Password Flow
   - 🔒 Change Password
   - ✉️ Email Verification
@@ -23,6 +24,7 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - ⚡ Rate Limiting for Auth Endpoints
   - 🛡️ Protected Routes and Layouts
   - 📋 Session Listing and Management
+  - 🔒 Anti-Disposable Email Protection
 - 💾 Database with Drizzle and Cloudflare D1
   - 🏗️ Type-safe Database Operations
   - 🔄 Automatic Migration Generation

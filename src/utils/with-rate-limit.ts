@@ -2,6 +2,7 @@ import "server-only";
 import { checkRateLimit } from "./rate-limit";
 import { getIP } from "./getIP";
 import ms from "ms";
+import isProd from "./isProd";
 
 interface RateLimitConfig {
   identifier: string;
@@ -13,6 +14,11 @@ export async function withRateLimit<T>(
   action: () => Promise<T>,
   config: RateLimitConfig
 ): Promise<T> {
+
+  if (!isProd) {
+    return action();
+  }
+
   const ip = await getIP();
 
   const rateLimitResult = await checkRateLimit({

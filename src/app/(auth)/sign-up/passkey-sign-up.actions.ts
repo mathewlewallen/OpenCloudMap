@@ -8,7 +8,7 @@ import { userTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { cookies, headers } from "next/headers";
-import { createSession, generateSessionToken, setSessionTokenCookie } from "@/utils/auth";
+import { createSession, generateSessionToken, setSessionTokenCookie, canSignUp } from "@/utils/auth";
 import type { RegistrationResponseJSON, PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { getIP } from "@/utils/getIP";
@@ -28,6 +28,10 @@ export const startPasskeyRegistrationAction = createServerAction()
     return withRateLimit(
       async () => {
         const db = getDB();
+
+        // Check if email is disposable
+        await canSignUp({ email: input.email });
+
         const existingUser = await db.query.userTable.findFirst({
           where: eq(userTable.email, input.email),
         });
