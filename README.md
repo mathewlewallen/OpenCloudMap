@@ -98,9 +98,9 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 5. `pnpm dev`
 6.  Open http://localhost:3000
 
-## Changes to wrangler.toml
+## Changes to wrangler.json
 
-After making a change to wrangler.toml, you need to run `pnpm cf-typegen` to generate the new types.
+After making a change to wrangler.json, you need to run `pnpm cf-typegen` to generate the new types.
 
 ## Things to change and customize before deploying to production
 1. Go to `src/constants.ts` and update it with your project details
@@ -115,7 +115,7 @@ After making a change to wrangler.toml, you need to run `pnpm cf-typegen` to gen
 2. Set either `RESEND_API_KEY` or `SENDGRID_API_KEY` as a secret in your Cloudflare Worker depending on which email service you want to use.
 3. Create a Turnstile catcha in your Cloudflare account, and set the `NEXT_PUBLIC_TURNSTILE_SITE_KEY` as a Github Actions variable.
 4. Set `TURNSTILE_SECRET_KEY` as a secret in your Cloudflare Worker.
-5. Update the `wrangler.toml` file with the new database and KV namespaces and env variables. If you change the D1 database name, you also need to update the `db:migrate:dev` script in the `package.json` file.
+5. Update the `wrangler.json` file with the new database and KV namespaces and env variables. If you change the D1 database name, you also need to update the `db:migrate:dev` script in the `package.json` file.
 6. Go to https://dash.cloudflare.com/profile/api-tokens and click on "Use template" next to "Edit Cloudflare Workers". On the next, page add the following permissions in addition to the ones from the template:
     - Account:AI Gateway:Edit
     - Account:Workers AI:Edit
@@ -128,7 +128,7 @@ After making a change to wrangler.toml, you need to run `pnpm cf-typegen` to gen
 7. Add the API token to the Github repository secrets as `CLOUDFLARE_API_TOKEN`
 8. Add the Cloudflare account id to the Github repository variables as `CLOUDFLARE_ACCOUNT_ID`
 9. Optional: If you want clear the CDN cache on deploy, add `CLOUDFLARE_ZONE_ID` to the Github repository variables for the zone id of your domain. This is the zone id of your domain, not the account id.
-10. Add the database name to the Github repository variables as `DATABASE_ID`. This should match the database name in the `wrangler.toml` file.
+10. Add the database name to the Github repository variables as `DATABASE_ID`. This should match the database name in the `wrangler.json` file.
 11. Push to the main branch
 
 ## Email templates

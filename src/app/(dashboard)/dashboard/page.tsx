@@ -16,6 +16,7 @@ import {
 
 export default function Page() {
   return (
+    // TODO The sidebar needs to be moved to the layout
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>

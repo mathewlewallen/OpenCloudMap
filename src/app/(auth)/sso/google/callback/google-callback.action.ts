@@ -146,6 +146,8 @@ export const googleSSOCallbackAction = createServerAction()
           })
           .returning();
 
+        // TODO: If the user is not verified, send a verification email
+
         await createAndStoreSession(user.id, "google-oauth");
         return { success: true };
 
