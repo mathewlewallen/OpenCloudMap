@@ -71,7 +71,7 @@ export default async function BaseLayout({
             skipDelayDuration={50}
           >
             {children}
-            <Toaster richColors closeButton position="top-right" expand duration={2500} />
+            <Toaster richColors closeButton position="top-right" expand duration={7000} />
           </TooltipProvider>
         </ThemeProvider>
       </body>

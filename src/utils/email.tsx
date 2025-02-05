@@ -72,7 +72,7 @@ async function sendResendEmail({
       subject,
       html,
       text,
-      reply_to: replyTo,
+      ...(replyTo ? { reply_to: replyTo } : {}),
       tags,
     }),
   });
@@ -124,7 +124,7 @@ async function sendBrevoEmail({
       templateId,
       params,
       tags,
-      replyTo,
+      ...(replyTo ? { replyTo } : {}),
     }),
   });
 
