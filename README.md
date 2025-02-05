@@ -16,7 +16,7 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 > - AI strategy consulting for sustainable scaling
 > - Custom SaaS development using cutting-edge stacks
 >
-> Hundrets of developers already trust our codebase - imagine what we could build for your enterprise.
+> Hundrets of developers already trust our codebase - Just Imagine what we could build for your business.
 
 # Supported Features:
 
