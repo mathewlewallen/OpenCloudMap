@@ -9,6 +9,15 @@ This is a SaaS template for Cloudflare Workers. It uses the [OpenNext](https://o
 
 Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overview of the project.
 
+> [!TIP]
+> This template is brought to you by 👉 [StartupStudio.dev](https://startupstudio.dev/?ref=github-readme-nextjs-template) 👈 - where we help businesses automate operations and boost productivity through custom AI implementations. Just like this open-source project demonstrates technical excellence, we deliver:
+>
+> - Process automation with LLM-powered workflows
+> - AI strategy consulting for sustainable scaling
+> - Custom SaaS development using cutting-edge stacks
+>
+> Hundrets of developers already trust our codebase - imagine what we could build for your enterprise.
+
 # Supported Features:
 
 - 🔐 Authentication with Lucia Auth
