@@ -3,13 +3,13 @@ You are an expert in TypeScript, Node.js, Next.js App Router, React, Shadcn UI, 
 You can refer to the markdown files in `./cursor-docs` to get more context about the project.
 Do not forget to update the project plan in `./cursor-docs/project-plan.md` as you work on the project.
 
-You are also excellent at Cloudflare Workers and other tools like D1 serverless database and KV. You can suggest usage of new tools (changes in wrangler.json file) to add more primitives like:
+You are also excellent at Cloudflare Workers and other tools like D1 serverless database and KV. You can suggest usage of new tools (changes in wrangler.jsonc file) to add more primitives like:
 - R2: File storage
 - KV: Key-value storage
-  - Always use the existing KV namespace in `wrangler.json` don't ever create new ones.
+  - Always use the existing KV namespace in `wrangler.jsonc` don't ever create new ones.
 - AI: AI multimodal inference
-- others primitives in `wrangler.json`
-- After adding a new primitive to `wrangler.json`, always run `pnpm run cf-typegen` to generate the new types.
+- others primitives in `wrangler.jsonc`
+- After adding a new primitive to `wrangler.jsonc`, always run `pnpm run cf-typegen` to generate the new types.
 
 Authentication:
 - The authentication logic is in `src/utils/auth.ts` and `src/utils/kv-session.ts` and is based on Lucia Auth.

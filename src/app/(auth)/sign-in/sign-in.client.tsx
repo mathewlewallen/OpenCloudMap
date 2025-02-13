@@ -2,6 +2,7 @@
 
 import { signInAction } from "./sign-in.actions";
 import { type SignInSchema, signInSchema } from "@/schemas/signin.schema";
+import { type ReactNode, useState } from "react";
 
 import { Form, FormControl, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -14,8 +15,61 @@ import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
 import Link from "next/link";
 import SSOButtons from "../_components/sso-buttons";
-import { PasskeyAuthenticationButton } from "@/app/(settings)/settings/security/passkey.client";
 import { KeyIcon } from "lucide-react";
+import { generateAuthenticationOptionsAction, verifyAuthenticationAction } from "@/app/(settings)/settings/security/passkey-settings.actions";
+import { startAuthentication } from "@simplewebauthn/browser";
+
+interface PasskeyAuthenticationButtonProps {
+  className?: string;
+  disabled?: boolean;
+  children?: ReactNode;
+}
+
+function PasskeyAuthenticationButton({ className, disabled, children }: PasskeyAuthenticationButtonProps) {
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  const handleAuthenticate = async () => {
+    try {
+      setIsAuthenticating(true);
+
+      // Get authentication options from the server
+      const [options] = await generateAuthenticationOptionsAction({});
+
+      if (!options) {
+        throw new Error("Failed to get authentication options");
+      }
+
+      // Start the authentication process in the browser
+      const authenticationResponse = await startAuthentication({
+        optionsJSON: options,
+      });
+
+      // Send the response back to the server for verification
+      await verifyAuthenticationAction({
+        response: authenticationResponse,
+        challenge: options.challenge,
+      });
+
+      toast.success("Authentication successful");
+      window.location.href = "/dashboard"; // Redirect to dashboard after successful authentication
+    } catch (error) {
+      console.error("Passkey authentication error:", error);
+      toast.error((error as { err?: { message: string } })?.err?.message || "Authentication failed");
+    } finally {
+      setIsAuthenticating(false);
+    }
+  };
+
+  return (
+    <Button
+      onClick={handleAuthenticate}
+      disabled={isAuthenticating || disabled}
+      className={className}
+    >
+      {isAuthenticating ? "Authenticating..." : children || "Sign in with a Passkey"}
+    </Button>
+  );
+}
 
 const SignInPage = () => {
   const { execute: signIn } = useServerAction(signInAction, {
