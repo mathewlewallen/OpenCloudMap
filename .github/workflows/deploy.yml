@@ -43,8 +43,8 @@ jobs:
       - name: Set D1 environment variables
         id: set-d1-vars
         run: |
-          echo "D1_DATABASE_NAME=$(node scripts/get-db-name.js)" >> $GITHUB_ENV
-          echo "D1_DATABASE_ID=$(node scripts/get-db-id.js)" >> $GITHUB_ENV
+          echo "D1_DATABASE_NAME=$(node scripts/get-db-name.mjs)" >> $GITHUB_ENV
+          echo "D1_DATABASE_ID=$(node scripts/get-db-id.mjs)" >> $GITHUB_ENV
 
       - name: Deploy
         run: pnpm run deploy
