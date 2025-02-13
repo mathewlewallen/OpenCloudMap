@@ -11,7 +11,7 @@ import { getDB } from "@/db";
 import { userTable, passKeyCredentialTable } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { createServerAction, ZSAError } from "zsa";
-import { getSessionFromCookie, requireVerifiedEmail, createAndStoreSession } from "@/utils/auth";
+import { requireVerifiedEmail, createAndStoreSession } from "@/utils/auth";
 import type { User } from "@/db/schema";
 import type { RegistrationResponseJSON, AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
 import { headers } from "next/headers";
