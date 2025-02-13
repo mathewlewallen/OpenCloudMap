@@ -1,10 +1,10 @@
 "use client"
 
-import * as React from "react"
+import { type ComponentType } from "react"
+import type { Route } from 'next'
+
 import {
   AudioWaveform,
-  BookOpen,
-  Bot,
   Command,
   Frame,
   GalleryVerticalEnd,
@@ -27,8 +27,33 @@ import {
 } from "@/components/ui/sidebar"
 import { useSessionStore } from "@/state/session"
 
+export type NavItem = {
+  title: string
+  url: Route
+  icon?: ComponentType
+}
+
+export type NavMainItem = NavItem & {
+  isActive?: boolean
+  items?: NavItem[]
+}
+
+type Data = {
+  user: {
+    name: string
+    email: string
+  }
+  teams: {
+    name: string
+    logo: ComponentType
+    plan: string
+  }[]
+  navMain: NavMainItem[]
+  projects: NavItem[]
+}
+
 // This is sample data.
-const data = {
+const data: Data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
@@ -52,66 +77,24 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
-      url: "#",
+      title: "Dashboard",
+      url: "/dashboard",
       icon: SquareTerminal,
       isActive: true,
-      items: [
-        {
-          title: "History",
-          url: "#",
-        },
-        {
-          title: "Starred",
-          url: "#",
-        },
-        {
-          title: "Settings",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Models",
-      url: "#",
-      icon: Bot,
-      items: [
-        {
-          title: "Genesis",
-          url: "#",
-        },
-        {
-          title: "Explorer",
-          url: "#",
-        },
-        {
-          title: "Quantum",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Documentation",
-      url: "#",
-      icon: BookOpen,
-      items: [
-        {
-          title: "Introduction",
-          url: "#",
-        },
-        {
-          title: "Get Started",
-          url: "#",
-        },
-        {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
-          url: "#",
-        },
-      ],
+      // items: [
+      //   {
+      //     title: "History",
+      //     url: "#",
+      //   },
+      //   {
+      //     title: "Starred",
+      //     url: "#",
+      //   },
+      //   {
+      //     title: "Settings",
+      //     url: "#",
+      //   },
+      // ],
     },
     {
       title: "Settings",
@@ -139,17 +122,17 @@ const data = {
   ],
   projects: [
     {
-      name: "Design Engineering",
+      title: "Design Engineering",
       url: "#",
       icon: Frame,
     },
     {
-      name: "Sales & Marketing",
+      title: "Sales & Marketing",
       url: "#",
       icon: PieChart,
     },
     {
-      name: "Travel",
+      title: "Travel",
       url: "#",
       icon: Map,
     },
