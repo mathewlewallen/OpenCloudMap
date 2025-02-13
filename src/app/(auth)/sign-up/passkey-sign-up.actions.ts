@@ -18,6 +18,8 @@ import { sendVerificationEmail } from "@/utils/email";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 import { passkeyEmailSchema } from "@/schemas/passkey.schema";
 import ms from "ms";
+import { validateTurnstileToken } from "@/utils/validateCaptcha";
+import { isTurnstileEnabled } from "@/flags";
 
 const PASSKEY_CHALLENGE_COOKIE_NAME = "passkey_challenge";
 const PASSKEY_USER_ID_COOKIE_NAME = "passkey_user_id";
@@ -27,6 +29,17 @@ export const startPasskeyRegistrationAction = createServerAction()
   .handler(async ({ input }) => {
     return withRateLimit(
       async () => {
+        if (await isTurnstileEnabled() && input.captchaToken) {
+          const success = await validateTurnstileToken(input.captchaToken)
+
+          if (!success) {
+            throw new ZSAError(
+              "INPUT_PARSE_ERROR",
+              "Please complete the captcha"
+            )
+          }
+        }
+
         const db = getDB();
 
         // Check if email is disposable

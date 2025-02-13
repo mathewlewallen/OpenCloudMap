@@ -11,8 +11,9 @@ import { Button } from "@/components/ui/button";
 import SeparatorWithText from "@/components/separator-with-text";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Spinner } from "@/components/ui/spinner";
+import { Captcha } from "@/components/captcha";
 
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useServerAction } from "zsa-react";
@@ -22,9 +23,11 @@ import SSOButtons from "../_components/sso-buttons";
 import { useState } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
 import { KeyIcon } from 'lucide-react'
+import { useConfigStore } from "@/state/config";
 
 const SignUpPage = () => {
   const router = useRouter();
+  const { isTurnstileEnabled } = useConfigStore();
   const [isPasskeyModalOpen, setIsPasskeyModalOpen] = useState(false);
   const [isRegistering, setIsRegistering] = useState(false);
 
@@ -95,6 +98,9 @@ const SignUpPage = () => {
   const passkeyForm = useForm<PasskeyEmailSchema>({
     resolver: zodResolver(passkeyEmailSchema),
   });
+
+  const captchaToken = useWatch({ control: form.control, name: 'captchaToken' });
+  const passkeyCaptchaToken = useWatch({ control: passkeyForm.control, name: 'captchaToken' });
 
   const onSubmit = async (data: SignUpSchema) => {
     signUp(data)
@@ -207,12 +213,20 @@ const SignUpPage = () => {
               )}
             />
 
-            <Button
-              type="submit"
-              className="w-full flex justify-center py-2.5"
-            >
-              Create Account with Password
-            </Button>
+            <div className="flex flex-col justify-center items-center">
+              <Captcha
+                onSuccess={(token) => form.setValue('captchaToken', token)}
+                validationError={form.formState.errors.captchaToken?.message}
+              />
+
+              <Button
+                type="submit"
+                className="w-full flex justify-center py-2.5 mt-8"
+                disabled={Boolean(isTurnstileEnabled && !captchaToken)}
+              >
+                Create Account with Password
+              </Button>
+            </div>
           </form>
         </Form>
 
@@ -289,16 +303,27 @@ const SignUpPage = () => {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full" disabled={isRegistering}>
-                {isRegistering ? (
-                  <>
-                    <Spinner className="mr-2 h-4 w-4" />
-                    Registering...
-                  </>
-                ) : (
-                  "Continue"
-                )}
-              </Button>
+              <div className="flex flex-col justify-center items-center">
+                <Captcha
+                  onSuccess={(token) => passkeyForm.setValue('captchaToken', token)}
+                  validationError={passkeyForm.formState.errors.captchaToken?.message}
+                />
+
+                <Button
+                  type="submit"
+                  className="w-full mt-8"
+                  disabled={isRegistering || Boolean(isTurnstileEnabled && !passkeyCaptchaToken)}
+                >
+                  {isRegistering ? (
+                    <>
+                      <Spinner className="mr-2 h-4 w-4" />
+                      Registering...
+                    </>
+                  ) : (
+                    "Continue"
+                  )}
+                </Button>
+              </div>
               {!isRegistering && (
                 <p className="text-xs text-muted text-center mt-4">
                   After clicking continue, your browser will prompt you to create and save your Passkey. This will allow you to sign in securely without a password in the future.

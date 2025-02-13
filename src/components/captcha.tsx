@@ -14,10 +14,10 @@ type Props = Omit<ComponentProps<typeof Turnstile>, 'siteKey'> & {
 }
 
 export const Captcha = (props: Props) => {
-  const { isGoogleSSOEnabled } = useConfigStore()
+  const { isTurnstileEnabled } = useConfigStore()
 
   return (
-    isGoogleSSOEnabled ? (
+    isTurnstileEnabled ? (
       <>
         <Turnstile
           options={{

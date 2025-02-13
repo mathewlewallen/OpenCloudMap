@@ -39,17 +39,21 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - 🔄 Automatic Migration Generation
   - 💻 SQLite for Local Development
   - ⚡ Efficient Data Fetching
+  - 🔍 Type-safe Queries
 - 📨 Email Service with React Email and Resend or Brevo
   - 🎨 Beautiful Email Templates
   - 👀 Email Preview Mode
   - 🔧 Local Email Development Server
   - 📬 Transactional Emails
   - ✉️ Email Verification Flow
+  - 📱 Responsive Email Templates
 - 🚀 Deployment with Github Actions
   - ⚙️ Automatic Deployments
   - 🔐 Environment Variables Management
   - 📦 Database Migrations
   - 🔄 Comprehensive CI/CD Pipeline
+  - 🧹 Cache Purging
+  - ✅ Type Checking
 - 🎨 Modern UI
   - 🎨 Tailwind CSS
   - 🧩 Shadcn UI Components
@@ -61,12 +65,16 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - 🏠 Landing Page
   - ✨ Beautiful Email Templates
   - 👤 Profile Settings Page
+  - 🎯 Form Validation States
 - ✨ Validations with Zod and React Hook Form
   - 🛡️ Type-safe Form Validations
   - 🔒 Server-side Validations
   - 🔍 Client-side Validations
   - 🧹 Input Sanitization
+  - ⚡ Real-time Validation
+  - 🔄 Form State Management
 - 👨‍💻 Developer Experience
+  - 🧪 Local Development Setup
   - 📘 TypeScript Support
   - 🔍 ESLint Configuration
   - ✨ Prettier Configuration
@@ -83,6 +91,7 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - 🖥️ Server-side Rendering
   - 💾 Edge Database with D1
   - 🗄️ Session Storage with KV
+  - ⚡ API Rate Limiting
 
 ## Planned features (TODO):
 

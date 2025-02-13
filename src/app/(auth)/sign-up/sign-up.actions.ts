@@ -14,6 +14,8 @@ import { sendVerificationEmail } from "@/utils/email";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 import { getIP } from "@/utils/getIP";
+import { validateTurnstileToken } from "@/utils/validateCaptcha";
+import { isTurnstileEnabled } from "@/flags";
 
 export const signUpAction = createServerAction()
   .input(signUpSchema)
@@ -23,7 +25,16 @@ export const signUpAction = createServerAction()
         const db = getDB();
         const { env } = getCloudflareContext();
 
-        // TODO Implement a captcha
+        if (await isTurnstileEnabled() && input.captchaToken) {
+          const success = await validateTurnstileToken(input.captchaToken)
+
+          if (!success) {
+            throw new ZSAError(
+              "INPUT_PARSE_ERROR",
+              "Please complete the captcha"
+            )
+          }
+        }
 
         // Check if email is disposable
         await canSignUp({ email: input.email });
