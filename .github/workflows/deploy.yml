@@ -40,10 +40,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Set D1 environment variables
+        id: set-d1-vars
+        run: |
+          echo "D1_DATABASE_NAME=$(node scripts/get-db-name.js)" >> $GITHUB_ENV
+          echo "D1_DATABASE_ID=$(node scripts/get-db-id.js)" >> $GITHUB_ENV
+
       - name: Deploy
         run: pnpm run deploy
         env:
-          DATABASE_ID: ${{ vars.DATABASE_ID }}
+          DATABASE_ID: ${{ env.D1_DATABASE_ID }}
           CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           # Here you can add env variables that will be available in Next.js
@@ -56,7 +62,7 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
-          command: d1 migrations apply ${{ vars.DATABASE_ID }} --remote
+          command: d1 migrations apply ${{ env.D1_DATABASE_NAME }} --remote
 
       - name: Purge Cloudflare CDN cache
         if: ${{ vars.CLOUDFLARE_ZONE_ID != '' }}

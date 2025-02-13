@@ -132,7 +132,7 @@ export async function verifyPasskeyAuthentication(
   await db
     .update(passKeyCredentialTable)
     .set({ counter: verification.authenticationInfo.newCounter })
-    .where(eq(passKeyCredentialTable.id, credential.id));
+    .where(eq(passKeyCredentialTable.credentialId, credential.credentialId));
 
   return {
     verification,

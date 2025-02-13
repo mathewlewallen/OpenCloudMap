@@ -14,7 +14,7 @@
     "preview": "pnpm run opennext:build && wrangler dev",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "db:generate": "drizzle-kit generate --name",
-    "db:migrate:dev": "wrangler d1 migrations apply cloudflare-workers-nextjs-saas --local",
+    "db:migrate:dev": "wrangler d1 migrations apply $(node scripts/get-db-name.mjs) --local",
     "email:dev": "email dev -d src/react-email -p 3001"
   },
   "dependencies": {
