@@ -94,7 +94,7 @@ const SignInPage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center px-4 justify-center bg-background">
+    <div className="min-h-[90vh] flex flex-col items-center px-4 justify-center bg-background my-6 md:my-10">
       <div className="w-full max-w-md space-y-8 p-6 md:p-10 bg-card rounded-xl shadow-lg border border-border">
         <div className="text-center">
           <h2 className="mt-2 text-2xl md:text-3xl font-bold tracking-tight text-foreground">
