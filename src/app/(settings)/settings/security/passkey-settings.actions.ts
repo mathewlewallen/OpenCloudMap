@@ -160,7 +160,7 @@ export const verifyAuthenticationAction = createServerAction()
     const { verification, credential } = await verifyPasskeyAuthentication(input.response, input.challenge);
 
     if (!verification.verified) {
-      throw new Error("Passkey authentication failed");
+      throw new ZSAError("FORBIDDEN", "Passkey authentication failed");
     }
 
     await createAndStoreSession(credential.userId, "passkey", input.response.id);
