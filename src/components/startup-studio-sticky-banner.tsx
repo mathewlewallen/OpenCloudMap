@@ -9,7 +9,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 const STORAGE_KEY = 'startup-studio-banner-collapsed';
 
 export function StartupStudioStickyBanner() {
-  const [isCollapsed, setIsCollapsed] = useState(true); // Start collapsed by default
+  const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
   useEffect(() => {
