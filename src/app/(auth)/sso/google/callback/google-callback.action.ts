@@ -12,7 +12,7 @@ import { eq } from "drizzle-orm";
 import { userTable } from "@/db/schema";
 import { createAndStoreSession, canSignUp } from "@/utils/auth";
 import { isGoogleSSOEnabled } from "@/flags";
-import { getIP } from "@/utils/getIP";
+import { getIP } from "@/utils/get-IP";
 
 type GoogleSSOResponse = {
   /**

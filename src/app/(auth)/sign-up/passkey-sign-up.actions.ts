@@ -11,14 +11,14 @@ import { cookies, headers } from "next/headers";
 import { createSession, generateSessionToken, setSessionTokenCookie, canSignUp } from "@/utils/auth";
 import type { RegistrationResponseJSON, PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
-import { getIP } from "@/utils/getIP";
+import { getIP } from "@/utils/get-IP";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getVerificationTokenKey } from "@/utils/auth-utils";
 import { sendVerificationEmail } from "@/utils/email";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 import { passkeyEmailSchema } from "@/schemas/passkey.schema";
 import ms from "ms";
-import { validateTurnstileToken } from "@/utils/validateCaptcha";
+import { validateTurnstileToken } from "@/utils/validate-captcha";
 import { isTurnstileEnabled } from "@/flags";
 
 const PASSKEY_CHALLENGE_COOKIE_NAME = "passkey_challenge";

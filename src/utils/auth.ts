@@ -8,7 +8,7 @@ import ms from "ms"
 import { getDB } from "@/db";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
-import isProd from "@/utils/isProd";
+import isProd from "@/utils/is-prod";
 // eslint-disable-next-line import/no-cycle
 import {
   createKVSession,

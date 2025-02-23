@@ -4,7 +4,7 @@ import { createServerAction, ZSAError } from "zsa"
 import { getDB } from "@/db"
 import { userTable } from "@/db/schema"
 import { signUpSchema } from "@/schemas/signup.schema";
-import { hashPassword } from "@/utils/passwordHasher";
+import { hashPassword } from "@/utils/password-hasher";
 import { createSession, generateSessionToken, setSessionTokenCookie, canSignUp } from "@/utils/auth";
 import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
@@ -13,8 +13,8 @@ import { getVerificationTokenKey } from "@/utils/auth-utils";
 import { sendVerificationEmail } from "@/utils/email";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
-import { getIP } from "@/utils/getIP";
-import { validateTurnstileToken } from "@/utils/validateCaptcha";
+import { getIP } from "@/utils/get-IP";
+import { validateTurnstileToken } from "@/utils/validate-captcha";
 import { isTurnstileEnabled } from "@/flags";
 
 export const signUpAction = createServerAction()

@@ -1,8 +1,8 @@
 import "server-only";
 import { checkRateLimit } from "./rate-limit";
-import { getIP } from "./getIP";
+import { getIP } from "./get-IP";
 import ms from "ms";
-import isProd from "./isProd";
+import isProd from "./is-prod";
 
 interface RateLimitConfig {
   identifier: string;

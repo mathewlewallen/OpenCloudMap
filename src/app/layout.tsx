@@ -8,6 +8,7 @@ import { getSessionFromCookie } from "@/utils/auth";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
 import { getConfig } from "@/flags";
+import { StartupStudioStickyBanner } from "@/components/startup-studio-sticky-banner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -72,6 +73,7 @@ export default async function BaseLayout({
           >
             {children}
             <Toaster richColors closeButton position="top-right" expand duration={7000} />
+            <StartupStudioStickyBanner />
           </TooltipProvider>
         </ThemeProvider>
       </body>

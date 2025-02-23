@@ -4,7 +4,7 @@ import { createServerAction, ZSAError } from "zsa";
 import { getDB } from "@/db";
 import { userTable } from "@/db/schema";
 import { signInSchema } from "@/schemas/signin.schema";
-import { verifyPassword } from "@/utils/passwordHasher";
+import { verifyPassword } from "@/utils/password-hasher";
 import { createAndStoreSession } from "@/utils/auth";
 import { eq } from "drizzle-orm";
 import { RATE_LIMITS, withRateLimit } from "@/utils/with-rate-limit";

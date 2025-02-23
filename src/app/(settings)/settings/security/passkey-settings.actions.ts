@@ -15,7 +15,7 @@ import { requireVerifiedEmail, createAndStoreSession } from "@/utils/auth";
 import type { User } from "@/db/schema";
 import type { RegistrationResponseJSON, AuthenticationResponseJSON } from "@simplewebauthn/typescript-types";
 import { headers } from "next/headers";
-import { getIP } from "@/utils/getIP";
+import { getIP } from "@/utils/get-IP";
 
 const generateRegistrationOptionsSchema = z.object({
   email: z.string().email(),

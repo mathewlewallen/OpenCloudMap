@@ -8,7 +8,7 @@ import { init } from "@paralleldrive/cuid2";
 import { eq } from "drizzle-orm";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getResetTokenKey } from "@/utils/auth-utils";
-import { validateTurnstileToken } from "@/utils/validateCaptcha";
+import { validateTurnstileToken } from "@/utils/validate-captcha";
 import { forgotPasswordSchema } from "@/schemas/forgot-password.schema";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { PASSWORD_RESET_TOKEN_EXPIRATION_SECONDS } from "@/constants";

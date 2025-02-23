@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "build:prod": "pnpm run opennext:build && wrangler deploy --dry-run --outdir=dist",
-    "opennext:build": "export SKIP_LINTER=false && opennextjs-cloudflare",
+    "opennext:build": "opennextjs-cloudflare",
     "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
@@ -68,9 +68,9 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250204.0",
+    "@cloudflare/workers-types": "^4.20250214.0",
     "@next/bundle-analyzer": "^15.1.4",
-    "@opennextjs/cloudflare": "^0.4.8",
+    "@opennextjs/cloudflare": "^0.5.3",
     "@tailwindcss/typography": "^0.5.16",
     "@types/ms": "^0.7.34",
     "@types/node": "^20",
@@ -87,7 +87,7 @@
     "react-email": "3.0.6",
     "tailwindcss": "^3.4.1",
     "typescript": "^5",
-    "wrangler": "^3.108.1"
+    "wrangler": "^3.109.2"
   },
   "packageManager": "pnpm@9.12.1+sha512.e5a7e52a4183a02d5931057f7a0dbff9d5e9ce3161e33fa68ae392125b79282a8a8a470a51dfc8a0ed86221442eb2fb57019b0990ed24fab519bf0e1bc5ccfc4"
 }

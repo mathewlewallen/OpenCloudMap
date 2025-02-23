@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 // eslint-disable-next-line import/no-cycle
 import { getUserFromDB } from "@/utils/auth";
-import { getIP } from "./getIP";
+import { getIP } from "./get-IP";
 
 const SESSION_PREFIX = "session:";
 

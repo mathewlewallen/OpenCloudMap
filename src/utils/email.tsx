@@ -4,7 +4,7 @@ import { SITE_DOMAIN, SITE_URL } from "@/constants";
 import { render } from '@react-email/render'
 import { ResetPasswordEmail } from "@/react-email/reset-password";
 import { VerifyEmail } from "@/react-email/verify-email";
-import isProd from "./isProd";
+import isProd from "./is-prod";
 
 interface BrevoEmailOptions {
   to: { email: string; name?: string }[];

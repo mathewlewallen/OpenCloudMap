@@ -4,7 +4,7 @@ import { createServerAction, ZSAError } from "zsa";
 import { getDB } from "@/db";
 import { userTable } from "@/db/schema";
 import { resetPasswordSchema } from "@/schemas/reset-password.schema";
-import { hashPassword } from "@/utils/passwordHasher";
+import { hashPassword } from "@/utils/password-hasher";
 import { eq } from "drizzle-orm";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { getResetTokenKey } from "@/utils/auth-utils";
