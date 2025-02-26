@@ -9,15 +9,8 @@ interface CacheOptions {
   ttl: string; // e.g., "1h", "5m", "1d"
 }
 
-type JSONPrimitive = string | number | boolean | null;
-type JSONValue = JSONPrimitive | JSONObject | JSONArray;
-type JSONArray = JSONValue[];
-type JSONObject = { [member: string]: JSONValue };
-
-type AsyncFunction<T extends JSONValue> = () => Promise<T>;
-
-export async function withKVCache<T extends JSONValue>(
-  fn: AsyncFunction<T>,
+export async function withKVCache<T>(
+  fn: () => Promise<T>,
   { key, ttl }: CacheOptions
 ): Promise<T> {
   // In development mode, always bypass the cache
