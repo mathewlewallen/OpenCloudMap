@@ -5,10 +5,9 @@ import { GITHUB_REPO_URL, SITE_NAME } from "@/constants";
 import { Button } from "./ui/button";
 import StartupStudioLogo from "./startupstudio-logo";
 import { getGithubStars } from "@/utils/stats";
+import { Suspense } from "react";
 
-export async function Footer() {
-  const starsCount = await getGithubStars();
-
+export function Footer() {
   return (
     <footer className="border-t dark:bg-muted/30 bg-muted/60 shadow">
       <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8">
@@ -79,19 +78,9 @@ export async function Footer() {
 
               <div className="flex flex-col md:flex-row items-center gap-4 md:space-x-4">
                 {GITHUB_REPO_URL && (
-                  <Button variant="outline" size="sm" className="w-full md:w-auto h-9" asChild>
-                    <Link
-                      href={GITHUB_REPO_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center space-x-2"
-                    >
-                      <GithubIcon className="h-4 w-4" />
-                      <span className="whitespace-nowrap">
-                        {starsCount ? `Fork on Github (${starsCount} Stars)` : "Fork on Github"}
-                      </span>
-                    </Link>
-                  </Button>
+                  <Suspense fallback={<GithubButtonFallback />}>
+                    <GithubButton />
+                  </Suspense>
                 )}
 
                 <div className="flex items-center gap-4">
@@ -113,5 +102,43 @@ export async function Footer() {
         </div>
       </div>
     </footer>
+  );
+}
+
+// This component will be wrapped in Suspense
+async function GithubButton() {
+  const starsCount = await getGithubStars();
+
+  return (
+    <Button variant="outline" size="sm" className="w-full md:w-auto h-9" asChild>
+      <Link
+        href={GITHUB_REPO_URL!}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center space-x-2"
+      >
+        <GithubIcon className="h-4 w-4" />
+        <span className="whitespace-nowrap">
+          {starsCount ? `Fork on Github (${starsCount} Stars)` : "Fork on Github"}
+        </span>
+      </Link>
+    </Button>
+  );
+}
+
+// Fallback while loading stars count
+function GithubButtonFallback() {
+  return (
+    <Button variant="outline" size="sm" className="w-full md:w-auto h-9" asChild>
+      <Link
+        href={GITHUB_REPO_URL!}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center space-x-2"
+      >
+        <GithubIcon className="h-4 w-4" />
+        <span className="whitespace-nowrap">Fork on Github</span>
+      </Link>
+    </Button>
   );
 }
