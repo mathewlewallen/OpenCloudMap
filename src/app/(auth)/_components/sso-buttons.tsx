@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { useConfigStore } from "@/state/config";
 import Google from "@/icons/google";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function SSOButtons({
   isSignIn = false
@@ -9,6 +10,12 @@ export default function SSOButtons({
   isSignIn?: boolean
 }) {
   const { isGoogleSSOEnabled } = useConfigStore()
+
+  if (isGoogleSSOEnabled === null) {
+    return (
+      <Skeleton className="w-full h-[44px]" />
+    )
+  }
 
   return (
     <>

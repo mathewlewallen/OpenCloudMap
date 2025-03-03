@@ -9,7 +9,7 @@ import { eq } from "drizzle-orm";
 import { createId } from "@paralleldrive/cuid2";
 import { cookies, headers } from "next/headers";
 import { createSession, generateSessionToken, setSessionTokenCookie, canSignUp } from "@/utils/auth";
-import type { RegistrationResponseJSON, PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/typescript-types";
+import type { RegistrationResponseJSON, PublicKeyCredentialCreationOptionsJSON } from "@simplewebauthn/types";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { getIP } from "@/utils/get-IP";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
@@ -77,8 +77,10 @@ export const startPasskeyRegistrationAction = createServerAction()
         // Generate passkey registration options
         const options = await generatePasskeyRegistrationOptions(user.id, input.email);
 
+        const cookieStore = await cookies();
+
         // Store the challenge in a cookie for verification
-        cookies().set(PASSKEY_CHALLENGE_COOKIE_NAME, options.challenge, {
+        cookieStore.set(PASSKEY_CHALLENGE_COOKIE_NAME, options.challenge, {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
@@ -87,7 +89,7 @@ export const startPasskeyRegistrationAction = createServerAction()
         });
 
         // Store the user ID in a cookie for verification
-        cookies().set(PASSKEY_USER_ID_COOKIE_NAME, user.id, {
+        cookieStore.set(PASSKEY_USER_ID_COOKIE_NAME, user.id, {
           httpOnly: true,
           secure: true,
           sameSite: "strict",
@@ -123,7 +125,7 @@ const completePasskeyRegistrationSchema = z.object({
 export const completePasskeyRegistrationAction = createServerAction()
   .input(completePasskeyRegistrationSchema)
   .handler(async ({ input }) => {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const challenge = cookieStore.get(PASSKEY_CHALLENGE_COOKIE_NAME)?.value;
     const userId = cookieStore.get(PASSKEY_USER_ID_COOKIE_NAME)?.value;
 
@@ -140,7 +142,7 @@ export const completePasskeyRegistrationAction = createServerAction()
         userId,
         response: input.response,
         challenge,
-        userAgent: headers().get("user-agent"),
+        userAgent: (await headers()).get("user-agent"),
         ipAddress: await getIP(),
       });
 

@@ -5,7 +5,7 @@ import type {
   AuthenticationResponseJSON,
   AuthenticatorTransport,
   RegistrationResponseJSON,
-} from "@simplewebauthn/typescript-types";
+} from "@simplewebauthn/types";
 import { getDB } from "@/db";
 import { passKeyCredentialTable } from "@/db/schema";
 import { eq } from "drizzle-orm";

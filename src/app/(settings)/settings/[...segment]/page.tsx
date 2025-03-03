@@ -42,9 +42,7 @@ function SettingsFormSkeleton() {
   );
 }
 
-export default async function SettingsPage(__ignoreprops: {
-  params: { segment: string[] };
-}) {
+export default async function SettingsPage() {
   const session = await getSessionFromCookie();
 
   if (!session) {
