@@ -19,7 +19,6 @@ const nextConfig = {
   }
 };
 
-// eslint-disable-next-line import/no-unused-modules
 export default process.env.ANALYZE === 'true'
   ? withBundleAnalyzer()(nextConfig)
   : nextConfig;

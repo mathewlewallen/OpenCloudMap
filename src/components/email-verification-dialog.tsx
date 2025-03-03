@@ -15,7 +15,6 @@ import { toast } from "sonner";
 import { useState } from "react";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 
-// eslint-disable-next-line import/no-unused-modules
 export function EmailVerificationDialog() {
   const { session } = useSessionStore();
   const [lastResendTime, setLastResendTime] = useState<number | null>(null);

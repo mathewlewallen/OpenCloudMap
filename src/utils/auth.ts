@@ -9,14 +9,12 @@ import { getDB } from "@/db";
 import { eq } from "drizzle-orm";
 import { cookies } from "next/headers";
 import isProd from "@/utils/is-prod";
-// eslint-disable-next-line import/no-cycle
 import {
   createKVSession,
   deleteKVSession,
-  getKV,
-  getSessionKey,
   type KVSession,
-  type CreateKVSessionParams
+  type CreateKVSessionParams,
+  getKVSession
 } from "./kv-session";
 import { cache } from "react"
 import type { SessionValidationResult } from "@/types";
@@ -117,12 +115,10 @@ export async function createAndStoreSession(
 
 async function validateSessionToken(token: string, userId: string): Promise<SessionValidationResult | null> {
   const sessionId = encodeHexLowerCase(sha256(new TextEncoder().encode(token)));
-  const kv = await getKV();
 
-  const sessionStr = await kv.get(getSessionKey(userId, sessionId));
-  if (!sessionStr) return null;
+  const session = await getKVSession(sessionId, userId);
 
-  const session = JSON.parse(sessionStr) as KVSession;
+  if (!session) return null;
 
   // If the session has expired, delete it and return null
   if (Date.now() >= session.expiresAt) {

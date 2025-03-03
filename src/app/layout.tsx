@@ -81,7 +81,7 @@ export default function BaseLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Suspense fallback={<ThemeProviderFallback>{children}</ThemeProviderFallback>}>
           <SessionProvider>

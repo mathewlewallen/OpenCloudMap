@@ -54,7 +54,6 @@ ResetPasswordEmail.PreviewProps = {
   username: "johndoe",
 } as ResetPasswordEmailProps;
 
-// eslint-disable-next-line import/no-unused-modules
 export default ResetPasswordEmail;
 
 const main = {

@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 export default async function VerifyEmailPage({
   searchParams,
 }: {
-  searchParams: { token?: string };
+  searchParams: Promise<{ token?: string }>
 }) {
-  const token = searchParams.token;
+  const token = (await searchParams).token;
 
   if (!token) {
     return notFound();
