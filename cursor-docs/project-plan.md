@@ -3,7 +3,7 @@
 ## Tech Stack Overview
 
 ### Frontend
-- Next.js 14 (App Router)
+- Next.js 15 (App Router)
 - React Server Components
 - TypeScript
 - Tailwind CSS

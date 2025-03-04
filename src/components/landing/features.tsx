@@ -25,7 +25,7 @@ const features = [
   {
     name: "Modern Stack",
     description:
-      "Next.js 14 App Router with React Server Components, Server Actions, and Edge Runtime for optimal performance.",
+      "Next.js 15 App Router with React Server Components, Server Actions, and Edge Runtime for optimal performance.",
     icon: BoltIcon,
   },
   {

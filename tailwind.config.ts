@@ -104,5 +104,4 @@ const config: Config = {
     heroui(),
   ],
 };
-// eslint-disable-next-line
 export default config;

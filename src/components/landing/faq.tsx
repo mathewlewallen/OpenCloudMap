@@ -43,7 +43,7 @@ const faqs = [
       <>
         <p>The template uses modern and reliable technologies:</p>
         <ul className="list-disc pl-6 mt-2 space-y-1">
-          <li>Next.js 14 with App Router and React Server Components</li>
+          <li>Next.js 15 with App Router and React Server Components</li>
           <li>TypeScript for type safety</li>
           <li>Tailwind CSS and Shadcn UI for styling</li>
           <li>DrizzleORM with Cloudflare D1 for database</li>

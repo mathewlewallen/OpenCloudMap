@@ -1,4 +1,3 @@
-// eslint-disable-next-line
 interface CloudflareEnv {
   // TODO Remove them from here because we are not longer loading them from the Cloudflare Context
   RESEND_API_KEY?: string;
