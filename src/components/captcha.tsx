@@ -13,7 +13,10 @@ type Props = Omit<ComponentProps<typeof Turnstile>, 'siteKey'> & {
   validationError?: string
 }
 
-export const Captcha = (props: Props) => {
+export const Captcha = ({
+  validationError,
+  ...props
+}: Props) => {
   const { isTurnstileEnabled } = useConfigStore()
 
   return (
@@ -28,9 +31,9 @@ export const Captcha = (props: Props) => {
           siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
         />
 
-        {props?.validationError && (
+        {validationError && (
           <FormMessage className="text-red-500 mt-2">
-            {props.validationError}
+            {validationError}
           </FormMessage>
         )}
       </>
