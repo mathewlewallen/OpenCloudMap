@@ -5,7 +5,7 @@ import { googleSSOCallbackSchema } from "@/schemas/google-sso-callback.schema";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { GOOGLE_OAUTH_CODE_VERIFIER_COOKIE_NAME, GOOGLE_OAUTH_STATE_COOKIE_NAME } from "@/constants";
 import { cookies } from "next/headers";
-import google from "@/lib/sso/google-sso";
+import { getGoogleSSOClient } from "@/lib/sso/google-sso";
 import { decodeIdToken } from "arctic";
 import { getDB } from "@/db";
 import { eq } from "drizzle-orm";
@@ -81,6 +81,7 @@ export const googleSSOCallbackAction = createServerAction()
 
       let tokens;
       try {
+        const google = getGoogleSSOClient();
         tokens = await google.validateAuthorizationCode(input.code, cookieCodeVerifier);
       } catch (error) {
         console.error("Google OAuth callback: Error validating authorization code", error);

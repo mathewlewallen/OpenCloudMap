@@ -26,10 +26,12 @@ export function ThemeProvider({
 
   useEffect(() => {
     setSession(session)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session]);
 
   useEffect(() => {
     setConfig(config)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [config])
 
   return (

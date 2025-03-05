@@ -2,7 +2,7 @@ import { getSessionFromCookie } from "@/utils/auth";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
 import { redirect } from "next/navigation";
 import { generateState, generateCodeVerifier } from "arctic";
-import google from "@/lib/sso/google-sso";
+import { getGoogleSSOClient } from "@/lib/sso/google-sso";
 import { cookies } from "next/headers";
 import {
   GOOGLE_OAUTH_STATE_COOKIE_NAME,
@@ -39,6 +39,8 @@ export async function GET() {
     try {
       const state = generateState();
       const codeVerifier = generateCodeVerifier();
+
+      const google = getGoogleSSOClient();
 
       ssoRedirectUrl = google.createAuthorizationURL(state, codeVerifier, ["openid", "profile", "email"]);
 

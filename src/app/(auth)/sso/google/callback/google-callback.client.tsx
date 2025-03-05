@@ -43,6 +43,7 @@ export default function GoogleCallbackClientComponent() {
         router.push("/sign-in");
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code, state]);
 
   if (isPending) {

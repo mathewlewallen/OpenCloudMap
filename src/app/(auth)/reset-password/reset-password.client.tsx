@@ -38,6 +38,7 @@ export default function ResetPasswordClientComponent() {
     if (token) {
       form.setValue("token", token);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const { execute: resetPassword, isSuccess } = useServerAction(resetPasswordAction, {
