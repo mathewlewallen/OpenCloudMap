@@ -24,7 +24,7 @@ export async function getGithubStars() {
   }
 
   // Extract owner and repo from GitHub URL
-  const match = GITHUB_REPO_URL.match(/github\.com\/([^/]+)\/([^/]+)/);
+  const match = (GITHUB_REPO_URL as string)?.match(/github\.com\/([^/]+)\/([^/]+)/);
   if (!match) return null;
 
   const [, owner, repo] = match;

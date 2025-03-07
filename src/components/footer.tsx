@@ -111,7 +111,7 @@ async function GithubButton() {
 
   return (
     <Button variant="outline" size="sm" className="w-full md:w-auto h-9" asChild>
-      <Link
+      <a
         href={GITHUB_REPO_URL!}
         target="_blank"
         rel="noopener noreferrer"
@@ -121,7 +121,7 @@ async function GithubButton() {
         <span className="whitespace-nowrap">
           {starsCount ? `Fork on Github (${starsCount} Stars)` : "Fork on Github"}
         </span>
-      </Link>
+      </a>
     </Button>
   );
 }
@@ -130,7 +130,7 @@ async function GithubButton() {
 function GithubButtonFallback() {
   return (
     <Button variant="outline" size="sm" className="w-full md:w-auto h-9" asChild>
-      <Link
+      <a
         href={GITHUB_REPO_URL!}
         target="_blank"
         rel="noopener noreferrer"
@@ -138,7 +138,7 @@ function GithubButtonFallback() {
       >
         <GithubIcon className="h-4 w-4" />
         <span className="whitespace-nowrap">Fork on Github</span>
-      </Link>
+      </a>
     </Button>
   );
 }
