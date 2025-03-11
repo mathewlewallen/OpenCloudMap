@@ -77,7 +77,7 @@ export function StartupStudioStickyBanner() {
                 </div>
 
                 <div className="text-tiny text-muted-foreground mt-3">
-                Boost efficiency and competitiveness with tailored AI solutions—from foundational automation to enterprise-grade systems, custom models, and multi-agent frameworks designed for your unique operational and business needs.
+                Transform operations with AI solutions that adapt to your actual needs—automating routine tasks or solving complex challenges through customized systems. Focus on growth while we handle the tech specifics that matter most to your business.
                 </div>
               </a>
               <Button size="sm" className="mt-4" asChild>
