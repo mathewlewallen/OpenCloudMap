@@ -16,10 +16,24 @@ import { useState } from "react";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
 import { Alert } from "@heroui/react"
 import isProd from "@/utils/is-prod";
+import { usePathname } from "next/navigation";
+import { Route } from "next";
+
+const pagesToBypass: Route[] = [
+  "/verify-email",
+  "/sign-in",
+  "/sign-up",
+  "/",
+  "/privacy",
+  "/terms",
+  "/reset-password",
+  "/forgot-password"
+];
 
 export function EmailVerificationDialog() {
   const { session } = useSessionStore();
   const [lastResendTime, setLastResendTime] = useState<number | null>(null);
+  const pathname = usePathname();
 
   const { execute: resendVerification, status } = useServerAction(resendVerificationAction, {
     onError: (error) => {
@@ -36,8 +50,13 @@ export function EmailVerificationDialog() {
     },
   });
 
-  // Don't show the dialog if the user is not logged in or if their email is already verified
-  if (!session || session.user.emailVerified) {
+  // Don't show the dialog if the user is not logged in, if their email is already verified,
+  // or if we're on the verify-email page
+  if (
+    !session
+    || session.user.emailVerified
+    || pagesToBypass.includes(pathname as Route)
+  ) {
     return null;
   }
 
