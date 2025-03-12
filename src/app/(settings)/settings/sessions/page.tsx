@@ -13,7 +13,7 @@ export default async function SessionsPage() {
   const [sessions, error] = await getSessionsAction()
 
   if (error) {
-    redirect('/')
+    return redirect('/')
   }
 
   return (

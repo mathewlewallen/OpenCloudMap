@@ -14,6 +14,8 @@ import { resendVerificationAction } from "@/app/(auth)/resend-verification.actio
 import { toast } from "sonner";
 import { useState } from "react";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
+import { Alert } from "@heroui/react"
+import isProd from "@/utils/is-prod";
 
 export function EmailVerificationDialog() {
   const { session } = useSessionStore();
@@ -54,6 +56,15 @@ export function EmailVerificationDialog() {
           <DialogDescription>
             Please verify your email address to access all features. We sent a verification link to {session.user.email}.
             The verification link will expire in {Math.floor(EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS / 3600)} hours.
+
+            {!isProd && (
+              <Alert
+                color="warning"
+                title="Development mode"
+                description="You can find the verification link in the console."
+                className="mt-4 mb-2"
+              />
+            )}
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4">

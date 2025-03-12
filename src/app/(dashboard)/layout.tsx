@@ -10,7 +10,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const session = await getSessionFromCookie()
 
   if (!session) {
-    redirect('/')
+    return redirect('/')
   }
 
   return (

@@ -18,7 +18,7 @@ export default async function SettingsLayout({
   const session = await getSessionFromCookie();
 
   if (!session) {
-    redirect("/sign-in");
+    return redirect("/sign-in");
   }
 
   return (

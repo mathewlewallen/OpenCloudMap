@@ -19,7 +19,7 @@ export default async function SecurityPage() {
   const session = await getSessionFromCookie();
 
   if (!session) {
-    redirect("/sign-in");
+    return redirect("/sign-in");
   }
 
   const db = getDB();
