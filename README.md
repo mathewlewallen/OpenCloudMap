@@ -130,7 +130,7 @@ After making a change to wrangler.jsonc, you need to run `pnpm cf-typegen` to ge
 ## Deploying to Cloudflare with Github Actions
 
 1. Create D1 and KV namespaces
-2. Set either `RESEND_API_KEY` or `SENDGRID_API_KEY` as a secret in your Cloudflare Worker depending on which email service you want to use.
+2. Set either `RESEND_API_KEY` or `BREVO_API_KEY` as a secret in your Cloudflare Worker depending on which email service you want to use.
 3. Create a Turnstile catcha in your Cloudflare account, and set the `NEXT_PUBLIC_TURNSTILE_SITE_KEY` as a Github Actions variable.
 4. Set `TURNSTILE_SECRET_KEY` as a secret in your Cloudflare Worker.
 5. Update the `wrangler.jsonc` file with the new database and KV namespaces and env variables.
