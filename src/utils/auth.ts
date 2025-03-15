@@ -14,12 +14,15 @@ import {
   deleteKVSession,
   type KVSession,
   type CreateKVSessionParams,
-  getKVSession
+  getKVSession,
+  updateKVSession,
+  CURRENT_SESSION_VERSION
 } from "./kv-session";
 import { cache } from "react"
 import type { SessionValidationResult } from "@/types";
 import { SESSION_COOKIE_NAME } from "@/constants";
 import { ZSAError } from "zsa";
+import { checkAndRefreshCredits } from "./credits";
 
 const getSessionLength = () => {
   return ms("30d");
@@ -29,22 +32,24 @@ const getSessionLength = () => {
  * This file is based on https://lucia-auth.com
  */
 
-export const getUserFromDB = async (userId: string) => {
+export async function getUserFromDB(userId: string) {
   const db = getDB();
-  return db.query.userTable.findFirst({
+  return await db.query.userTable.findFirst({
     where: eq(userTable.id, userId),
     columns: {
       id: true,
-      createdAt: true,
-      updatedAt: true,
+      email: true,
       firstName: true,
       lastName: true,
-      email: true,
       role: true,
       emailVerified: true,
       avatar: true,
-    }
-  })
+      createdAt: true,
+      updatedAt: true,
+      currentCredits: true,
+      lastCreditRefreshAt: true,
+    },
+  });
 }
 
 const createId = init({
@@ -126,25 +131,28 @@ async function validateSessionToken(token: string, userId: string): Promise<Sess
     return null;
   }
 
-  // TODO: Error: Cookies can only be modified in a Server Action or Route Handler.
-  // if (Date.now() >= session.expiresAt - (getSessionLength() / 2)) {
-  //   const newExpiresAt = new Date(Date.now() + getSessionLength());
-  //   const updatedSession = await updateKVSession(sessionId, userId, newExpiresAt);
+  // Check if session version needs to be updated
+  if (!session.version || session.version !== CURRENT_SESSION_VERSION) {
+    const updatedSession = await updateKVSession(sessionId, userId, new Date(session.expiresAt));
 
-  //   if (!updatedSession) return null;
+    if (!updatedSession) {
+      return null;
+    }
 
-  //   // Update the session in the cookie
-  //   await setSessionTokenCookie({
-  //     token,
-  //     userId,
-  //     expiresAt: newExpiresAt
-  //   });
+    return updatedSession;
+  }
 
-  //   return {
-  //     ...user,
-  //     session: updatedSession,
-  //   };
-  // }
+  // Check and refresh credits if needed
+  const currentCredits = await checkAndRefreshCredits(session);
+
+  // If credits were refreshed, update the session
+  if (currentCredits !== session.user.currentCredits) {
+    const updatedSession = await updateKVSession(sessionId, userId, new Date(session.expiresAt));
+    if (!updatedSession) {
+      return null;
+    }
+    return updatedSession;
+  }
 
   // Return the user data directly from the session
   return session;

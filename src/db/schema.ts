@@ -51,6 +51,11 @@ export const userTable = sqliteTable("user", {
   avatar: text({
     length: 600,
   }),
+  // Credit system fields
+  currentCredits: integer().default(0).notNull(),
+  lastCreditRefreshAt: integer({
+    mode: "timestamp",
+  }),
 }, (table) => ([
   index('email_idx').on(table.email),
   index('google_account_id_idx').on(table.googleAccountId),
@@ -88,8 +93,48 @@ export const passKeyCredentialTable = sqliteTable("passkey_credential", {
   index('credential_id_idx').on(table.credentialId),
 ]));
 
+// Credit transaction types
+export const CREDIT_TRANSACTION_TYPE = {
+  PURCHASE: 'PURCHASE',
+  USAGE: 'USAGE',
+  MONTHLY_REFRESH: 'MONTHLY_REFRESH',
+} as const;
+
+export const creditTransactionTypeTuple = Object.values(CREDIT_TRANSACTION_TYPE) as [string, ...string[]];
+
+export const creditTransactionTable = sqliteTable("credit_transaction", {
+  ...commonColumns,
+  userId: text().notNull().references(() => userTable.id),
+  amount: integer().notNull(),
+  type: text({
+    enum: creditTransactionTypeTuple,
+  }).notNull(),
+  description: text({
+    length: 255,
+  }).notNull(),
+  expirationDate: integer({
+    mode: "timestamp",
+  }),
+  expirationDateProcessedAt: integer({
+    mode: "timestamp",
+  }),
+}, (table) => ([
+  index('credit_transaction_user_id_idx').on(table.userId),
+  index('credit_transaction_type_idx').on(table.type),
+  index('credit_transaction_created_at_idx').on(table.createdAt),
+  index('credit_transaction_expiration_date_idx').on(table.expirationDate),
+]));
+
+export const creditTransactionRelations = relations(creditTransactionTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [creditTransactionTable.userId],
+    references: [userTable.id],
+  }),
+}));
+
 export const userRelations = relations(userTable, ({ many }) => ({
   passkeys: many(passKeyCredentialTable),
+  creditTransactions: many(creditTransactionTable),
 }));
 
 export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ one }) => ({
@@ -101,3 +146,4 @@ export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ o
 
 export type User = InferSelectModel<typeof userTable>;
 export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;
+export type CreditTransaction = InferSelectModel<typeof creditTransactionTable>;
