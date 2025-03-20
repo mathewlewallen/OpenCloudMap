@@ -1,6 +1,6 @@
 'use server';
 
-import { getSessionFromCookie } from "@/utils/auth";
+import { requireVerifiedEmail } from "@/utils/auth";
 import {
   getCreditTransactions,
   updateUserCredits,
@@ -9,11 +9,12 @@ import {
 } from "@/utils/credits";
 import { CREDIT_TRANSACTION_TYPE } from "@/db/schema";
 import { getStripe } from "@/lib/stripe";
+import { MAX_TRANSACTIONS_PER_PAGE } from "@/constants";
 
 // Action types
 type GetTransactionsInput = {
   page: number;
-  limit: number;
+  limit?: number;
 };
 
 type PurchaseCreditsInput = {
@@ -22,11 +23,20 @@ type PurchaseCreditsInput = {
 };
 
 // TODO This should happen directly in the server side component page
-export async function getTransactions({ page, limit }: GetTransactionsInput) {
-  const session = await getSessionFromCookie();
-  if (!session) {
-    throw new Error("Unauthorized");
+export async function getTransactions({ page, limit = MAX_TRANSACTIONS_PER_PAGE }: GetTransactionsInput) {
+  if (page < 1 || limit < 1) {
+    throw new Error("Invalid page or limit");
   }
+
+  if (limit > MAX_TRANSACTIONS_PER_PAGE) {
+    throw new Error(`Limit cannot be greater than ${MAX_TRANSACTIONS_PER_PAGE}`);
+  }
+
+  if (!limit) {
+    limit = MAX_TRANSACTIONS_PER_PAGE;
+  }
+
+  const session = await requireVerifiedEmail();
 
   const result = await getCreditTransactions({
     userId: session.user.id,
@@ -44,9 +54,8 @@ export async function getTransactions({ page, limit }: GetTransactionsInput) {
   };
 }
 
-// TODO This should happen directly in the server side component page
 export async function purchaseCredits({ packageId, paymentMethodId }: PurchaseCreditsInput) {
-  const session = await getSessionFromCookie();
+  const session = await requireVerifiedEmail();
   if (!session) {
     throw new Error("Unauthorized");
   }

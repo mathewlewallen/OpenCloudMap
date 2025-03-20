@@ -1,59 +1,43 @@
 "use client"
 
-import { useState } from "react"
 import { toast } from "sonner"
 import ShinyButton from "@/components/ui/shiny-button"
-
+import { useServerAction } from "zsa-react"
+import { purchaseAction } from "@/app/api/marketplace/purchase/purchase.action"
+import type { PURCHASABLE_ITEM_TYPE } from "@/db/schema"
+import { useRouter } from "next/navigation"
 interface PurchaseButtonProps {
-  componentId: string
-  credits: number
+  itemId: string
+  itemType: keyof typeof PURCHASABLE_ITEM_TYPE
 }
 
-interface ApiResponse {
-  success?: boolean
-  error?: string
-  message: string
-  details?: unknown
-}
+export default function PurchaseButton({ itemId, itemType }: PurchaseButtonProps) {
+  const router = useRouter()
 
-export default function PurchaseButton({ componentId, credits }: PurchaseButtonProps) {
-  const [isLoading, setIsLoading] = useState(false)
-
-  const handlePurchase = async () => {
-    try {
-      setIsLoading(true)
-      // TODO: Implement credit checking and deduction and also implmenet it as a server action
-      const response = await fetch("/api/marketplace/purchase", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          componentId,
-          credits,
-        }),
-      })
-
-      const data = (await response.json()) as ApiResponse
-
-      if (!response.ok) {
-        throw new Error(data.message || "Failed to purchase component")
-      }
-
-      toast.success("Component purchased successfully!")
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Failed to purchase component")
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const { execute: handlePurchase, isPending } = useServerAction(purchaseAction, {
+    onError: (error) => {
+      toast.dismiss();
+      toast.error(error.err?.message || "Failed to purchase item")
+    },
+    onStart: () => {
+      toast.loading("Processing purchase...")
+    },
+    onSuccess: () => {
+      toast.dismiss()
+      toast.success("Item purchased successfully!")
+    },
+  })
 
   return (
     <ShinyButton
-      onClick={handlePurchase}
-      disabled={isLoading}
+      onClick={() => {
+        handlePurchase({ itemId, itemType }).then(() => {
+          router.refresh()
+        })
+      }}
+      disabled={isPending}
     >
-      {isLoading ? "Processing..." : "Purchase"}
+      {isPending ? "Processing..." : "Purchase"}
     </ShinyButton>
   )
 }

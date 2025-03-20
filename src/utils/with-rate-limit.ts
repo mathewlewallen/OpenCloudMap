@@ -93,4 +93,9 @@ export const RATE_LIMITS = {
     limit: 10,
     windowInSeconds: Math.floor(ms("5 minutes") / 1000),
   },
+  PURCHASE: {
+    identifier: "purchase",
+    limit: 20,
+    windowInSeconds: Math.floor(ms("5 minutes") / 1000),
+  },
 } as const;

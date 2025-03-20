@@ -22,7 +22,7 @@ import { cache } from "react"
 import type { SessionValidationResult } from "@/types";
 import { SESSION_COOKIE_NAME } from "@/constants";
 import { ZSAError } from "zsa";
-import { checkAndRefreshCredits } from "./credits";
+import { addFreeMonthlyCreditsIfNeeded } from "./credits";
 
 const getSessionLength = () => {
   return ms("30d");
@@ -143,15 +143,14 @@ async function validateSessionToken(token: string, userId: string): Promise<Sess
   }
 
   // Check and refresh credits if needed
-  const currentCredits = await checkAndRefreshCredits(session);
+  const currentCredits = await addFreeMonthlyCreditsIfNeeded(session);
 
   // If credits were refreshed, update the session
-  if (currentCredits !== session.user.currentCredits) {
-    const updatedSession = await updateKVSession(sessionId, userId, new Date(session.expiresAt));
-    if (!updatedSession) {
-      return null;
-    }
-    return updatedSession;
+  if (
+    session?.user?.currentCredits &&
+    currentCredits !== session.user.currentCredits
+  ) {
+    session.user.currentCredits = currentCredits;
   }
 
   // Return the user data directly from the session

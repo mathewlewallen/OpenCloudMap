@@ -22,6 +22,8 @@ In the terminal, you are also an expert at suggesting wrangler commands
  - Always use pnpm to install dependencies.
 
 Code Style and Structure
+- Never use Drizzle ORM Transactions since Cloudflare D1 doesn't support them.
+- When inserting or updating items with Drizzle ORM never pass an id since we autogenerate it in the schema.
 - Write concise, technical TypeScript code with accurate examples.
 - Use functional and declarative programming patterns; avoid classes.
 - Prefer iteration and modularization over code duplication.

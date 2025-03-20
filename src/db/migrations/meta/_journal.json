@@ -43,6 +43,13 @@
       "when": 1741876964627,
       "tag": "0005_add_credit_billing_system",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1742164401272,
+      "tag": "0006_add_purchased_item_table",
+      "breakpoints": true
     }
   ]
 }
