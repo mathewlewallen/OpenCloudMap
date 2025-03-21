@@ -14,18 +14,21 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import type { CreditTransaction } from "@/db/schema";
 import { format, isPast } from "date-fns";
 import { Badge } from "@/components/ui/badge";
+import { useTransactionStore } from "@/state/transaction";
 
-function isTransactionExpired(transaction: CreditTransaction): boolean {
+type TransactionData = Awaited<ReturnType<typeof getTransactions>>
+
+function isTransactionExpired(transaction: TransactionData["transactions"][number]): boolean {
   return transaction.expirationDate ? isPast(new Date(transaction.expirationDate)) : false;
 }
 
 export function TransactionHistory() {
-  const [data, setData] = useState<Awaited<ReturnType<typeof getTransactions>> | null>(null);
+  const [data, setData] = useState<TransactionData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const refreshTrigger = useTransactionStore((state) => state.refreshTrigger);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -41,7 +44,7 @@ export function TransactionHistory() {
     };
 
     fetchTransactions();
-  }, [page]);
+  }, [page, refreshTrigger]);
 
   if (isLoading) {
     return (
@@ -103,7 +106,7 @@ export function TransactionHistory() {
                   {transaction.type !== "USAGE" && transaction.expirationDate && (
                     <Badge
                       variant="secondary"
-                      className={`mt-1 font-normal text-[0.75rem] leading-[1rem] ${
+                      className={`mt-1 ml-3 font-normal text-[0.75rem] leading-[1rem] ${
                         isTransactionExpired(transaction)
                           ? "bg-orange-500 hover:bg-orange-600 text-white"
                           : "bg-muted"

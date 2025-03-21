@@ -17,9 +17,13 @@ type GetTransactionsInput = {
   limit?: number;
 };
 
+type CreatePaymentIntentInput = {
+  packageId: string;
+};
+
 type PurchaseCreditsInput = {
   packageId: string;
-  paymentMethodId: string;
+  paymentIntentId: string;
 };
 
 // TODO This should happen directly in the server side component page
@@ -54,7 +58,7 @@ export async function getTransactions({ page, limit = MAX_TRANSACTIONS_PER_PAGE 
   };
 }
 
-export async function purchaseCredits({ packageId, paymentMethodId }: PurchaseCreditsInput) {
+export async function createPaymentIntent({ packageId }: CreatePaymentIntentInput) {
   const session = await requireVerifiedEmail();
   if (!session) {
     throw new Error("Unauthorized");
@@ -66,28 +70,65 @@ export async function purchaseCredits({ packageId, paymentMethodId }: PurchaseCr
       throw new Error("Invalid package");
     }
 
-    // Create Stripe payment intent
     const paymentIntent = await getStripe().paymentIntents.create({
       amount: creditPackage.price * 100,
       currency: 'usd',
-      payment_method: paymentMethodId,
-      confirm: true,
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: 'never',
+      },
+      metadata: {
+        userId: session.user.id,
+        packageId: creditPackage.id,
+        credits: creditPackage.credits.toString(),
+      },
     });
 
-    if (paymentIntent.status === 'succeeded') {
-      // Add credits and log transaction
-      await updateUserCredits(session.user.id, creditPackage.credits);
-      await logTransaction(
-        session.user.id,
-        creditPackage.credits,
-        `Purchased ${creditPackage.credits} credits`,
-        CREDIT_TRANSACTION_TYPE.PURCHASE
-      );
+    return { clientSecret: paymentIntent.client_secret };
+  } catch (error) {
+    console.error("Payment intent creation error:", error);
+    throw new Error("Failed to create payment intent");
+  }
+}
 
-      return { success: true };
+export async function confirmPayment({ packageId, paymentIntentId }: PurchaseCreditsInput) {
+  const session = await requireVerifiedEmail();
+  if (!session) {
+    throw new Error("Unauthorized");
+  }
+
+  try {
+    const creditPackage = getCreditPackage(packageId);
+    if (!creditPackage) {
+      throw new Error("Invalid package");
     }
 
-    throw new Error("Payment failed");
+    // Verify the payment intent
+    const paymentIntent = await getStripe().paymentIntents.retrieve(paymentIntentId);
+
+    if (paymentIntent.status !== 'succeeded') {
+      throw new Error("Payment not completed");
+    }
+
+    // Verify the payment intent metadata matches
+    if (
+      paymentIntent.metadata.userId !== session.user.id ||
+      paymentIntent.metadata.packageId !== packageId ||
+      parseInt(paymentIntent.metadata.credits) !== creditPackage.credits
+    ) {
+      throw new Error("Invalid payment intent");
+    }
+
+    // Add credits and log transaction
+    await updateUserCredits(session.user.id, creditPackage.credits);
+    await logTransaction(
+      session.user.id,
+      creditPackage.credits,
+      `Purchased ${creditPackage.credits} credits`,
+      CREDIT_TRANSACTION_TYPE.PURCHASE
+    );
+
+    return { success: true };
   } catch (error) {
     console.error("Purchase error:", error);
     throw new Error("Failed to process payment");
