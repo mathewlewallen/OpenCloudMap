@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CREDIT_PACKAGES, FREE_MONTHLY_CREDITS } from "@/constants";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { StripePaymentForm } from "./stripe-payment-form";
-import { createPaymentIntent } from "@/actions/credits";
+import { createPaymentIntent } from "@/actions/credits.action";
 import { Coins, Sparkles, Zap } from "lucide-react";
 import { useSessionStore } from "@/state/session";
 import { useTransactionStore } from "@/state/transaction";

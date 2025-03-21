@@ -3,9 +3,10 @@
 import { toast } from "sonner"
 import ShinyButton from "@/components/ui/shiny-button"
 import { useServerAction } from "zsa-react"
-import { purchaseAction } from "@/app/api/marketplace/purchase/purchase.action"
+import { purchaseAction } from "@/app/(dashboard)/dashboard/marketplace/purchase.action"
 import type { PURCHASABLE_ITEM_TYPE } from "@/db/schema"
 import { useRouter } from "next/navigation"
+
 interface PurchaseButtonProps {
   itemId: string
   itemType: keyof typeof PURCHASABLE_ITEM_TYPE

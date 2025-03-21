@@ -10,7 +10,7 @@ import {
 import { loadStripe } from "@stripe/stripe-js";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { confirmPayment } from "@/actions/credits";
+import { confirmPayment } from "@/actions/credits.action";
 import { useTheme } from "next-themes";
 import { Card, CardContent } from "@/components/ui/card";
 import { getPackageIcon } from "./credit-packages";

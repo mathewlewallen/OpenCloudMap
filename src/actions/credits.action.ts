@@ -26,7 +26,6 @@ type PurchaseCreditsInput = {
   paymentIntentId: string;
 };
 
-// TODO This should happen directly in the server side component page
 export async function getTransactions({ page, limit = MAX_TRANSACTIONS_PER_PAGE }: GetTransactionsInput) {
   if (page < 1 || limit < 1) {
     throw new Error("Invalid page or limit");

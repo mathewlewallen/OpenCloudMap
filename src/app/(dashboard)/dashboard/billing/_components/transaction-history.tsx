@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTransactions } from "@/actions/credits";
+import { getTransactions } from "@/actions/credits.action";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
