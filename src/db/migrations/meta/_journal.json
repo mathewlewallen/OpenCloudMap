@@ -36,6 +36,13 @@
       "when": 1738522913553,
       "tag": "0004_add_passkey_credentials",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1742847210932,
+      "tag": "0005_add_opennext_cache_tables",
+      "breakpoints": true
     }
   ]
 }

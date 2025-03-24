@@ -13,7 +13,11 @@ export const getDB = () => {
 
   const { env } = getCloudflareContext();
 
-  db = drizzle(env.DATABASE, { schema, logger: true });
+  if (!env.NEXT_CACHE_D1) {
+    throw new Error("D1 database not found");
+  }
+
+  db = drizzle(env.NEXT_CACHE_D1, { schema, logger: true });
 
   return db;
 };

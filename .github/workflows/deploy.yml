@@ -67,6 +67,14 @@ jobs:
           accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
           command: d1 migrations apply ${{ env.D1_DATABASE_NAME }} --remote
 
+      - name: Reset D1 cache
+        run: |
+          pnpm d1:cache:clean
+          pnpm d1:cache:seed
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+
       - name: Purge Cloudflare CDN cache
         if: ${{ vars.CLOUDFLARE_ZONE_ID != '' }}
         uses: nathanvaughn/actions-cloudflare-purge@master
