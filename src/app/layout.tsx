@@ -7,6 +7,7 @@ import "server-only";
 import { ThemeProvider } from "@/components/providers";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import NextTopLoader from 'nextjs-toploader'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
 import { StartupStudioStickyBanner } from "@/components/startup-studio-sticky-banner";
 import { getSessionFromCookie } from "@/utils/auth";
@@ -83,6 +84,11 @@ export default function BaseLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
+        <NextTopLoader
+          initialPosition={0.15}
+          shadow="0 0 10px #000, 0 0 5px #000"
+          height={4}
+        />
         <Suspense fallback={<ThemeProviderFallback>{children}</ThemeProviderFallback>}>
           <SessionProvider>
             {children}

@@ -9,6 +9,8 @@ import { useEffect } from "react"
 import { useConfigStore } from "@/state/config"
 import type { getConfig } from "@/flags"
 import { EmailVerificationDialog } from "./email-verification-dialog"
+import { useTopLoader } from 'nextjs-toploader'
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 
 type Props = {
   session: SessionValidationResult
@@ -23,6 +25,23 @@ export function ThemeProvider({
 }: React.ComponentProps<typeof NextThemesProvider> & Props) {
   const setSession = useSessionStore((store) => store.setSession)
   const setConfig = useConfigStore((store) => store.setConfig)
+  const { start, done } = useTopLoader()
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  useEffect(() => {
+    const _push = router.push.bind(router);
+
+    router.push = (href, options) => {
+      start();
+      _push(href, options);
+    };
+  }, [])
+
+  useEffect(() => {
+    done();
+  }, [pathname, searchParams]);
 
   useEffect(() => {
     setSession(session)
