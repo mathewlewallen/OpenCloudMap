@@ -57,12 +57,13 @@ export function ThemeProvider({
   config,
   ...props
 }: React.ComponentProps<typeof NextThemesProvider> & Props) {
-  const session = useSessionStore((store) => store.session)
   const setSession = useSessionStore((store) => store.setSession)
   const setConfig = useConfigStore((store) => store.setConfig)
-  const sessionLastFetched = useSessionStore((store) => store.lastFetched)
+  const isLoading = useSessionStore((store) => store.isLoading)
+  const clearSession = useSessionStore((store) => store.clearSession)
+  const refetchSession = useSessionStore((store) => store.refetchSession)
   const documentRef = useRef(typeof window === 'undefined' ? null : document)
-
+  const windowRef = useRef(typeof window === 'undefined' ? null : window)
   const fetchSession = useDebounceCallback(async () => {
     try {
       const response = await fetch('/api/get-session')
@@ -70,26 +71,32 @@ export function ThemeProvider({
 
       if (session) {
         setSession(session)
+      } else {
+        clearSession()
       }
     } catch (error) {
       console.error('Failed to fetch session:', error)
+      clearSession()
     }
   }, 30)
 
   useEffect(() => {
-    if (session && sessionLastFetched) {
-      return
+    if (isLoading) {
+      fetchSession()
     }
-
-    fetchSession()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session, sessionLastFetched])
+  }, [isLoading])
 
   useEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      fetchSession()
+      refetchSession()
     }
   }, documentRef as RefObject<Document>)
+
+  useEventListener('focus', () => {
+    refetchSession()
+    // @ts-expect-error window is not defined in the server
+  }, windowRef)
 
   useEffect(() => {
     setConfig(config)
