@@ -7,10 +7,12 @@ export const useSessionStore = create(
     {
       session: null as SessionValidationResult | null,
       isLoading: true,
+      lastFetched: null as Date | null,
     },
     (set) => ({
-      setSession: (session: SessionValidationResult) => set({ session, isLoading: false }),
-      clearSession: () => set({ session: null, isLoading: false }),
+      setSession: (session: SessionValidationResult) => set({ session, isLoading: false, lastFetched: new Date() }),
+      clearSession: () => set({ session: null, isLoading: false, lastFetched: null }),
+      refetchSession: () => set({ isLoading: true, lastFetched: null }),
     })
   )
 )

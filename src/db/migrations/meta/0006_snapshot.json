@@ -1,8 +1,8 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "96ea1d72-6a47-421e-aeae-da8df9001a71",
-  "prevId": "2e42f278-5acf-4d28-a02e-b94706b496ea",
+  "id": "250fbde8-5e23-48b6-b4bc-3254a652a8d2",
+  "prevId": "464e607f-4645-45da-84e0-78622259cf8d",
   "tables": {
     "credit_transaction": {
       "name": "credit_transaction",

@@ -5,6 +5,7 @@ interface CloudflareEnv {
 	EMAIL_FROM: "hello@saas-stack.startup-studio.dev";
 	EMAIL_FROM_NAME: "Startup Studio";
 	EMAIL_REPLY_TO: "startupstudio.dev@gmail.com";
-	DATABASE: D1Database;
+	NEXT_CACHE_D1: D1Database;
+	NEXT_CACHE_REVALIDATION_WORKER: Fetcher;
 	ASSETS: Fetcher;
 }

@@ -40,15 +40,15 @@
     {
       "idx": 5,
       "version": "6",
-      "when": 1741876964627,
-      "tag": "0005_add_credit_billing_system",
+      "when": 1742847210932,
+      "tag": "0005_add_opennext_cache_tables",
       "breakpoints": true
     },
     {
       "idx": 6,
       "version": "6",
-      "when": 1742164401272,
-      "tag": "0006_add_purchased_item_table",
+      "when": 1742857278889,
+      "tag": "0006_add_credit_billing_system",
       "breakpoints": true
     }
   ]

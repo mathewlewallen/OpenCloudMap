@@ -1,125 +1,9 @@
 {
+  "id": "464e607f-4645-45da-84e0-78622259cf8d",
+  "prevId": "81b88d85-a1d8-4ce9-b10f-26cd5fb6db6c",
   "version": "6",
   "dialect": "sqlite",
-  "id": "2e42f278-5acf-4d28-a02e-b94706b496ea",
-  "prevId": "81b88d85-a1d8-4ce9-b10f-26cd5fb6db6c",
   "tables": {
-    "credit_transaction": {
-      "name": "credit_transaction",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "text",
-          "primaryKey": true,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "createdAt": {
-          "name": "createdAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "updatedAt": {
-          "name": "updatedAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "userId": {
-          "name": "userId",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "amount": {
-          "name": "amount",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "type": {
-          "name": "type",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "description": {
-          "name": "description",
-          "type": "text(255)",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "expirationDate": {
-          "name": "expirationDate",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "expirationDateProcessedAt": {
-          "name": "expirationDateProcessedAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        }
-      },
-      "indexes": {
-        "credit_transaction_user_id_idx": {
-          "name": "credit_transaction_user_id_idx",
-          "columns": [
-            "userId"
-          ],
-          "isUnique": false
-        },
-        "credit_transaction_type_idx": {
-          "name": "credit_transaction_type_idx",
-          "columns": [
-            "type"
-          ],
-          "isUnique": false
-        },
-        "credit_transaction_created_at_idx": {
-          "name": "credit_transaction_created_at_idx",
-          "columns": [
-            "createdAt"
-          ],
-          "isUnique": false
-        },
-        "credit_transaction_expiration_date_idx": {
-          "name": "credit_transaction_expiration_date_idx",
-          "columns": [
-            "expirationDate"
-          ],
-          "isUnique": false
-        }
-      },
-      "foreignKeys": {
-        "credit_transaction_userId_user_id_fk": {
-          "name": "credit_transaction_userId_user_id_fk",
-          "tableFrom": "credit_transaction",
-          "tableTo": "user",
-          "columnsFrom": [
-            "userId"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "checkConstraints": {}
-    },
     "passkey_credential": {
       "name": "passkey_credential",
       "columns": {
@@ -228,15 +112,15 @@
         "passkey_credential_userId_user_id_fk": {
           "name": "passkey_credential_userId_user_id_fk",
           "tableFrom": "passkey_credential",
-          "tableTo": "user",
           "columnsFrom": [
             "userId"
           ],
+          "tableTo": "user",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -330,21 +214,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "currentCredits": {
-          "name": "currentCredits",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
-        "lastCreditRefreshAt": {
-          "name": "lastCreditRefreshAt",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
         }
       },
       "indexes": {
@@ -386,9 +255,9 @@
   "views": {},
   "enums": {},
   "_meta": {
+    "columns": {},
     "schemas": {},
-    "tables": {},
-    "columns": {}
+    "tables": {}
   },
   "internal": {
     "indexes": {}
