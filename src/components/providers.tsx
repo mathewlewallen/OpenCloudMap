@@ -95,7 +95,7 @@ export function ThemeProvider({
 
   useEventListener('focus', () => {
     refetchSession()
-    // @ts-expect-error
+    // @ts-expect-error window is not defined in the server
   }, windowRef)
 
   useEffect(() => {
