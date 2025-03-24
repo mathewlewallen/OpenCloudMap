@@ -14,6 +14,7 @@ import { confirmPayment } from "@/actions/credits.action";
 import { useTheme } from "next-themes";
 import { Card, CardContent } from "@/components/ui/card";
 import { getPackageIcon } from "./credit-packages";
+import { CREDITS_EXPIRATION_YEARS } from "@/constants";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
@@ -95,7 +96,7 @@ function PaymentForm({ packageId, clientSecret, onSuccess, onCancel, credits, pr
             </div>
             <div className="h-px bg-border" />
             <div className="text-sm text-muted-foreground">
-              Your payment is secure and encrypted. Credits will be added to your account immediately after successful payment.
+              Your payment is secure and encrypted. Credits will be added to your account immediately after successful payment and will be valid for {CREDITS_EXPIRATION_YEARS} years from the purchase date.
             </div>
           </div>
         </CardContent>

@@ -29,12 +29,20 @@ function shouldRefreshCredits(session: KVSession, currentTime: Date): boolean {
 async function processExpiredCredits(userId: string, currentTime: Date) {
   const db = getDB();
   // Find all expired transactions that haven't been processed and have remaining credits
+  // Order by type to process MONTHLY_REFRESH first, then by creation date
   const expiredTransactions = await db.query.creditTransactionTable.findMany({
     where: and(
       eq(creditTransactionTable.userId, userId),
       lt(creditTransactionTable.expirationDate, currentTime),
       isNull(creditTransactionTable.expirationDateProcessedAt),
+      gt(creditTransactionTable.remainingAmount, 0),
     ),
+    orderBy: [
+      // Process MONTHLY_REFRESH transactions first
+      desc(sql`CASE WHEN ${creditTransactionTable.type} = ${CREDIT_TRANSACTION_TYPE.MONTHLY_REFRESH} THEN 1 ELSE 0 END`),
+      // Then process by creation date (oldest first)
+      asc(creditTransactionTable.createdAt),
+    ],
   });
 
   // Process each expired transaction

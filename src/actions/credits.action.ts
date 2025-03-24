@@ -9,7 +9,8 @@ import {
 } from "@/utils/credits";
 import { CREDIT_TRANSACTION_TYPE } from "@/db/schema";
 import { getStripe } from "@/lib/stripe";
-import { MAX_TRANSACTIONS_PER_PAGE } from "@/constants";
+import { MAX_TRANSACTIONS_PER_PAGE, CREDITS_EXPIRATION_YEARS } from "@/constants";
+import ms from "ms";
 
 // Action types
 type GetTransactionsInput = {
@@ -124,7 +125,8 @@ export async function confirmPayment({ packageId, paymentIntentId }: PurchaseCre
       session.user.id,
       creditPackage.credits,
       `Purchased ${creditPackage.credits} credits`,
-      CREDIT_TRANSACTION_TYPE.PURCHASE
+      CREDIT_TRANSACTION_TYPE.PURCHASE,
+      new Date(Date.now() + ms(`${CREDITS_EXPIRATION_YEARS} years`))
     );
 
     return { success: true };

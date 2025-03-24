@@ -16,5 +16,7 @@ export const CREDIT_PACKAGES = [
   { id: "package-3", credits: 3000, price: 20 },
 ] as const;
 
+export const CREDITS_EXPIRATION_YEARS = 2;
+
 export const FREE_MONTHLY_CREDITS = CREDIT_PACKAGES[0].credits * 0.1;
 export const MAX_TRANSACTIONS_PER_PAGE = 10;
