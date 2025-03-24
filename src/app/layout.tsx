@@ -10,8 +10,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NextTopLoader from 'nextjs-toploader'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
 import { StartupStudioStickyBanner } from "@/components/startup-studio-sticky-banner";
-import { getSessionFromCookie } from "@/utils/auth";
 import { getConfig } from "@/flags";
+import { Spinner } from '@/components/ui/spinner';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -53,9 +53,8 @@ export const metadata: Metadata = {
 };
 
 // This component will be wrapped in Suspense in the BaseLayout
-async function SessionProvider({ children }: { children: React.ReactNode }) {
+async function Providers({ children }: { children: React.ReactNode }) {
   // These async operations will be handled by Suspense in the parent component
-  const session = await getSessionFromCookie();
   const config = await getConfig();
 
   return (
@@ -63,7 +62,6 @@ async function SessionProvider({ children }: { children: React.ReactNode }) {
       attribute="class"
       defaultTheme="system"
       enableSystem
-      session={session}
       config={config}
     >
       <TooltipProvider
@@ -89,10 +87,10 @@ export default function BaseLayout({
           shadow="0 0 10px #000, 0 0 5px #000"
           height={4}
         />
-        <Suspense fallback={<ThemeProviderFallback>{children}</ThemeProviderFallback>}>
-          <SessionProvider>
+        <Suspense fallback={<ProvidersFallback />}>
+          <Providers>
             {children}
-          </SessionProvider>
+          </Providers>
         </Suspense>
         <Toaster richColors closeButton position="top-right" expand duration={7000} />
         <StartupStudioStickyBanner />
@@ -101,21 +99,17 @@ export default function BaseLayout({
   );
 }
 
-function ThemeProviderFallback({ children }: { children: React.ReactNode }) {
+function ProvidersFallback() {
   return (
     <ThemeProvider
       attribute="class"
       defaultTheme="system"
       enableSystem
-      session={null}
       config={{ isGoogleSSOEnabled: false, isTurnstileEnabled: false }}
     >
-      <TooltipProvider
-        delayDuration={100}
-        skipDelayDuration={50}
-      >
-        {children}
-      </TooltipProvider>
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Spinner size="large" />
+      </div>
     </ThemeProvider>
   );
 }
