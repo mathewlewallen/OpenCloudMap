@@ -5,7 +5,7 @@ import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { HeroUIProvider } from "@heroui/react"
 import type { SessionValidationResult } from "@/types"
 import { useSessionStore } from "@/state/session"
-import { useEffect } from "react"
+import { Suspense, useEffect } from "react"
 import { useConfigStore } from "@/state/config"
 import type { getConfig } from "@/flags"
 import { EmailVerificationDialog } from "./email-verification-dialog"
@@ -17,14 +17,7 @@ type Props = {
   config: Awaited<ReturnType<typeof getConfig>>
 }
 
-export function ThemeProvider({
-  children,
-  session,
-  config,
-  ...props
-}: React.ComponentProps<typeof NextThemesProvider> & Props) {
-  const setSession = useSessionStore((store) => store.setSession)
-  const setConfig = useConfigStore((store) => store.setConfig)
+function RouterChecker() {
   const { start, done } = useTopLoader()
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,11 +30,25 @@ export function ThemeProvider({
       start();
       _push(href, options);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
     done();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, searchParams]);
+
+  return null;
+}
+
+export function ThemeProvider({
+  children,
+  session,
+  config,
+  ...props
+}: React.ComponentProps<typeof NextThemesProvider> & Props) {
+  const setSession = useSessionStore((store) => store.setSession)
+  const setConfig = useConfigStore((store) => store.setConfig)
 
   useEffect(() => {
     setSession(session)
@@ -55,6 +62,9 @@ export function ThemeProvider({
 
   return (
     <HeroUIProvider>
+      <Suspense>
+        <RouterChecker />
+      </Suspense>
       <NextThemesProvider {...props} attribute="class">
         {children}
         <EmailVerificationDialog />
