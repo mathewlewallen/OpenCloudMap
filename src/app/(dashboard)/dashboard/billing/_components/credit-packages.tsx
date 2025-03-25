@@ -12,12 +12,22 @@ import { useSessionStore } from "@/state/session";
 import { useTransactionStore } from "@/state/transaction";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 type CreditPackage = typeof CREDIT_PACKAGES[number];
 
 export const getPackageIcon = (index: number) => {
   if (index === 2) return <Zap className="h-6 w-6 text-yellow-500" />;
   if (index === 1) return <Sparkles className="h-6 w-6 text-blue-500" />;
   return <Coins className="h-6 w-6 text-green-500" />;
+};
+
+// Calculate savings percentage compared to the first package
+const calculateSavings = (pkg: CreditPackage) => {
+  const basePackage = CREDIT_PACKAGES[0];
+  const basePrice = basePackage.price / basePackage.credits;
+  const currentPrice = pkg.price / pkg.credits;
+  const savings = ((basePrice - currentPrice) / basePrice) * 100;
+  return Math.round(savings);
 };
 
 export function CreditPackages() {
@@ -101,6 +111,11 @@ export function CreditPackages() {
                           <div className="text-sm text-muted-foreground">
                             one-time payment
                           </div>
+                          {index > 0 && (
+                            <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                              Save {calculateSavings(pkg)}%
+                            </Badge>
+                          )}
                         </div>
                       </div>
                       <Button
