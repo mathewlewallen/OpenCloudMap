@@ -28,7 +28,7 @@ export default function GoogleCallbackClientComponent() {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Signed in successfully");
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     },
   });
 
