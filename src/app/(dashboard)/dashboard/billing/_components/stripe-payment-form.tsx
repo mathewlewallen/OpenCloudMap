@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   PaymentElement,
   useStripe,
@@ -15,8 +15,6 @@ import { useTheme } from "next-themes";
 import { Card, CardContent } from "@/components/ui/card";
 import { getPackageIcon } from "./credit-packages";
 import { CREDITS_EXPIRATION_YEARS } from "@/constants";
-
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 
 interface StripePaymentFormProps {
   packageId: string;
@@ -136,6 +134,7 @@ function PaymentForm({ packageId, clientSecret, onSuccess, onCancel, credits, pr
 
 export function StripePaymentForm(props: StripePaymentFormProps) {
   const { resolvedTheme: theme } = useTheme();
+  const stripePromise = useMemo(() => process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) : null, []);
 
   return (
     <Elements

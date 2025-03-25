@@ -14,6 +14,7 @@ import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 type CreditPackage = typeof CREDIT_PACKAGES[number];
 
 export const getPackageIcon = (index: number) => {
@@ -36,10 +37,9 @@ export function CreditPackages() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<CreditPackage | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const session = useSessionStore();
+  const session = useSessionStore((state) => state.session);
   const transactionsRefresh = useTransactionStore((state) => state.triggerRefresh);
   const sessionIsLoading = useSessionStore((state) => state.isLoading);
-
 
   const handlePurchase = async (pkg: CreditPackage) => {
     try {
@@ -78,7 +78,7 @@ export function CreditPackages() {
                 </>
               ) : (
                 <div className="text-3xl font-bold">
-                  {session.session?.user.currentCredits.toLocaleString()} credits
+                  {session?.user.currentCredits.toLocaleString()} credits
                 </div>
               )}
             </div>
@@ -131,7 +131,13 @@ export function CreditPackages() {
                     </div>
                     <div className="flex-grow" />
                     <Button
-                      onClick={() => handlePurchase(pkg)}
+                      onClick={() => {
+                        if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {
+                          handlePurchase(pkg)
+                        } else {
+                          toast.error("Something went wrong with our payment provider. Please try again later.")
+                        }
+                      }}
                       className="w-full"
                     >
                       Purchase Now
@@ -149,7 +155,7 @@ export function CreditPackages() {
           <DialogHeader>
             <DialogTitle>Purchase Credits</DialogTitle>
           </DialogHeader>
-          {clientSecret && selectedPackage && (
+          {(clientSecret && selectedPackage) && (
             <StripePaymentForm
               packageId={selectedPackage.id}
               clientSecret={clientSecret}
