@@ -10,7 +10,7 @@ import { useConfigStore } from "@/state/config"
 import type { getConfig } from "@/flags"
 import { EmailVerificationDialog } from "./email-verification-dialog"
 import { useTopLoader } from 'nextjs-toploader'
-import { usePathname, useRouter, useSearchParams } from "next/navigation"
+import { usePathname, useRouter, useSearchParams, useParams } from "next/navigation"
 import { useEventListener } from 'usehooks-ts';
 import { useDebounceCallback } from 'usehooks-ts'
 
@@ -23,6 +23,7 @@ function RouterChecker() {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const params = useParams();
   const refetchSession = useSessionStore((store) => store.refetchSession)
 
   useEffect(() => {
@@ -48,7 +49,7 @@ function RouterChecker() {
     done();
     refetchSession();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname, searchParams]);
+  }, [pathname, searchParams, params]);
 
   return null;
 }
