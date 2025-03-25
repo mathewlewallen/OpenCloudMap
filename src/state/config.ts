@@ -4,11 +4,16 @@ import { combine } from 'zustand/middleware'
 export const useConfigStore = create(
   combine(
     {
-      isGoogleSSOEnabled: null as boolean | null,
-      isTurnstileEnabled: null as boolean | null,
+      isGoogleSSOEnabled: false,
+      isTurnstileEnabled: false,
     },
     (set) => ({
-      setConfig: (config: { isGoogleSSOEnabled: boolean, isTurnstileEnabled: boolean }) => set(config),
+      setConfig: (config: { isGoogleSSOEnabled: boolean, isTurnstileEnabled: boolean }) => {
+        set({
+          isGoogleSSOEnabled: config.isGoogleSSOEnabled,
+          isTurnstileEnabled: config.isTurnstileEnabled,
+        })
+      },
     })
   )
 )

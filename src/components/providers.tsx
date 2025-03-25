@@ -14,10 +14,6 @@ import { usePathname, useRouter, useSearchParams, useParams } from "next/navigat
 import { useEventListener } from 'usehooks-ts';
 import { useDebounceCallback } from 'usehooks-ts'
 
-type Props = {
-  config: Awaited<ReturnType<typeof getConfig>>
-}
-
 function RouterChecker() {
   const { start, done } = useTopLoader()
   const pathname = usePathname();
@@ -56,9 +52,8 @@ function RouterChecker() {
 
 export function ThemeProvider({
   children,
-  config,
   ...props
-}: React.ComponentProps<typeof NextThemesProvider> & Props) {
+}: React.ComponentProps<typeof NextThemesProvider>) {
   const setSession = useSessionStore((store) => store.setSession)
   const setConfig = useConfigStore((store) => store.setConfig)
   const isLoading = useSessionStore((store) => store.isLoading)
@@ -69,10 +64,15 @@ export function ThemeProvider({
   const fetchSession = useDebounceCallback(async () => {
     try {
       const response = await fetch('/api/get-session')
-      const session = await response.json() as SessionValidationResult
+      const sessionWithConfig = await response.json() as {
+        session: SessionValidationResult
+        config: Awaited<ReturnType<typeof getConfig>>
+      }
 
-      if (session) {
-        setSession(session)
+      setConfig(sessionWithConfig?.config)
+
+      if (sessionWithConfig?.session) {
+        setSession(sessionWithConfig?.session)
       } else {
         clearSession()
       }
@@ -99,11 +99,6 @@ export function ThemeProvider({
     refetchSession()
     // @ts-expect-error window is not defined in the server
   }, windowRef)
-
-  useEffect(() => {
-    setConfig(config)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [config])
 
   return (
     <HeroUIProvider>
