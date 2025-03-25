@@ -53,8 +53,18 @@ export const metadata: Metadata = {
 };
 
 // This component will be wrapped in Suspense in the BaseLayout
-async function Providers({ children }: { children: React.ReactNode }) {
-  // These async operations will be handled by Suspense in the parent component
+function Providers({ children }: { children: React.ReactNode }) {
+  return (
+    <Suspense fallback={<ProvidersFallback />}>
+      <ProvidersContent>
+        {children}
+      </ProvidersContent>
+    </Suspense>
+  );
+}
+
+// This is the async component that fetches config
+async function ProvidersContent({ children }: { children: React.ReactNode }) {
   const config = await getConfig();
 
   return (
@@ -87,11 +97,9 @@ export default function BaseLayout({
           shadow="0 0 10px #000, 0 0 5px #000"
           height={4}
         />
-        <Suspense fallback={<ProvidersFallback />}>
-          <Providers>
-            {children}
-          </Providers>
-        </Suspense>
+        <Providers>
+          {children}
+        </Providers>
         <Toaster richColors closeButton position="top-right" expand duration={7000} />
         <StartupStudioStickyBanner />
       </body>
