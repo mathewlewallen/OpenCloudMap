@@ -5,14 +5,13 @@ import { ThemeProvider as NextThemesProvider } from "next-themes"
 import { HeroUIProvider } from "@heroui/react"
 import type { SessionValidationResult } from "@/types"
 import { useSessionStore } from "@/state/session"
-import { Suspense, useEffect, useRef, RefObject } from "react"
+import { Suspense, useEffect, useRef, RefObject, useCallback } from "react"
 import { useConfigStore } from "@/state/config"
 import type { getConfig } from "@/flags"
 import { EmailVerificationDialog } from "./email-verification-dialog"
 import { useTopLoader } from 'nextjs-toploader'
 import { usePathname, useRouter, useSearchParams, useParams } from "next/navigation"
-import { useEventListener } from 'usehooks-ts';
-import { useDebounceCallback } from 'usehooks-ts'
+import { useEventListener, useDebounceCallback } from 'usehooks-ts';
 
 function RouterChecker() {
   const { start, done } = useTopLoader()
@@ -20,7 +19,7 @@ function RouterChecker() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const params = useParams();
-  const refetchSession = useSessionStore((store) => store.refetchSession)
+  const fetchSession = useSessionStore((store) => store.fetchSession)
 
   useEffect(() => {
     const _push = router.push.bind(router);
@@ -35,7 +34,7 @@ function RouterChecker() {
     // Monkey patch: https://github.com/vercel/next.js/discussions/42016#discussioncomment-9027313
     router.refresh = () => {
       start();
-      refetchSession();
+      fetchSession?.();
       _refresh();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -43,7 +42,7 @@ function RouterChecker() {
 
   useEffect(() => {
     done();
-    refetchSession();
+    fetchSession?.();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, searchParams, params]);
 
@@ -56,13 +55,14 @@ export function ThemeProvider({
 }: React.ComponentProps<typeof NextThemesProvider>) {
   const setSession = useSessionStore((store) => store.setSession)
   const setConfig = useConfigStore((store) => store.setConfig)
-  const isLoading = useSessionStore((store) => store.isLoading)
-  const clearSession = useSessionStore((store) => store.clearSession)
   const refetchSession = useSessionStore((store) => store.refetchSession)
+  const clearSession = useSessionStore((store) => store.clearSession)
   const documentRef = useRef(typeof window === 'undefined' ? null : document)
   const windowRef = useRef(typeof window === 'undefined' ? null : window)
-  const fetchSession = useDebounceCallback(async () => {
+
+  const doFetchSession = useCallback(async () => {
     try {
+      refetchSession() // Set loading state before fetch
       const response = await fetch('/api/get-session')
       const sessionWithConfig = await response.json() as {
         session: SessionValidationResult
@@ -80,25 +80,31 @@ export function ThemeProvider({
       console.error('Failed to fetch session:', error)
       clearSession()
     }
-  }, 30)
+  }, [setSession, setConfig, clearSession, refetchSession])
 
+  const fetchSession = useDebounceCallback(doFetchSession, 30)
+
+  // Initial fetch on mount
   useEffect(() => {
-    if (isLoading) {
-      fetchSession()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLoading])
+    fetchSession()
+  }, [fetchSession])
 
+  // Handle refetches
   useEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') {
-      refetchSession()
+      fetchSession()
     }
   }, documentRef as RefObject<Document>)
 
   useEventListener('focus', () => {
-    refetchSession()
+    fetchSession()
     // @ts-expect-error window is not defined in the server
   }, windowRef)
+
+  // Add fetchSession to the session store
+  useEffect(() => {
+    useSessionStore.setState({ fetchSession: doFetchSession })
+  }, [doFetchSession])
 
   return (
     <HeroUIProvider>
