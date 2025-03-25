@@ -13,6 +13,7 @@ import { useTransactionStore } from "@/state/transaction";
 import { Separator } from "@/components/ui/separator";
 import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
+import { Skeleton } from "@/components/ui/skeleton";
 type CreditPackage = typeof CREDIT_PACKAGES[number];
 
 export const getPackageIcon = (index: number) => {
@@ -37,6 +38,8 @@ export function CreditPackages() {
   const [clientSecret, setClientSecret] = useState<string | null>(null);
   const session = useSessionStore();
   const transactionsRefresh = useTransactionStore((state) => state.triggerRefresh);
+  const sessionIsLoading = useSessionStore((state) => state.isLoading);
+
 
   const handlePurchase = async (pkg: CreditPackage) => {
     try {
@@ -68,9 +71,16 @@ export function CreditPackages() {
         <CardContent className="space-y-8">
           <div className="space-y-2">
             <div className="flex items-baseline gap-2">
-              <div className="text-3xl font-bold">
-                {session.session?.user.currentCredits.toLocaleString()} credits
-              </div>
+              {sessionIsLoading ? (
+                <>
+                  <Skeleton className="h-9 w-16" />
+                  <Skeleton className="h-9 w-24" />
+                </>
+              ) : (
+                <div className="text-3xl font-bold">
+                  {session.session?.user.currentCredits.toLocaleString()} credits
+                </div>
+              )}
             </div>
             <div className="text-sm text-muted-foreground">
               You get {FREE_MONTHLY_CREDITS} free credits every month.
@@ -90,41 +100,42 @@ export function CreditPackages() {
             <div className="grid gap-4 lg:grid-cols-3">
               {CREDIT_PACKAGES.map((pkg, index) => (
                 <Card key={pkg.id} className="relative overflow-hidden transition-all hover:shadow-lg">
-                  <CardContent className="pt-6">
-                    <div className="flex flex-col space-y-4">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center space-x-2">
-                          {getPackageIcon(index)}
-                          <div>
-                            <div className="text-2xl font-bold">
-                              {pkg.credits.toLocaleString()}
-                            </div>
-                            <div className="text-sm text-muted-foreground">
-                              credits
-                            </div>
-                          </div>
-                        </div>
+                  <CardContent className="flex flex-col h-full pt-4 gap-4">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        {getPackageIcon(index)}
                         <div>
-                          <div className="text-2xl font-bold text-primary">
-                            ${pkg.price}
+                          <div className="text-2xl font-bold">
+                            {pkg.credits.toLocaleString()}
                           </div>
                           <div className="text-sm text-muted-foreground">
-                            one-time payment
+                            credits
                           </div>
-                          {index > 0 && (
-                            <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                              Save {calculateSavings(pkg)}%
-                            </Badge>
-                          )}
                         </div>
                       </div>
-                      <Button
-                        onClick={() => handlePurchase(pkg)}
-                        className="w-full"
-                      >
-                        Purchase Now
-                      </Button>
+                      <div className="flex flex-col items-end">
+                        <div className="text-2xl font-bold text-primary">
+                          ${pkg.price}
+                        </div>
+                        <div className="text-sm text-muted-foreground">
+                          one-time payment
+                        </div>
+                        {index > 0 ? (
+                          <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                            Save {calculateSavings(pkg)}%
+                          </Badge>
+                        ) : (
+                          <div className="h-[26px]" /> /* Placeholder for badge height */
+                        )}
+                      </div>
                     </div>
+                    <div className="flex-grow" />
+                    <Button
+                      onClick={() => handlePurchase(pkg)}
+                      className="w-full"
+                    >
+                      Purchase Now
+                    </Button>
                   </CardContent>
                 </Card>
               ))}
