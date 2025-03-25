@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Suspense } from "react";
 import "server-only";
 
 import { ThemeProvider } from "@/components/providers";
@@ -10,8 +9,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NextTopLoader from 'nextjs-toploader'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
 import { StartupStudioStickyBanner } from "@/components/startup-studio-sticky-banner";
-import { getConfig } from "@/flags";
-import { Spinner } from '@/components/ui/spinner';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -52,28 +49,6 @@ export const metadata: Metadata = {
   },
 };
 
-// This component will be wrapped in Suspense in the BaseLayout
-async function Providers({ children }: { children: React.ReactNode }) {
-  // These async operations will be handled by Suspense in the parent component
-  const config = await getConfig();
-
-  return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      config={config}
-    >
-      <TooltipProvider
-        delayDuration={100}
-        skipDelayDuration={50}
-      >
-        {children}
-      </TooltipProvider>
-    </ThemeProvider>
-  );
-}
-
 export default function BaseLayout({
   children,
 }: Readonly<{
@@ -87,29 +62,21 @@ export default function BaseLayout({
           shadow="0 0 10px #000, 0 0 5px #000"
           height={4}
         />
-        <Suspense fallback={<ProvidersFallback />}>
-          <Providers>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+        >
+          <TooltipProvider
+            delayDuration={100}
+            skipDelayDuration={50}
+          >
             {children}
-          </Providers>
-        </Suspense>
+          </TooltipProvider>
+        </ThemeProvider>
         <Toaster richColors closeButton position="top-right" expand duration={7000} />
         <StartupStudioStickyBanner />
       </body>
     </html>
-  );
-}
-
-function ProvidersFallback() {
-  return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      config={{ isGoogleSSOEnabled: false, isTurnstileEnabled: false }}
-    >
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <Spinner size="large" />
-      </div>
-    </ThemeProvider>
   );
 }

@@ -3,8 +3,10 @@ import { Navigation } from '@/components/navigation';
 
 export default async function NavFooterLayout({
   children,
+  renderFooter = true,
 }: Readonly<{
   children: React.ReactNode;
+  renderFooter?: boolean;
 }>) {
   return (
     <div className="min-h-screen flex flex-col">
@@ -12,7 +14,7 @@ export default async function NavFooterLayout({
       <main className="flex-1">
         {children}
       </main>
-      <Footer />
+      {renderFooter && <Footer />}
     </div>
   );
 }
