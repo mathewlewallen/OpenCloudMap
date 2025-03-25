@@ -90,7 +90,12 @@ export const RATE_LIMITS = {
   },
   SETTINGS: {
     identifier: "settings",
-    limit: 10,
+    limit: 15,
+    windowInSeconds: Math.floor(ms("5 minutes") / 1000),
+  },
+  PURCHASE: {
+    identifier: "purchase",
+    limit: 25,
     windowInSeconds: Math.floor(ms("5 minutes") / 1000),
   },
 } as const;

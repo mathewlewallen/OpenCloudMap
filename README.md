@@ -66,6 +66,15 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
   - ✨ Beautiful Email Templates
   - 👤 Profile Settings Page
   - 🎯 Form Validation States
+- 💳 Credit Billing System
+  - 💰 Credit-based Pricing Model
+  - 🔄 Monthly Credit Refresh
+  - 📊 Credit Usage Tracking
+  - 💳 Stripe Payment Integration
+  - 📜 Transaction History
+  - 📦 Credit Package Management
+  - 💸 Pay-as-you-go Model
+  - 📈 Usage Analytics
 - ✨ Validations with Zod and React Hook Form
   - 🛡️ Type-safe Form Validations
   - 🔒 Server-side Validations

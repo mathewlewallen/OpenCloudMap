@@ -27,7 +27,26 @@ export interface KVSession {
   userAgent?: string | null;
   authenticationType?: "passkey" | "password" | "google-oauth";
   passkeyCredentialId?: string;
+  /**
+   *  !!!!!!!!!!!!!!!!!!!!!
+   *  !!!   IMPORTANT   !!!
+   *  !!!!!!!!!!!!!!!!!!!!!
+   *
+   *  IF YOU MAKE ANY CHANGES TO THIS OBJECT DON'T FORGET TO INCREMENT "CURRENT_SESSION_VERSION" BELOW
+   *  IF YOU FORGET, THE SESSION WILL NOT BE UPDATED IN THE DATABASE
+   */
+  version?: number;
 }
+
+/**
+ *  !!!!!!!!!!!!!!!!!!!!!
+ *  !!!   IMPORTANT   !!!
+ *  !!!!!!!!!!!!!!!!!!!!!
+ *
+ * IF YOU MAKE ANY CHANGES TO THE KVSESSION TYPE ABOVE, YOU NEED TO INCREMENT THIS VERSIN.
+ * THIS IS HOW WE TRACK WHEN WE NEED TO UPDATE THE SESSIONS IN THE KV STORE.
+ */
+export const CURRENT_SESSION_VERSION = 1;
 
 export async function getKV() {
   const { env } = getCloudflareContext();
@@ -63,7 +82,8 @@ export async function createKVSession({
     userAgent: headersList.get('user-agent'),
     user,
     authenticationType,
-    passkeyCredentialId
+    passkeyCredentialId,
+    version: CURRENT_SESSION_VERSION
   };
 
   // TODO We should limit the number of sessions per user to 10
@@ -86,7 +106,25 @@ export async function getKVSession(sessionId: string, userId: string): Promise<K
   const sessionStr = await kv.get(getSessionKey(userId, sessionId));
   if (!sessionStr) return null;
 
-  return JSON.parse(sessionStr) as KVSession;
+  const session = JSON.parse(sessionStr) as KVSession
+
+  if (session?.user?.createdAt) {
+    session.user.createdAt = new Date(session.user.createdAt);
+  }
+
+  if (session?.user?.updatedAt) {
+    session.user.updatedAt = new Date(session.user.updatedAt);
+  }
+
+  if (session?.user?.lastCreditRefreshAt) {
+    session.user.lastCreditRefreshAt = new Date(session.user.lastCreditRefreshAt);
+  }
+
+  if (session?.user?.emailVerified) {
+    session.user.emailVerified = new Date(session.user.emailVerified);
+  }
+
+  return session;
 }
 
 export async function updateKVSession(sessionId: string, userId: string, expiresAt: Date): Promise<KVSession | null> {
@@ -101,6 +139,7 @@ export async function updateKVSession(sessionId: string, userId: string, expires
 
   const updatedSession: KVSession = {
     ...session,
+    version: CURRENT_SESSION_VERSION,
     expiresAt: expiresAt.getTime(),
     user: updatedUser
   };

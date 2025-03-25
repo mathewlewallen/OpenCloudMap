@@ -51,6 +51,11 @@ export const userTable = sqliteTable("user", {
   avatar: text({
     length: 600,
   }),
+  // Credit system fields
+  currentCredits: integer().default(0).notNull(),
+  lastCreditRefreshAt: integer({
+    mode: "timestamp",
+  }),
 }, (table) => ([
   index('email_idx').on(table.email),
   index('google_account_id_idx').on(table.googleAccountId),
@@ -88,8 +93,85 @@ export const passKeyCredentialTable = sqliteTable("passkey_credential", {
   index('credential_id_idx').on(table.credentialId),
 ]));
 
+// Credit transaction types
+export const CREDIT_TRANSACTION_TYPE = {
+  PURCHASE: 'PURCHASE',
+  USAGE: 'USAGE',
+  MONTHLY_REFRESH: 'MONTHLY_REFRESH',
+} as const;
+
+export const creditTransactionTypeTuple = Object.values(CREDIT_TRANSACTION_TYPE) as [string, ...string[]];
+
+export const creditTransactionTable = sqliteTable("credit_transaction", {
+  ...commonColumns,
+  userId: text().notNull().references(() => userTable.id),
+  amount: integer().notNull(),
+  // Track how many credits are still available from this transaction
+  remainingAmount: integer().default(0).notNull(),
+  type: text({
+    enum: creditTransactionTypeTuple,
+  }).notNull(),
+  description: text({
+    length: 255,
+  }).notNull(),
+  expirationDate: integer({
+    mode: "timestamp",
+  }),
+  expirationDateProcessedAt: integer({
+    mode: "timestamp",
+  }),
+}, (table) => ([
+  index('credit_transaction_user_id_idx').on(table.userId),
+  index('credit_transaction_type_idx').on(table.type),
+  index('credit_transaction_created_at_idx').on(table.createdAt),
+  index('credit_transaction_expiration_date_idx').on(table.expirationDate),
+]));
+
+// Define item types that can be purchased
+export const PURCHASABLE_ITEM_TYPE = {
+  COMPONENT: 'COMPONENT',
+  // Add more types in the future (e.g., TEMPLATE, PLUGIN, etc.)
+} as const;
+
+export const purchasableItemTypeTuple = Object.values(PURCHASABLE_ITEM_TYPE) as [string, ...string[]];
+
+export const purchasedItemsTable = sqliteTable("purchased_item", {
+  ...commonColumns,
+  userId: text().notNull().references(() => userTable.id),
+  // The type of item (e.g., COMPONENT, TEMPLATE, etc.)
+  itemType: text({
+    enum: purchasableItemTypeTuple,
+  }).notNull(),
+  // The ID of the item within its type (e.g., componentId)
+  itemId: text().notNull(),
+  purchasedAt: integer({
+    mode: "timestamp",
+  }).$defaultFn(() => new Date()).notNull(),
+}, (table) => ([
+  index('purchased_item_user_id_idx').on(table.userId),
+  index('purchased_item_type_idx').on(table.itemType),
+  // Composite index for checking if a user owns a specific item of a specific type
+  index('purchased_item_user_item_idx').on(table.userId, table.itemType, table.itemId),
+]));
+
+export const creditTransactionRelations = relations(creditTransactionTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [creditTransactionTable.userId],
+    references: [userTable.id],
+  }),
+}));
+
+export const purchasedItemsRelations = relations(purchasedItemsTable, ({ one }) => ({
+  user: one(userTable, {
+    fields: [purchasedItemsTable.userId],
+    references: [userTable.id],
+  }),
+}));
+
 export const userRelations = relations(userTable, ({ many }) => ({
   passkeys: many(passKeyCredentialTable),
+  creditTransactions: many(creditTransactionTable),
+  purchasedItems: many(purchasedItemsTable),
 }));
 
 export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ one }) => ({
@@ -101,3 +183,5 @@ export const passKeyCredentialRelations = relations(passKeyCredentialTable, ({ o
 
 export type User = InferSelectModel<typeof userTable>;
 export type PassKeyCredential = InferSelectModel<typeof passKeyCredentialTable>;
+export type CreditTransaction = InferSelectModel<typeof creditTransactionTable>;
+export type PurchasedItem = InferSelectModel<typeof purchasedItemsTable>;
