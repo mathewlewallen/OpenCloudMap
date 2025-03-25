@@ -37,9 +37,9 @@ export function CreditPackages() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedPackage, setSelectedPackage] = useState<CreditPackage | null>(null);
   const [clientSecret, setClientSecret] = useState<string | null>(null);
-  const session = useSessionStore((state) => state.session);
+  const session = useSessionStore((state) => state);
   const transactionsRefresh = useTransactionStore((state) => state.triggerRefresh);
-  const sessionIsLoading = useSessionStore((state) => state.isLoading);
+  const sessionIsLoading = session?.isLoading;
 
   const handlePurchase = async (pkg: CreditPackage) => {
     try {
@@ -78,7 +78,7 @@ export function CreditPackages() {
                 </>
               ) : (
                 <div className="text-3xl font-bold">
-                  {session?.user.currentCredits.toLocaleString()} credits
+                  {session?.session?.user?.currentCredits.toLocaleString()} credits
                 </div>
               )}
             </div>
