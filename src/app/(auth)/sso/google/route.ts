@@ -12,7 +12,7 @@ import isProd from "@/utils/is-prod";
 import ms from "ms";
 import type { ResponseCookie } from "next/dist/compiled/@edge-runtime/cookies";
 import { isGoogleSSOEnabled } from "@/flags";
-
+import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
 const cookieOptions: Partial<ResponseCookie> = {
   path: "/",
   httpOnly: true,
@@ -31,7 +31,7 @@ export async function GET() {
     const session = await getSessionFromCookie()
 
     if (session) {
-      return redirect('/dashboard')
+      return redirect(REDIRECT_AFTER_SIGN_IN)
     }
 
     let ssoRedirectUrl: null | URL = null

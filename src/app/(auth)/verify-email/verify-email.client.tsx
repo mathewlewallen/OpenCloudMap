@@ -9,6 +9,7 @@ import { useServerAction } from "zsa-react";
 import { verifyEmailAction } from "./verify-email.action";
 import { verifyEmailSchema } from "@/schemas/verify-email.schema";
 import { Spinner } from "@/components/ui/spinner";
+import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
 
 export default function VerifyEmailClientComponent() {
   const router = useRouter();
@@ -31,7 +32,7 @@ export default function VerifyEmailClientComponent() {
       router.refresh();
 
       setTimeout(() => {
-        router.push("/dashboard");
+        router.push(REDIRECT_AFTER_SIGN_IN);
       }, 500);
     },
   });

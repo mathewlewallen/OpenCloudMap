@@ -24,7 +24,7 @@ import { useState } from "react";
 import { startRegistration } from "@simplewebauthn/browser";
 import { KeyIcon } from 'lucide-react'
 import { useConfigStore } from "@/state/config";
-
+import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
 const SignUpPage = () => {
   const router = useRouter();
   const { isTurnstileEnabled } = useConfigStore();
@@ -42,7 +42,7 @@ const SignUpPage = () => {
     onSuccess: () => {
       toast.dismiss()
       toast.success("Account created successfully")
-      router.push("/dashboard")
+      router.push(REDIRECT_AFTER_SIGN_IN)
     }
   })
 
@@ -55,7 +55,7 @@ const SignUpPage = () => {
     onSuccess: () => {
       toast.dismiss()
       toast.success("Account created successfully")
-      router.push("/dashboard")
+      router.push(REDIRECT_AFTER_SIGN_IN)
     }
   })
 

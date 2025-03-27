@@ -18,6 +18,7 @@ import SSOButtons from "../_components/sso-buttons";
 import { KeyIcon } from "lucide-react";
 import { generateAuthenticationOptionsAction, verifyAuthenticationAction } from "@/app/(settings)/settings/security/passkey-settings.actions";
 import { startAuthentication } from "@simplewebauthn/browser";
+import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
 
 interface PasskeyAuthenticationButtonProps {
   className?: string;
@@ -41,7 +42,7 @@ function PasskeyAuthenticationButton({ className, disabled, children }: PasskeyA
     onSuccess: () => {
       toast.dismiss();
       toast.success("Authentication successful");
-      window.location.href = "/dashboard";
+      window.location.href = REDIRECT_AFTER_SIGN_IN;
     },
   });
 

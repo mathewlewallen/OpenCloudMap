@@ -9,6 +9,7 @@ import { useServerAction } from "zsa-react";
 import { googleSSOCallbackAction } from "./google-callback.action";
 import { googleSSOCallbackSchema } from "@/schemas/google-sso-callback.schema";
 import { Spinner } from "@/components/ui/spinner";
+import { REDIRECT_AFTER_SIGN_IN } from "@/constants";
 
 export default function GoogleCallbackClientComponent() {
   const router = useRouter();
@@ -28,7 +29,7 @@ export default function GoogleCallbackClientComponent() {
     onSuccess: () => {
       toast.dismiss();
       toast.success("Signed in successfully");
-      window.location.href = "/dashboard";
+      window.location.href = REDIRECT_AFTER_SIGN_IN;
     },
   });
 
