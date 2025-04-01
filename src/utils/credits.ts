@@ -19,11 +19,12 @@ function shouldRefreshCredits(session: KVSession, currentTime: Date): boolean {
     return true;
   }
 
-  // Check if the month or year has changed since last refresh
-  return (
-    session.user.lastCreditRefreshAt.getMonth() !== currentTime.getMonth() ||
-    session.user.lastCreditRefreshAt.getFullYear() !== currentTime.getFullYear()
-  );
+  // Calculate the date exactly one month after the last refresh
+  const oneMonthAfterLastRefresh = new Date(session.user.lastCreditRefreshAt);
+  oneMonthAfterLastRefresh.setMonth(oneMonthAfterLastRefresh.getMonth() + 1);
+
+  // Only refresh if we've passed the one month mark
+  return currentTime >= oneMonthAfterLastRefresh;
 }
 
 async function processExpiredCredits(userId: string, currentTime: Date) {
