@@ -124,7 +124,11 @@ async function sendBrevoEmail({
       templateId,
       params,
       tags,
-      ...(replyTo ? { replyTo } : {}),
+      ...(replyTo ? {
+        replyTo: {
+          email: replyTo,
+        }
+      } : {}),
     }),
   });
 
