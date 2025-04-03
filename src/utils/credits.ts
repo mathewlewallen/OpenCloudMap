@@ -95,13 +95,21 @@ async function updateLastRefreshDate(userId: string, date: Date) {
     .where(eq(userTable.id, userId));
 }
 
-export async function logTransaction(
-  userId: string,
-  amount: number,
-  description: string,
-  type: keyof typeof CREDIT_TRANSACTION_TYPE,
-  expirationDate?: Date
-) {
+export async function logTransaction({
+  userId,
+  amount,
+  description,
+  type,
+  expirationDate,
+  paymentIntentId
+}: {
+  userId: string;
+  amount: number;
+  description: string;
+  type: keyof typeof CREDIT_TRANSACTION_TYPE;
+  expirationDate?: Date;
+  paymentIntentId?: string;
+}) {
   const db = getDB();
   await db.insert(creditTransactionTable).values({
     userId,
@@ -109,9 +117,8 @@ export async function logTransaction(
     remainingAmount: amount, // Initialize remaining amount to be the same as amount
     type,
     description,
-    createdAt: new Date(),
-    updatedAt: new Date(),
     expirationDate,
+    paymentIntentId
   });
 }
 
@@ -143,13 +150,13 @@ export async function addFreeMonthlyCreditsIfNeeded(session: KVSession): Promise
     expirationDate.setMonth(expirationDate.getMonth() + 1);
 
     await updateUserCredits(session.userId, FREE_MONTHLY_CREDITS);
-    await logTransaction(
-      session.userId,
-      FREE_MONTHLY_CREDITS,
-      'Free monthly credits',
-      CREDIT_TRANSACTION_TYPE.MONTHLY_REFRESH,
+    await logTransaction({
+      userId: session.userId,
+      amount: FREE_MONTHLY_CREDITS,
+      description: 'Free monthly credits',
+      type: CREDIT_TRANSACTION_TYPE.MONTHLY_REFRESH,
       expirationDate
-    );
+    });
 
     // Update last refresh date
     await updateLastRefreshDate(session.userId, currentTime);

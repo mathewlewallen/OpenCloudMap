@@ -1,5 +1,5 @@
 import { sqliteTable, integer, text, index } from "drizzle-orm/sqlite-core";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { type InferSelectModel } from "drizzle-orm";
 
 import { createId } from '@paralleldrive/cuid2'
@@ -12,17 +12,18 @@ export const ROLES_ENUM = {
 const roleTuple = Object.values(ROLES_ENUM) as [string, ...string[]];
 
 const commonColumns = {
-  id: text().primaryKey().$defaultFn(() => createId()).notNull(),
   createdAt: integer({
     mode: "timestamp",
   }).$defaultFn(() => new Date()).notNull(),
   updatedAt: integer({
     mode: "timestamp",
   }).$onUpdateFn(() => new Date()).notNull(),
+  updateCounter: integer().default(0).$onUpdate(() => sql`updateCounter + 1`),
 }
 
 export const userTable = sqliteTable("user", {
   ...commonColumns,
+  id: text().primaryKey().$defaultFn(() => `usr_${createId()}`).notNull(),
   firstName: text({
     length: 255,
   }),
@@ -64,6 +65,7 @@ export const userTable = sqliteTable("user", {
 
 export const passKeyCredentialTable = sqliteTable("passkey_credential", {
   ...commonColumns,
+  id: text().primaryKey().$defaultFn(() => `pkey_${createId()}`).notNull(),
   userId: text().notNull().references(() => userTable.id),
   credentialId: text({
     length: 255,
@@ -104,6 +106,7 @@ export const creditTransactionTypeTuple = Object.values(CREDIT_TRANSACTION_TYPE)
 
 export const creditTransactionTable = sqliteTable("credit_transaction", {
   ...commonColumns,
+  id: text().primaryKey().$defaultFn(() => `ctxn_${createId()}`).notNull(),
   userId: text().notNull().references(() => userTable.id),
   amount: integer().notNull(),
   // Track how many credits are still available from this transaction
@@ -120,11 +123,15 @@ export const creditTransactionTable = sqliteTable("credit_transaction", {
   expirationDateProcessedAt: integer({
     mode: "timestamp",
   }),
+  paymentIntentId: text({
+    length: 255,
+  }),
 }, (table) => ([
   index('credit_transaction_user_id_idx').on(table.userId),
   index('credit_transaction_type_idx').on(table.type),
   index('credit_transaction_created_at_idx').on(table.createdAt),
   index('credit_transaction_expiration_date_idx').on(table.expirationDate),
+  index('credit_transaction_payment_intent_id_idx').on(table.paymentIntentId),
 ]));
 
 // Define item types that can be purchased
@@ -137,6 +144,7 @@ export const purchasableItemTypeTuple = Object.values(PURCHASABLE_ITEM_TYPE) as 
 
 export const purchasedItemsTable = sqliteTable("purchased_item", {
   ...commonColumns,
+  id: text().primaryKey().$defaultFn(() => `pitem_${createId()}`).notNull(),
   userId: text().notNull().references(() => userTable.id),
   // The type of item (e.g., COMPONENT, TEMPLATE, etc.)
   itemType: text({

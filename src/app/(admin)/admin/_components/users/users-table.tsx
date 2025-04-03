@@ -33,6 +33,7 @@ export function UsersTable() {
         <h1 className="text-3xl font-bold">Users</h1>
         <Input
           placeholder="Filter emails..."
+          type="search"
           value={emailFilter}
           onChange={(event) => setEmailFilter(event.target.value)}
           className="max-w-sm"

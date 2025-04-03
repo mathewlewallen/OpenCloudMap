@@ -131,13 +131,14 @@ export async function confirmPayment({ packageId, paymentIntentId }: PurchaseCre
 
       // Add credits and log transaction
       await updateUserCredits(session.user.id, creditPackage.credits);
-      await logTransaction(
-        session.user.id,
-        creditPackage.credits,
-        `Purchased ${creditPackage.credits} credits`,
-        CREDIT_TRANSACTION_TYPE.PURCHASE,
-        new Date(Date.now() + ms(`${CREDITS_EXPIRATION_YEARS} years`))
-      );
+      await logTransaction({
+        userId: session.user.id,
+        amount: creditPackage.credits,
+        description: `Purchased ${creditPackage.credits} credits`,
+        type: CREDIT_TRANSACTION_TYPE.PURCHASE,
+        expirationDate: new Date(Date.now() + ms(`${CREDITS_EXPIRATION_YEARS} years`)),
+        paymentIntentId: paymentIntent?.id
+      });
 
       return { success: true };
     } catch (error) {
