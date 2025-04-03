@@ -4,7 +4,7 @@ import { type InferSelectModel } from "drizzle-orm";
 
 import { createId } from '@paralleldrive/cuid2'
 
-const ROLES_ENUM = {
+export const ROLES_ENUM = {
   ADMIN: 'admin',
   USER: 'user',
 } as const;

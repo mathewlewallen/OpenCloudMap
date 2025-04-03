@@ -1,6 +1,6 @@
 import "server-only";
 
-import { userTable } from "@/db/schema";
+import { ROLES_ENUM, userTable } from "@/db/schema";
 import { init } from "@paralleldrive/cuid2";
 import { encodeHexLowerCase } from "@oslojs/encoding"
 import { sha256 } from "@oslojs/crypto/sha2"
@@ -217,6 +217,20 @@ export async function requireVerifiedEmail() {
 
   if (!session.user.emailVerified) {
     throw new ZSAError("FORBIDDEN", "Please verify your email first");
+  }
+
+  return session;
+}
+
+export const requireAdmin = async () => {
+  const session = await getSessionFromCookie();
+
+  if (!session) {
+    throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
+  }
+
+  if (session.user.role !== ROLES_ENUM.ADMIN) {
+    throw new ZSAError("FORBIDDEN", "Not authorized");
   }
 
   return session;
