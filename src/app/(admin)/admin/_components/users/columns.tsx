@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { MoreHorizontal } from "lucide-react"
+import { formatDistanceToNow, format } from "date-fns"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -12,6 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Badge } from "@/components/ui/badge"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export type User = {
   id: string
@@ -57,10 +63,20 @@ export const columns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "createdAt",
-    header: "Created At",
+    header: "Created",
     cell: ({ row }) => {
       const date = row.getValue("createdAt") as Date
-      return new Date(date).toLocaleDateString()
+      const formattedDate = format(new Date(date), "PPpp")
+      return (
+        <Tooltip>
+          <TooltipTrigger>
+            {formatDistanceToNow(new Date(date), { addSuffix: true })}
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>{formattedDate}</p>
+          </TooltipContent>
+        </Tooltip>
+      )
     },
   },
   {

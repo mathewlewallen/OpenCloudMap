@@ -6,10 +6,11 @@ import { requireAdmin } from "@/utils/auth"
 import { z } from "zod"
 import { sql } from "drizzle-orm"
 import { userTable } from "@/db/schema"
+import { PAGE_SIZE_OPTIONS } from "../admin-constants"
 
 const getUsersSchema = z.object({
   page: z.number().min(1).default(1),
-  pageSize: z.number().min(1).max(100).default(10),
+  pageSize: z.number().min(1).max(Math.max(...PAGE_SIZE_OPTIONS)).default(10),
   emailFilter: z.string().optional(),
 })
 

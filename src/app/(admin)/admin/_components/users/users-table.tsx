@@ -7,7 +7,7 @@ import { getUsersAction } from "../../_actions/get-users.action"
 import { useServerAction } from "zsa-react"
 import { toast } from "sonner"
 import { Input } from "@/components/ui/input"
-
+import { PAGE_SIZE_OPTIONS } from "../../admin-constants"
 export function UsersTable() {
   const [page, setPage] = useState(1)
   const [pageSize, setPageSize] = useState(10)
@@ -58,6 +58,7 @@ export function UsersTable() {
               totalCount={data.totalCount}
               itemNameSingular="user"
               itemNamePlural="users"
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
             />
           )}
         </div>
