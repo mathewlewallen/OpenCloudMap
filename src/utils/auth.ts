@@ -203,26 +203,33 @@ export const getSessionFromCookie = cache(async (): Promise<SessionValidationRes
   return validateSessionToken(decoded.token, decoded.userId);
 })
 
-/**
- * Helper function to require a verified email for protected actions
- * @throws {ZSAError} If user is not authenticated or email is not verified
- * @returns The verified session
- */
-export async function requireVerifiedEmail() {
+export async function requireVerifiedEmail({
+  doNotThrowError = false,
+}: {
+  doNotThrowError?: boolean;
+} = {}) {
   const session = await getSessionFromCookie();
 
   if (!session) {
     throw new ZSAError("NOT_AUTHORIZED", "Not authenticated");
   }
 
-  if (!session.user.emailVerified) {
+  if (!session?.user?.emailVerified) {
+    if (doNotThrowError) {
+      return null;
+    }
+
     throw new ZSAError("FORBIDDEN", "Please verify your email first");
   }
 
   return session;
 }
 
-export const requireAdmin = async () => {
+export const requireAdmin = async ({
+  doNotThrowError = false,
+}: {
+  doNotThrowError?: boolean;
+} = {}) => {
   const session = await getSessionFromCookie();
 
   if (!session) {
@@ -230,6 +237,10 @@ export const requireAdmin = async () => {
   }
 
   if (session.user.role !== ROLES_ENUM.ADMIN) {
+    if (doNotThrowError) {
+      return null;
+    }
+
     throw new ZSAError("FORBIDDEN", "Not authorized");
   }
 
