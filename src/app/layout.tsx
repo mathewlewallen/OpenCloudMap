@@ -10,6 +10,8 @@ import NextTopLoader from 'nextjs-toploader'
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/constants";
 import { StartupStudioStickyBanner } from "@/components/startup-studio-sticky-banner";
 
+export const dynamic = "force-dynamic";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
