@@ -39,7 +39,7 @@ export const generateRegistrationOptionsAction = createServerAction()
       }
 
       // Verify the email matches the logged-in user
-      if (user.id !== session.user.id) {
+      if (user.id !== session?.user?.id) {
         throw new ZSAError("FORBIDDEN", "You can only register passkeys for your own account");
       }
 
@@ -84,7 +84,7 @@ export const verifyRegistrationAction = createServerAction()
       }
 
       // Verify the email matches the logged-in user
-      if (user.id !== session.user.id) {
+      if (user.id !== session?.user?.id) {
         throw new ZSAError("FORBIDDEN", "You can only register passkeys for your own account");
       }
 
@@ -111,7 +111,7 @@ export const deletePasskeyAction = createServerAction()
       const session = await requireVerifiedEmail();
 
       // Prevent deletion of the current passkey
-      if (session.passkeyCredentialId === input.credentialId) {
+      if (session?.passkeyCredentialId === input.credentialId) {
         throw new ZSAError(
           "FORBIDDEN",
           "Cannot delete the current passkey"
@@ -124,11 +124,11 @@ export const deletePasskeyAction = createServerAction()
       const passkeys = await db
         .select()
         .from(passKeyCredentialTable)
-        .where(eq(passKeyCredentialTable.userId, session.user.id));
+        .where(eq(passKeyCredentialTable.userId, session?.user?.id ?? ""));
 
       // Get full user data to check password
       const user = await db.query.userTable.findFirst({
-        where: eq(userTable.id, session.user.id),
+        where: eq(userTable.id, session?.user?.id ?? ""),
       }) as User;
 
       // Check if this is the last passkey and if the user has a password

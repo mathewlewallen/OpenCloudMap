@@ -18,6 +18,10 @@ export const updateUserProfileAction = createServerAction()
         const session = await requireVerifiedEmail();
         const db = getDB();
 
+        if (!session?.user?.id) {
+          throw new ZSAError("NOT_AUTHORIZED", "Unauthorized");
+        }
+
         try {
           await db.update(userTable)
             .set({

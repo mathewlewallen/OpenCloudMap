@@ -44,6 +44,10 @@ export async function getTransactions({ page, limit = MAX_TRANSACTIONS_PER_PAGE 
 
     const session = await requireVerifiedEmail();
 
+    if (!session?.user?.id) {
+      throw new Error("Unauthorized");
+    }
+
     const result = await getCreditTransactions({
       userId: session.user.id,
       page,

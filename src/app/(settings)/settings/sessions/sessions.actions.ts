@@ -21,6 +21,10 @@ export const getSessionsAction = createServerAction()
       async () => {
         const session = await requireVerifiedEmail();
 
+        if (!session?.user?.id) {
+          throw new ZSAError("NOT_AUTHORIZED", "Unauthorized");
+        }
+
         const sessionIds = await getAllSessionIdsOfUser(session.user.id);
         const sessions = await Promise.all(
           sessionIds.map(async ({ key, absoluteExpiration }) => {
