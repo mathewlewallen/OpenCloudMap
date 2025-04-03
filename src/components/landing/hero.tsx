@@ -24,7 +24,7 @@ export function Hero() {
               Production-Ready SaaS Template
             </h1>
             <p className="mt-6 text-lg leading-8 text-muted-foreground">
-              A modern, open-source template for building SaaS applications with Next.js 14,
+              A modern, open-source template for building SaaS applications with Next.js 15,
               Cloudflare Workers, and everything you need to launch quickly.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-4 md:gap-x-6">

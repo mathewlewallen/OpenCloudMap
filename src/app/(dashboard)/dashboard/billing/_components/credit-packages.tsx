@@ -91,13 +91,13 @@ export function CreditPackages() {
 
           <div className="space-y-4">
             <div>
-              <h2 className="text-2xl font-semibold">Top up your credits</h2>
-              <p className="text-sm text-muted-foreground mt-3">
+              <h2 className="text-xl sm:text-2xl font-semibold">Top up your credits</h2>
+              <p className="text-sm text-muted-foreground mt-2 sm:mt-3">
                 Purchase additional credits to use our services. The more credits you buy, the better the value.
               </p>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-3">
+            <div className="grid gap-4 xl:grid-cols-3">
               {CREDIT_PACKAGES.map((pkg, index) => (
                 <Card key={pkg.id} className="relative overflow-hidden transition-all hover:shadow-lg">
                   <CardContent className="flex flex-col h-full pt-4 gap-4">
@@ -105,27 +105,27 @@ export function CreditPackages() {
                       <div className="flex items-center space-x-2">
                         {getPackageIcon(index)}
                         <div>
-                          <div className="text-2xl font-bold">
+                          <div className="text-xl sm:text-2xl font-bold">
                             {pkg.credits.toLocaleString()}
                           </div>
-                          <div className="text-sm text-muted-foreground">
+                          <div className="text-xs sm:text-sm text-muted-foreground">
                             credits
                           </div>
                         </div>
                       </div>
                       <div className="flex flex-col items-end">
-                        <div className="text-2xl font-bold text-primary">
+                        <div className="text-xl sm:text-2xl font-bold text-primary">
                           ${pkg.price}
                         </div>
-                        <div className="text-sm text-muted-foreground">
+                        <div className="text-xs sm:text-sm text-muted-foreground">
                           one-time payment
                         </div>
                         {index > 0 ? (
-                          <Badge variant="secondary" className="mt-1 bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                          <Badge variant="secondary" className="mt-1 text-xs sm:text-sm bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
                             Save {calculateSavings(pkg)}%
                           </Badge>
                         ) : (
-                          <div className="h-[26px]" /> /* Placeholder for badge height */
+                          <div className="h-[22px] sm:h-[26px]" /> /* Placeholder for badge height */
                         )}
                       </div>
                     </div>
@@ -138,7 +138,7 @@ export function CreditPackages() {
                           toast.error("Something went wrong with our payment provider. Please try again later.")
                         }
                       }}
-                      className="w-full"
+                      className="w-full text-sm sm:text-base"
                     >
                       Purchase Now
                     </Button>
