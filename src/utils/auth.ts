@@ -203,11 +203,11 @@ export const getSessionFromCookie = cache(async (): Promise<SessionValidationRes
   return validateSessionToken(decoded.token, decoded.userId);
 })
 
-export async function requireVerifiedEmail({
+export const requireVerifiedEmail = cache(async ({
   doNotThrowError = false,
 }: {
   doNotThrowError?: boolean;
-} = {}) {
+} = {}) => {
   const session = await getSessionFromCookie();
 
   if (!session) {
@@ -223,9 +223,9 @@ export async function requireVerifiedEmail({
   }
 
   return session;
-}
+});
 
-export const requireAdmin = async ({
+export const requireAdmin = cache(async ({
   doNotThrowError = false,
 }: {
   doNotThrowError?: boolean;
@@ -245,7 +245,7 @@ export const requireAdmin = async ({
   }
 
   return session;
-}
+});
 
 interface DisposableEmailResponse {
   disposable: string;
