@@ -99,8 +99,8 @@ export function CreditPackages() {
 
             <div className="grid gap-4 xl:grid-cols-3">
               {CREDIT_PACKAGES.map((pkg, index) => (
-                <Card key={pkg.id} className="relative overflow-hidden transition-all hover:shadow-lg">
-                  <CardContent className="flex flex-col h-full pt-4 gap-4">
+                <Card key={pkg.id} className="relative overflow-hidden transition-all hover:shadow-lg bg-muted dark:bg-background">
+                  <CardContent className="flex flex-col h-full pt-4 gap-6">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center space-x-2">
                         {getPackageIcon(index)}
