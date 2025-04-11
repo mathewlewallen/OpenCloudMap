@@ -19,7 +19,9 @@ export interface KVSession {
   userId: string;
   expiresAt: number;
   createdAt: number;
-  user: KVSessionUser;
+  user: KVSessionUser & {
+    initials?: string;
+  };
   country?: string;
   city?: string;
   continent?: string;

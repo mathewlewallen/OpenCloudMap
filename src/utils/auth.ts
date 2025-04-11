@@ -23,6 +23,7 @@ import type { SessionValidationResult } from "@/types";
 import { SESSION_COOKIE_NAME } from "@/constants";
 import { ZSAError } from "zsa";
 import { addFreeMonthlyCreditsIfNeeded } from "./credits";
+import { getInitials } from "./name-initials";
 
 const getSessionLength = () => {
   return ms("30d");
@@ -139,6 +140,9 @@ async function validateSessionToken(token: string, userId: string): Promise<Sess
       return null;
     }
 
+    // Update the user initials
+    updatedSession.user.initials = getInitials(`${updatedSession.user.firstName} ${updatedSession.user.lastName}`);
+
     return updatedSession;
   }
 
@@ -152,6 +156,9 @@ async function validateSessionToken(token: string, userId: string): Promise<Sess
   ) {
     session.user.currentCredits = currentCredits;
   }
+
+  // Update the user initials
+  session.user.initials = getInitials(`${session.user.firstName} ${session.user.lastName}`);
 
   // Return the user data directly from the session
   return session;
