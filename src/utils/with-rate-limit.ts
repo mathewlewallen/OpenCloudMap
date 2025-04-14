@@ -5,8 +5,22 @@ import ms from "ms";
 import isProd from "./is-prod";
 
 interface RateLimitConfig {
+  /**
+   * The key to use for the rate limit. Usually an IP address or a user ID.
+   * @default IP address of the request
+   */
+  userIdentifier?: string;
+  /**
+   * A unique identifier for the rate limit.
+   */
   identifier: string;
+  /**
+   * The maximum number of requests allowed within the window.
+   */
   limit: number;
+  /**
+   * The time window in seconds.
+   */
   windowInSeconds: number;
 }
 
@@ -22,7 +36,7 @@ export async function withRateLimit<T>(
   const ip = await getIP();
 
   const rateLimitResult = await checkRateLimit({
-    key: ip || "",
+    key: config?.userIdentifier || ip || "",
     options: {
       identifier: config.identifier,
       limit: config.limit,
