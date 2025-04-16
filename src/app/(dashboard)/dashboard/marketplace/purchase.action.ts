@@ -4,7 +4,7 @@ import { createServerAction, ZSAError } from "zsa";
 import { z } from "zod";
 import { getSessionFromCookie } from "@/utils/auth";
 import { withRateLimit, RATE_LIMITS } from "@/utils/with-rate-limit";
-import { hasEnoughCredits, useCredits } from "@/utils/credits";
+import { hasEnoughCredits, consumeCredits } from "@/utils/credits";
 import { getDB } from "@/db";
 import { purchasedItemsTable, PURCHASABLE_ITEM_TYPE } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
@@ -77,7 +77,7 @@ export const purchaseAction = createServerAction()
         }
 
         // Use credits first
-        await useCredits({
+        await consumeCredits({
           userId: session.userId,
           amount: itemDetails.credits,
           description: `Purchased ${input.itemType.toLowerCase()}: ${itemDetails.name}`,

@@ -187,7 +187,7 @@ export async function hasEnoughCredits({ userId, requiredCredits }: { userId: st
   return user.currentCredits >= requiredCredits;
 }
 
-export async function useCredits({ userId, amount, description }: { userId: string; amount: number; description: string }) {
+export async function consumeCredits({ userId, amount, description }: { userId: string; amount: number; description: string }) {
   const db = getDB();
 
   // First check if user has enough credits
