@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 
 import { getUserFromDB } from "@/utils/auth";
 import { getIP } from "./get-IP";
-
+import { MAX_SESSIONS_PER_USER } from "@/constants";
 const SESSION_PREFIX = "session:";
 
 export function getSessionKey(userId: string, sessionId: string): string {
@@ -88,8 +88,25 @@ export async function createKVSession({
     version: CURRENT_SESSION_VERSION
   };
 
-  // TODO We should limit the number of sessions per user to 10
-  // If we have more than 10 sessions, we should delete the oldest session
+  // Check if user has reached the session limit
+  const existingSessions = await getAllSessionIdsOfUser(userId);
+
+  // If user has MAX_SESSIONS_PER_USER or more sessions, delete the oldest one
+  if (existingSessions.length >= MAX_SESSIONS_PER_USER) {
+    // Sort sessions by expiration time (oldest first)
+    const sortedSessions = [...existingSessions].sort((a, b) => {
+      // If a session has no expiration, treat it as oldest
+      if (!a.absoluteExpiration) return -1;
+      if (!b.absoluteExpiration) return 1;
+      return a.absoluteExpiration.getTime() - b.absoluteExpiration.getTime();
+    });
+
+    // Delete the oldest session
+    const oldestSessionKey = sortedSessions?.[0]?.key;
+    const oldestSessionId = oldestSessionKey?.split(':')?.[2]; // Extract sessionId from key
+
+    await deleteKVSession(oldestSessionId, userId);
+  }
 
   await kv.put(
     getSessionKey(userId, sessionId),

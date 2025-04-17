@@ -8,6 +8,7 @@ export const GITHUB_REPO_URL = "https://github.com/LubomirGeorgiev/cloudflare-wo
 export const SITE_DOMAIN = new URL(SITE_URL).hostname
 export const PASSWORD_RESET_TOKEN_EXPIRATION_SECONDS = 24 * 60 * 60 // 24 hours
 export const EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS = 24 * 60 * 60 // 24 hours
+export const MAX_SESSIONS_PER_USER = 5;
 export const SESSION_COOKIE_NAME = "session";
 export const GOOGLE_OAUTH_STATE_COOKIE_NAME = "google-oauth-state";
 export const GOOGLE_OAUTH_CODE_VERIFIER_COOKIE_NAME = "google-oauth-code-verifier";

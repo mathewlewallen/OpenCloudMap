@@ -7,8 +7,6 @@ import { CREDIT_PACKAGES, FREE_MONTHLY_CREDITS } from "@/constants";
 
 export type CreditPackage = typeof CREDIT_PACKAGES[number];
 
-// TODO Update the Readme before merging the credit system
-
 export function getCreditPackage(packageId: string): CreditPackage | undefined {
   return CREDIT_PACKAGES.find((pkg) => pkg.id === packageId);
 }
