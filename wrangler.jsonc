@@ -4,7 +4,7 @@
  */
  {
     "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "cloudflare-workers-nextjs-saas-template",
+    "name": "opencloudmap",
     "main": ".open-next/worker.js",
     "compatibility_date": "2024-09-26",
     "compatibility_flags": [
@@ -54,7 +54,7 @@
      "services": [
       {
         "binding": "NEXT_CACHE_REVALIDATION_WORKER",
-        "service": "cloudflare-workers-nextjs-saas-template"
+        "service": "opencloudmap"
       }
     ],
 
