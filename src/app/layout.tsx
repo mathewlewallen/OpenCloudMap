@@ -21,9 +21,9 @@ export const metadata: Metadata = {
   },
   description: SITE_DESCRIPTION,
   metadataBase: new URL(SITE_URL),
-  keywords: ["SaaS", "Next.js", "React", "TypeScript", "Cloudflare Workers", "Edge Computing"],
-  authors: [{ name: "Lubomir Georgiev" }],
-  creator: "Lubomir Georgiev",
+  keywords: ["Open Cloud Map", "Next.js", "React", "TypeScript", "Cloudflare Workers", "Edge Computing", "Open Web", "Open Source", "OpenLayers"],
+  authors: [{ name: "Mathew Lewallen" }],
+  creator: "Mathew Lewallen",
   openGraph: {
     type: "website",
     locale: "en_US",
@@ -36,7 +36,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: SITE_NAME,
     description: SITE_DESCRIPTION,
-    creator: "@LubomirGeorg",
+    creator: "@MathewLewallen",
   },
   robots: {
     index: true,
