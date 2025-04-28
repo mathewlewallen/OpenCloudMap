@@ -11,7 +11,7 @@ jobs:
       deployments: write
     name: Deploy to Cloudflare Workers
     steps:
-      - name: Checkout
+      - name: Checkout 
         uses: actions/checkout@v4
         with:
           # We need to fetch all the history in order to get the updated date for...
