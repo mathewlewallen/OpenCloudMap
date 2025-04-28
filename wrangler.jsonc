@@ -38,9 +38,9 @@
      * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
      */
     "vars": {
-        "EMAIL_FROM": "hello@saas-stack.startup-studio.dev",
-        "EMAIL_FROM_NAME": "Startup Studio",
-        "EMAIL_REPLY_TO": "info@startupstudio.dev"
+        "EMAIL_FROM": "mathewlewallen@gmail.com",
+        "EMAIL_FROM_NAME": "Open Cloud Map",
+        "EMAIL_REPLY_TO": "support@opencloudmap.com" 
     },
     /**
      * Note: Use secrets to store sensitive data.
@@ -61,15 +61,15 @@
     "d1_databases": [
         {
             "binding": "NEXT_CACHE_D1",
-            "database_name": "cloudflare-workers-nextjs-saas",
-            "database_id": "94dd1269-a29c-4621-adff-1762d1af6926",
+            "database_name": "opencloudmapd1",
+            "database_id": "16c624d0-64ba-4d13-afe4-574416a87bf6",
             "migrations_dir": "src/db/migrations"
         }
     ],
     "kv_namespaces": [
         {
             "binding": "NEXT_CACHE_WORKERS_KV",
-            "id": "c6f2b077e0a34a84b3598558eb833055"
+            "id": "475cab4cd4b64c589df6cd7722e0ce11"
         }
     ]
   }

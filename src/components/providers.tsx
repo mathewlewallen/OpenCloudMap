@@ -94,12 +94,12 @@ export function ThemeProvider({
     if (document.visibilityState === 'visible') {
       fetchSession()
     }
-  }, documentRef as RefObject<Document | null>)
+  }, documentRef as RefObject<Document>)
 
   useEventListener('focus', () => {
     fetchSession()
     // @ts-expect-error window is not defined in the server
-  }, windowRef)
+  }, windowRef as RefObject<Window | null>)
 
   // Add fetchSession to the session store
   useEffect(() => {
