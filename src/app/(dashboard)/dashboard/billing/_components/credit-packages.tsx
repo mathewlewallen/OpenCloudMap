@@ -129,7 +129,7 @@ export function CreditPackages() {
                         )}
                       </div>
                     </div>
-                    <div className="flex-grow" />
+                    <div className="grow" />
                     <Button
                       onClick={() => {
                         if (process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY) {

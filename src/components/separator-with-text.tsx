@@ -12,9 +12,9 @@ export default function SeparatorWithText({
 }: SeparatorWithTextProps) {
   return (
     <div className="relative flex items-center" {...props}>
-      <div className="flex-grow border-t border-foreground-muted" {...leftBorderProps}></div>
-      <span className="flex-shrink mx-4">{children}</span>
-      <div className="flex-grow border-t border-foreground-muted" {...rightBorderProps}></div>
+      <div className="grow border-t border-foreground-muted" {...leftBorderProps}></div>
+      <span className="shrink mx-4">{children}</span>
+      <div className="grow border-t border-foreground-muted" {...rightBorderProps}></div>
     </div>
   )
 }

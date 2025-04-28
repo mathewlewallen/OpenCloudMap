@@ -31,7 +31,7 @@ export function StartupStudioStickyBanner() {
   return (
     <div
       className={cn(
-        "fixed bottom-4 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-4 z-[100] print:hidden",
+        "fixed bottom-4 left-1/2 -translate-x-1/2 md:left-auto md:translate-x-0 md:right-4 z-100 print:hidden",
         isCollapsed && "pointer-events-none" // Make entire container click-through when collapsed
       )}
     >

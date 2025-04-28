@@ -94,7 +94,7 @@ export function ThemeProvider({
     if (document.visibilityState === 'visible') {
       fetchSession()
     }
-  }, documentRef as RefObject<Document>)
+  }, documentRef as RefObject<Document | null>)
 
   useEventListener('focus', () => {
     fetchSession()
