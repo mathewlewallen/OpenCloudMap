@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { ScrollShadow } from '@heroui/react'
 import {
   User,
   Smartphone,
@@ -62,11 +61,6 @@ export function SettingsSidebar() {
   const { signOut } = useSignOut();
 
   return (
-    <ScrollShadow
-      className="w-full lg:w-auto whitespace-nowrap pb-2"
-      orientation="horizontal"
-      isEnabled={isLgAndSmaller}
-    >
       <nav className="flex items-center lg:items-stretch min-w-full space-x-2 pb-2 lg:pb-0 lg:flex-col lg:space-x-0 lg:space-y-1">
         {sidebarNavItems.map((item) => (
           <Link
@@ -121,6 +115,5 @@ export function SettingsSidebar() {
           </DialogContent>
         </Dialog>
       </nav>
-    </ScrollShadow>
   );
 }

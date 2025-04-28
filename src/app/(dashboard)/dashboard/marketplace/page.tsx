@@ -1,5 +1,5 @@
 import { PageHeader } from "@/components/page-header"
-import { Alert } from "@heroui/react"
+import { Alert } from "@/components/ui/alert"
 import { COMPONENTS } from "./components-catalog"
 import { MarketplaceCard } from "@/components/marketplace-card"
 import { getSessionFromCookie } from "@/utils/auth"

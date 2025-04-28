@@ -14,7 +14,7 @@ import { resendVerificationAction } from "@/app/(auth)/resend-verification.actio
 import { toast } from "sonner";
 import { useState } from "react";
 import { EMAIL_VERIFICATION_TOKEN_EXPIRATION_SECONDS } from "@/constants";
-import { Alert } from "@heroui/react"
+import { Alert } from "@/components/ui/alert";
 import isProd from "@/utils/is-prod";
 import { usePathname } from "next/navigation";
 import { Route } from "next";

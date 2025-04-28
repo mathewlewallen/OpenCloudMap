@@ -26,5 +26,5 @@
     ]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "custom-env.d.ts",],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "open-next.config.ts"]
 }
