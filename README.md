@@ -87,7 +87,6 @@ Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overv
 - 👨‍💻 Developer Experience
   - 🧪 Local Development Setup
   - 📘 TypeScript Support
-  - 🔍 ESLint Configuration
   - ✨ Prettier Configuration
   - 🔐 Type-safe Environment Variables
   - 🏗️ Cloudflare Types Generation

@@ -48,7 +48,6 @@ export default function VerifyEmailClientComponent() {
         router.push("/sign-in");
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   if (isPending) {

@@ -5,14 +5,13 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "build:prod": "pnpm run opennext:build && wrangler deploy --dry-run --outdir=dist",
-    "opennext:build": "opennextjs-cloudflare build",
-    "build:analyze": "ANALYZE=true next build",
     "start": "next start",
     "lint": "next lint",
-    "deploy": "pnpm run opennext:build && wrangler deploy",
-    "preview": "pnpm run opennext:build && wrangler dev",
-    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv env.d.ts",
+    "check": "opennextjs-cloudflare build && tsc && wrangler deploy --dry-run",
+    "deploy": "opennextjs-cloudflare build && wrangler deploy",
+    "preview": "opennextjs-cloudflare build && wrangler dev",
+    "build:analyze": "ANALYZE=true next build",
     "db:generate": "drizzle-kit generate --name",
     "db:migrate:dev": "wrangler d1 migrations apply $(node scripts/get-db-name.mjs) --local",
     "d1:cache:clean": "wrangler d1 execute $(node scripts/get-db-name.mjs) --command \"DELETE FROM tags; DELETE FROM revalidations\" --remote",
@@ -74,10 +73,9 @@
     "zustand": "^5.0.3"
   },
   "devDependencies": {
-    "@cloudflare/workers-types": "^4.20250428.0",
-    "@eslint/eslintrc": "^3.3.1",
     "@next/bundle-analyzer": "^15.3.1",
     "@opennextjs/cloudflare": "1.0.0-beta.4",
+    "@opennextjs/aws": "3.5.8",
     "@simplewebauthn/types": "^12.0.0",
     "@tailwindcss/postcss": "4.1.4",
     "@tailwindcss/typography": "^0.5.16",
@@ -86,13 +84,11 @@
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "drizzle-kit": "^0.31.0",
-    "eslint": "^9.25.1",
-    "eslint-config-next": "15.3.1",
     "postcss": "^8.5.3",
     "react-email": "4.0.7",
     "tailwindcss": "^4.1.4",
     "typescript": "^5.8.3",
-    "wrangler": "^4.13.2"
+    "wrangler": "^4.14.0"
   },
   "packageManager": "pnpm@10.10.0",
   "engines": {
