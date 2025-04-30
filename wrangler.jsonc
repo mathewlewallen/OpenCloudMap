@@ -2,74 +2,54 @@
  * For more details on how to configure Wrangler, refer to:
  * https://developers.cloudflare.com/workers/wrangler/configuration/
  */
- {
-    "$schema": "node_modules/wrangler/config-schema.json",
-    "name": "opencloudmap",
-    "main": ".open-next/worker.js",
-    "compatibility_date": "2025-04-01",
-    "compatibility_flags": [
-      "nodejs_compat", "nodejs_compat_populate_process_env", "global_fetch_strictly_public"
-    ],
-    // Minification helps to keep the Worker bundle size down and improve start up time.
-    "minify": true,
-    "assets": {
-      "binding": "ASSETS",
-      "directory": ".open-next/assets"
-    },
-    "observability": {
-      "enabled": true
-    },
-    "upload_source_maps": true,
-    /**
-     * Smart Placement
-     * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
-     */
-    "placement": { "mode": "smart" },
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"name": "opencloudmap",
+	"main": ".open-next/worker.js",
+	"compatibility_date": "2025-03-01",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"binding": "ASSETS",
+		"directory": ".open-next/assets"
+	},
+	"observability": {
+		"enabled": true
+	}
+	/**
+	 * Smart Placement
+	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
+	 */
+	// "placement": { "mode": "smart" },
 
-    /**
-     * Bindings
-     * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
-     * databases, object storage, AI inference, real-time communication and more.
-     * https://developers.cloudflare.com/workers/runtime-apis/bindings/
-     */
+	/**
+	 * Bindings
+	 * Bindings allow your Worker to interact with resources on the Cloudflare Developer Platform, including
+	 * databases, object storage, AI inference, real-time communication and more.
+	 * https://developers.cloudflare.com/workers/runtime-apis/bindings/
+	 */
 
-    /**
-     * Environment Variables
-     * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
-     */
-    "vars": {
-        "EMAIL_FROM": "mathewlewallen@gmail.com",
-        "EMAIL_FROM_NAME": "Open Cloud Map",
-        "EMAIL_REPLY_TO": "support@opencloudmap.com" 
-    },
-    /**
-     * Note: Use secrets to store sensitive data.
-     * https://developers.cloudflare.com/workers/configuration/secrets/
-     */
+	/**
+	 * Environment Variables
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#environment-variables
+	 */
+	// "vars": { "MY_VARIABLE": "production_value" },
+	/**
+	 * Note: Use secrets to store sensitive data.
+	 * https://developers.cloudflare.com/workers/configuration/secrets/
+	 */
 
-    /**
-     * Service Bindings (communicate between multiple Workers)
-     * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
-     */
-     "services": [
-      {
-        "binding": "WORKER_SELF_REFERENCE",
-        "service": "opencloudmap"
-      }
-    ],
+	/**
+	 * Static Assets
+	 * https://developers.cloudflare.com/workers/static-assets/binding/
+	 */
+	// "assets": { "directory": "./public/", "binding": "ASSETS" },
 
-    "d1_databases": [
-        {
-            "binding": "NEXT_TAG_CACHE_D1",
-            "database_name": "opencloudmapd1",
-            "database_id": "16c624d0-64ba-4d13-afe4-574416a87bf6",
-            "migrations_dir": "src/db/migrations"
-        }
-    ],
-    "kv_namespaces": [
-        {
-            "binding": "NEXT_INC_CACHE_KV",
-            "id": "475cab4cd4b64c589df6cd7722e0ce11"
-        }
-    ]
-  }
+	/**
+	 * Service Bindings (communicate between multiple Workers)
+	 * https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
+	 */
+	// "services": [{ "binding": "MY_SERVICE", "service": "my-service" }]
+}

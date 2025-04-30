@@ -1,170 +1,365 @@
-# Cloudflare Workers SaaS Template
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-[![.github/workflows/deploy.yml](https://github.com/mathewlewallen/opencloudmap/actions/workflows/deploy.yml/badge.svg)](https://github.com/mathewlewallen/opencloudmap/actions/workflows/deploy.yml)
+## Getting Started
 
-# [Live Demo](https://opencloudmap.com/sign-up)
-# [Github Repo](https://github.com/mathewlewallen/opencloudmap)
+First, run the development server:
 
-This is a SaaS template for Cloudflare Workers. It uses the [OpenNext](https://opennext.js.org/cloudflare) framework to build a SaaS application.
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-Have a look at the [project plan](./cursor-docs/project-plan.md) to get an overview of the project.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-> [!TIP]
-> This template is brought to you by 👉 [StartupStudio.dev](https://startupstudio.dev/?ref=github-readme-nextjs-template) 👈 - where we help businesses automate operations and boost productivity through custom AI implementations. Just like this open-source project demonstrates technical excellence, we deliver:
->
-> - Process automation with LLM-powered workflows
-> - AI strategy consulting for sustainable scaling
-> - Custom SaaS development using cutting-edge stacks
->
-> Hundrets of developers already trust our codebase - Just Imagine what we could build for your business.
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-# Supported Features:
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-- 🔐 Authentication with Lucia Auth
-  - 📧 Email/Password Sign In
-  - 📝 Email/Password Sign Up
-  - 🔑 WebAuthn/Passkey Authentication
-  - 🌐 Google OAuth/SSO Integration
-  - 🔄 Forgot Password Flow
-  - 🔒 Change Password
-  - ✉️ Email Verification
-  - 🗝️ Session Management with Cloudflare KV
-  - 🤖 Turnstile Captcha Integration
-  - ⚡ Rate Limiting for Auth Endpoints
-  - 🛡️ Protected Routes and Layouts
-  - 📋 Session Listing and Management
-  - 🔒 Anti-Disposable Email Protection
-- 💾 Database with Drizzle and Cloudflare D1
-  - 🏗️ Type-safe Database Operations
-  - 🔄 Automatic Migration Generation
-  - 💻 SQLite for Local Development
-  - ⚡ Efficient Data Fetching
-  - 🔍 Type-safe Queries
-- 📨 Email Service with React Email and Resend
-  - 🎨 Beautiful Email Templates
-  - 👀 Email Preview Mode
-  - 🔧 Local Email Development Server
-  - 📬 Transactional Emails
-  - ✉️ Email Verification Flow
-  - 📱 Responsive Email Templates
-- 🚀 Deployment with Github Actions
-  - ⚙️ Automatic Deployments
-  - 🔐 Environment Variables Management
-  - 📦 Database Migrations
-  - 🔄 Comprehensive CI/CD Pipeline
-  - 🧹 Cache Purging
-  - ✅ Type Checking
-- 🎨 Modern UI
-  - 🎨 Tailwind CSS
-  - 🧩 Shadcn UI Components
-  - 🌓 Dark/Light Mode
-  - 📱 Responsive Design
-  - ⚡ Loading States and Animations
-  - 🔔 Toast Notifications
-  - ⚙️ Settings Dashboard
-  - 🏠 Landing Page
-  - ✨ Beautiful Email Templates
-  - 👤 Profile Settings Page
-  - 🎯 Form Validation States
-- 💳 Credit Billing System
-  - 💰 Credit-based Pricing Model
-  - 🔄 Monthly Credit Refresh
-  - 📊 Credit Usage Tracking
-  - 💳 Stripe Payment Integration
-  - 📜 Transaction History
-  - 📦 Credit Package Management
-  - 💸 Pay-as-you-go Model
-  - 📈 Usage Analytics
-- 👑 Admin Dashboard
-  - 👥 User Management
-- ✨ Validations with Zod and React Hook Form
-  - 🛡️ Type-safe Form Validations
-  - 🔒 Server-side Validations
-  - 🔍 Client-side Validations
-  - 🧹 Input Sanitization
-  - ⚡ Real-time Validation
-  - 🔄 Form State Management
-- 👨‍💻 Developer Experience
-  - 🧪 Local Development Setup
-  - 📘 TypeScript Support
-  - ✨ Prettier Configuration
-  - 🔐 Type-safe Environment Variables
-  - 🏗️ Cloudflare Types Generation
-  - 🤖 AI-powered Development with Cursor
-  - 📚 Comprehensive Documentation
-  - 📐 Project Structure Best Practices
-- ⚡ Edge Computing
-  - 🌍 Global Deployment with Cloudflare Workers
-  - 🚀 Zero Cold Starts
-  - 💨 Edge Caching
-  - ⚛️ React Server Components
-  - 🖥️ Server-side Rendering
-  - 💾 Edge Database with D1
-  - 🗄️ Session Storage with KV
-  - ⚡ API Rate Limiting
+## Learn More
 
-## Planned features (TODO):
+To learn more about Next.js, take a look at the following resources:
 
-- [ ] Update Meta SEO tags 🔍
-- [ ] Dynamic OpenGraph images 📸
-- [ ] sitemap.xml 📄
-- [ ] robots.txt 📄
-- [ ] Multi-language support (i18n) 🌐
-- [ ] Notifications 🔔
-- [ ] Webhooks 🔗
-- [ ] Track bundle size with https://www.npmjs.com/package/webpack-bundle-analyzer 📊
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-# Running it locally
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-1. `pnpm install`
-2.  Copy `.dev.vars.example` to `.dev.vars` and fill in the values.
-3.  Copy `.env.example` to `.env` and fill in the values.
-4. `pnpm db:migrate:dev` - Creates a local SQLite database and applies migrations
-5. `pnpm dev`
-6.  Open http://localhost:3000
+## Deploy on Vercel
 
-## Changes to wrangler.jsonc
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-After making a change to wrangler.jsonc, you need to run `pnpm cf-typegen` to generate the new types.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
 
-## Things to change and customize before deploying to production
-1. Go to `src/constants.ts` and update it with your project details
-2. Update the documentation in `./cursor-docs` with your project details so that Cursor AI can give you better suggestions
-3. Update the footer in `src/components/footer.tsx` with your project details and links
-4. Optional: Update the color palette in `src/app/globals.css`
-5. Update the metadata in `src/app/layout.tsx` with your project details
+~/Documents/GitHub/OpenCloudMap on main !3 ❯ pnpm create cloudflare@latest opencloudmap
+.../19686b0c553-ac55                     |   +1 +
+.../19686b0c553-ac55                     | Progress: resolved 1, reused 0, downloaded 1, added 1, done
 
-## Deploying to Cloudflare with Github Actions
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
+👋 Welcome to create-cloudflare v2.46.0!
+🧡 Let's get started.
+📊 Cloudflare collects telemetry about your usage of Create-Cloudflare.
 
-1. Create D1 and KV namespaces
-2. Set either `RESEND_API_KEY` as a secret in your Cloudflare Worker depending on which email service you want to use.
-3. Create a Turnstile catcha in your Cloudflare account, and set the `NEXT_PUBLIC_TURNSTILE_SITE_KEY` as a Github Actions variable.
-4. Set `TURNSTILE_SECRET_KEY` as a secret in your Cloudflare Worker.
-5. Update the `wrangler.jsonc` file with the new database and KV namespaces and env variables. Search for "opencloudmap" recursively in the whole repository and change that to the name of your project. Don't forget that the name you choose at the top of the wrangler.jsonc should be the same as `services->[0]->service` in the same file.
-6. Go to https://dash.cloudflare.com/profile/api-tokens and click on "Use template" next to "Edit Cloudflare Workers". On the next, page add the following permissions in addition to the ones from the template:
-    - Account:AI Gateway:Edit
-    - Account:Workers AI:Edit
-    - Account:Workers AI:Read
-    - Account:Queues:Edit
-    - Account:Vectorize:Edit
-    - Account:D1:Edit
-    - Account:Cloudflare Images:Edit
-    - Account:Workers KV Storage:Edit
-    - Zone:Cache Purge:Purge
-7. Add the API token to the Github repository secrets as `CLOUDFLARE_API_TOKEN`
-8. Add the Cloudflare account id to the Github repository variables as `CLOUDFLARE_ACCOUNT_ID`
-9. Optional: If you want clear the CDN cache on deploy, add `CLOUDFLARE_ZONE_ID` to the Github repository variables for the zone id of your domain. This is the zone id of your domain, not the account id.
-10. Push to the main branch
+Learn more at: https://github.com/cloudflare/workers-sdk/blob/main/packages/create-cloudflare/telemetry.md
+──────────────────────────────────────────────────────────────────────────────────────────────────────────
 
-## Email templates
-If you want to preview and edit the email templates you can:
-1. `pnpm email:dev`
-2. Open http://localhost:3001
-3. Edit the email templates in the `src/react-email` folder
-4. For inspiration you can checkout https://react.email/templates
+╭ Create an application with Cloudflare Step 1 of 3
+│
+├ In which directory do you want to create your application?
+│ dir ./opencloudmap
+│
+├ What would you like to start with?
+│ category Framework Starter
+│
+╰ Which development framework do you want to use?
+  ● Analog
+  ○ Analog
+  ● Angular
+  ○ Angular
+  ● Astro
+  ○ Astro
+  ● Docusaurus
+  ○ Docusaurus
+  ● Gatsby
+  ○ Gatsby
+  ● Hono
+  ○ Hono
+  ● Next.js
+  ○ Next.js
+  ● Nuxt
+  ○ Nuxt
+  ● Docusaurus
+  ○ Docusaurus
+  ● Gatsby
+  ○ Gatsby
+  ● Hono
+  ○ Hono
+  ● Next.js
+  ○ Next.js
+  ● Nuxt
+  ● Analog
+  ○ Analog
+  ○ Angular
+  ○ Astro
+  ○ Docusaurus
+  ○ Gatsby
+  ○ Hono
+  ○ Next.js
+  ○ Nuxt
+├ Which development framework do you want to use?
+│ framework Next.js
+│
+├ Select your deployment platform
+│ platform Workers with Assets
+│
+├ Continue with Next.js (using Node.js compat + Workers Assets) via `pnpm dlx create-next-app@~15.3.0 opencloudmap`
+│
+
+Packages: +1
++
+Progress: resolved 1, reused 1, downloaded 0, added 1, done
+✔ Would you like to use TypeScript? … No / Yes
+✔ Would you like to use ESLint? … No / Yes
+✔ Would you like to use Tailwind CSS? … No / Yes
+✔ Would you like your code inside a `src/` directory? … No / Yes
+✔ Would you like to use App Router? (recommended) … No / Yes
+✔ Would you like to use Turbopack for `next dev`? … No / Yes
+✔ Would you like to customize the import alias (`@/*` by default)? … No / Yes
+✔ What import alias would you like configured? … @/*
+Creating a new Next.js app in /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap.
+
+Using pnpm.
+
+Initializing project with template: app-tw 
 
 
-### How to upgrade this template
-Since this template is based on the [OpenNext](https://opennext.js.org/cloudflare) framework we need to make sure that we are following the changes they are making and update this template accordingly.
+Installing dependencies:
+- react
+- react-dom
+- next
 
-To see the changes clone https://github.com/cloudflare/workers-sdk and then do `git diff 869ec7b...main -- packages/create-cloudflare/templates-experimental/next/` you will see the changes that we need to make to this template.
+Installing devDependencies:
+- typescript
+- @types/node
+- @types/react
+- @types/react-dom
+- @tailwindcss/postcss
+- tailwindcss
+
+Packages: +48
+++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 94, reused 47, downloaded 2, added 48, done
+
+dependencies:
++ next 15.3.1
++ react 19.1.0
++ react-dom 19.1.0
+
+devDependencies:
++ @tailwindcss/postcss 4.1.4
++ @types/node 20.17.32 (22.15.3 is available)
++ @types/react 19.1.2
++ @types/react-dom 19.1.3
++ tailwindcss 4.1.4
++ typescript 5.8.3
+
+╭ Warning ───────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                            │
+│   Ignored build scripts: sharp.                                                            │
+│   Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.   │
+│                                                                                            │
+╰────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Done in 8.1s using pnpm v10.6.3
+Success! Created opencloudmap at /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
+
+├ Copying template files
+│ files copied to project directory
+│
+╰ Application created 
+
+╭ Configuring your application for Cloudflare Step 2 of 3
+│
+├ Installing wrangler A command line tool for building Cloudflare Workers
+│ installed via `pnpm install wrangler --save-dev`
+│
+├ Installing @cloudflare/workers-types
+│ installed via pnpm
+│
+├ Adding latest types to `tsconfig.json`
+│ added @cloudflare/workers-types/2023-07-01
+│
+├ Adding the Cloudflare adapter
+│ installed @opennextjs/cloudflare)}
+│
+├ Updating `next.config.ts`
+│ updated `next.config.ts`
+│
+├ Adding Wrangler files to the .gitignore file
+│ updated .gitignore file
+│
+├ Updating `package.json` scripts
+│ updated `package.json`
+│
+├ You're in an existing git repository. Do you want to use git for version control?
+│ yes git
+│
+╰ Application configured 
+
+╭ Deploy with Cloudflare Step 3 of 3
+│
+├ Do you want to deploy your application?
+│ yes deploy via `pnpm run deploy`
+│
+├ Logging into Cloudflare checking authentication status
+│ not logged in
+│
+├ Logging into Cloudflare This will open a browser window
+│ allowed via `wrangler login`
+│
+├ Selecting Cloudflare account retrieving accounts
+│ account Mathewlewallen@gmail.com's Account
+│
+
+> opencloudmap@0.1.0 deploy /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
+> opennextjs-cloudflare build && opennextjs-cloudflare deploy
+
+
+┌─────────────────────────────┐
+│ OpenNext — Cloudflare build │
+└─────────────────────────────┘
+
+App directory: /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
+Next.js version : 15.3.1
+@opennextjs/cloudflare version: 1.0.0-beta.4
+@opennextjs/aws version: 3.5.7
+
+┌─────────────────────────────────┐
+│ OpenNext — Building Next.js app │
+└─────────────────────────────────┘
+
+
+> opencloudmap@0.1.0 build /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
+> next build
+
+   ▲ Next.js 15.3.1
+
+Using vars defined in .dev.vars
+Using vars defined in .dev.vars
+   Creating an optimized production build ...
+Using vars defined in .dev.vars
+Using vars defined in .dev.vars
+Using vars defined in .dev.vars
+ ✓ Compiled successfully in 5.0s
+ ✓ Linting and checking validity of types    
+ ✓ Collecting page data    
+ ✓ Generating static pages (5/5)
+ ✓ Collecting build traces    
+ ✓ Finalizing page optimization    
+
+Route (app)                                 Size  First Load JS    
+┌ ○ /                                    5.61 kB         107 kB
+└ ○ /_not-found                            978 B         103 kB
++ First Load JS shared by all             102 kB
+  ├ chunks/770-76939705ff65587a.js       46.5 kB
+  ├ chunks/96e220d1-21a0fdc894793ec0.js  53.2 kB
+  └ other shared chunks (total)          1.89 kB
+
+
+○  (Static)  prerendered as static content
+
+
+┌──────────────────────────────┐
+│ OpenNext — Generating bundle │
+└──────────────────────────────┘
+
+Bundling middleware function...
+Bundling static assets...
+Bundling cache assets...
+Building server function: default...
+Applying code patches: 3.635s
+# copyPackageTemplateFiles
+⚙️ Bundling the OpenNext server...
+
+Applying code patches:
+ - patching require
+ - patching cacheHandler
+ - patching 'require(this.middlewareManifestPath)'
+ - patching `require.resolve` call
+All 4 patches applied
+
+Worker saved in `/Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap/.open-next/worker.js` 🚀
+
+OpenNext build complete.
+
+┌──────────────────────────────┐
+│ OpenNext — Cloudflare deploy │
+└──────────────────────────────┘
+
+Incremental cache does not need populating
+Tag cache does not need populating
+
+Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+
+ ⛅️ wrangler 4.14.0
+-------------------
+
+🌀 Building list of assets...
+✨ Read 38 files from the assets directory /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap/.open-next/assets
+🌀 Starting asset upload...
+🌀 Found 26 new or modified static assets to upload. Proceeding with upload...
++ /BUILD_ID
++ /_next/static/chunks/pages/_error-124d86105653e7ca.js
++ /file.svg
++ /_next/static/chunks/app/layout-70e1e1c50f309fdc.js
++ /_next/static/chunks/app/_not-found/page-fc03ad80c386bbf7.js
++ /_next/static/media/9610d9e46709d722-s.woff2
++ /_next/static/media/8d697b304b401681-s.woff2
++ /_next/static/media/93f479601ee12b01-s.p.woff2
++ /_next/static/chunks/770-76939705ff65587a.js
++ /vercel.svg
++ /_next/static/chunks/pages/_app-0693f4868892b9c9.js
++ /_next/static/chunks/main-app-bd687684fa46af10.js
++ /globe.svg
++ /_next/static/chunks/webpack-a05f68e3d168c82d.js
++ /_next/static/media/747892c23ea88013-s.woff2
++ /_next/static/media/ba015fad6dcf6784-s.woff2
++ /_next/static/chunks/main-33dc44b75745a853.js
++ /_next/static/chunks/framework-1158a0cb627c4f82.js
++ /_next/static/chunks/app/page-1f71a4305cf8a15f.js
++ /window.svg
++ /_next/static/vvQAo48Boluubl5qzJ5SV/_buildManifest.js
++ /next.svg
++ /_next/static/css/46c36fc8a744cf8b.css
++ /_next/static/chunks/299-3d800a9d82a8b555.js
++ /_next/static/media/569ce4b8f30dc480-s.p.woff2
++ /_next/static/chunks/96e220d1-21a0fdc894793ec0.js
+Uploaded 9 of 26 assets
+Uploaded 18 of 26 assets
+Uploaded 26 of 26 assets
+✨ Success! Uploaded 26 files (3 already uploaded) (2.26 sec)
+
+Total Upload: 13982.27 KiB / gzip: 2309.95 KiB
+Worker Startup Time: 26 ms
+Your Worker has access to the following bindings:
+- Assets:
+  - Binding: ASSETS
+Uploaded opencloudmap (19.24 sec)
+Deployed opencloudmap triggers (1.33 sec)
+  https://opencloudmap.mathewlewallen.workers.dev
+Current Version ID: a9aae92d-9b97-483c-88c5-b6b802652230
+├ Waiting for DNS to propagate. This might take a few minutes.
+│ DNS propagation complete.
+│
+├ Waiting for deployment to become available
+│ deployment is ready at: https://opencloudmap.mathewlewallen.workers.dev
+│
+├ Opening browser
+│
+╰ Done 
+
+──────────────────────────────────────────────────────────────────────────────────
+🎉  SUCCESS  Application deployed successfully!
+
+🔍 View Project
+Visit: https://opencloudmap.mathewlewallen.workers.dev
+Dash: https://dash.cloudflare.com/?to=/:account/workers/services/view/opencloudmap
+
+💻 Continue Developing
+Change directories: cd opencloudmap
+Start dev server: pnpm run dev
+Deploy again: pnpm run deploy
+
+📖 Explore Documentation
+https://developers.cloudflare.com/workers
+
+🐛 Report an Issue
+https://github.com/cloudflare/workers-sdk/issues/new/choose
+
+💬 Join our Community
+https://discord.cloudflare.com
+────────────────────────────────
