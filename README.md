@@ -1,365 +1,261 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Next.js Subscription Payments Starter
 
-## Getting Started
 
-First, run the development server:
+> [!WARNING]  
+> This repo has been sunset and replaced by a new template: https://github.com/nextjs/saas-starter
+
+## Features
+
+- Secure user management and authentication with [Supabase](https://supabase.io/docs/guides/auth)
+- Powerful data access & management tooling on top of PostgreSQL with [Supabase](https://supabase.io/docs/guides/database)
+- Integration with [Stripe Checkout](https://stripe.com/docs/payments/checkout) and the [Stripe customer portal](https://stripe.com/docs/billing/subscriptions/customer-portal)
+- Automatic syncing of pricing plans and subscription statuses via [Stripe webhooks](https://stripe.com/docs/webhooks)
+
+## Demo
+
+- https://subscription-payments.vercel.app/
+
+[![Screenshot of demo](./public/demo.png)](https://subscription-payments.vercel.app/)
+
+## Architecture
+
+![Architecture diagram](./public/architecture_diagram.png)
+
+## Step-by-step setup
+
+When deploying this template, the sequence of steps is important. Follow the steps below in order to get up and running.
+
+### Initiate Deployment
+
+#### Vercel Deploy Button
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fvercel%2Fnextjs-subscription-payments&env=NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY,STRIPE_SECRET_KEY&envDescription=Enter%20your%20Stripe%20API%20keys.&envLink=https%3A%2F%2Fdashboard.stripe.com%2Fapikeys&project-name=nextjs-subscription-payments&repository-name=nextjs-subscription-payments&integration-ids=oac_VqOgBHqhEoFTPzGkPd7L0iH6&external-id=https%3A%2F%2Fgithub.com%2Fvercel%2Fnextjs-subscription-payments%2Ftree%2Fmain)
+
+The Vercel Deployment will create a new repository with this template on your GitHub account and guide you through a new Supabase project creation. The [Supabase Vercel Deploy Integration](https://vercel.com/integrations/supabase) will set up the necessary Supabase environment variables and run the [SQL migrations](./supabase/migrations/20230530034630_init.sql) to set up the Database schema on your account. You can inspect the created tables in your project's [Table editor](https://app.supabase.com/project/_/editor).
+
+Should the automatic setup fail, please [create a Supabase account](https://app.supabase.com/projects), and a new project if needed. In your project, navigate to the [SQL editor](https://app.supabase.com/project/_/sql) and select the "Stripe Subscriptions" starter template from the Quick start section.
+
+### Configure Auth
+
+Follow [this guide](https://supabase.com/docs/guides/auth/social-login/auth-github) to set up an OAuth app with GitHub and configure Supabase to use it as an auth provider.
+
+In your Supabase project, navigate to [auth > URL configuration](https://app.supabase.com/project/_/auth/url-configuration) and set your main production URL (e.g. https://your-deployment-url.vercel.app) as the site url.
+
+Next, in your Vercel deployment settings, add a new **Production** environment variable called `NEXT_PUBLIC_SITE_URL` and set it to the same URL. Make sure to deselect preview and development environments to make sure that preview branches and local development work correctly.
+
+#### [Optional] - Set up redirect wildcards for deploy previews (not needed if you installed via the Deploy Button)
+
+If you've deployed this template via the "Deploy to Vercel" button above, you can skip this step. The Supabase Vercel Integration will have set redirect wildcards for you. You can check this by going to your Supabase [auth settings](https://app.supabase.com/project/_/auth/url-configuration) and you should see a list of redirects under "Redirect URLs".
+
+Otherwise, for auth redirects (email confirmations, magic links, OAuth providers) to work correctly in deploy previews, navigate to the [auth settings](https://app.supabase.com/project/_/auth/url-configuration) and add the following wildcard URL to "Redirect URLs": `https://*-username.vercel.app/**`. You can read more about redirect wildcard patterns in the [docs](https://supabase.com/docs/guides/auth#redirect-urls-and-wildcards).
+
+If you've deployed this template via the "Deploy to Vercel" button above, you can skip this step. The Supabase Vercel Integration will have run database migrations for you. You can check this by going to [the Table Editor for your Supabase project](https://supabase.com/dashboard/project/_/editor), and confirming there are tables with seed data.
+
+Otherwise, navigate to the [SQL Editor](https://supabase.com/dashboard/project/_/sql/new), paste the contents of [the Supabase `schema.sql` file](./schema.sql), and click RUN to initialize the database.
+
+#### [Maybe Optional] - Set up Supabase environment variables (not needed if you installed via the Deploy Button)
+
+If you've deployed this template via the "Deploy to Vercel" button above, you can skip this step. The Supabase Vercel Integration will have set your environment variables for you. You can check this by going to your Vercel project settings, and clicking on 'Environment variables', there will be a list of environment variables with the Supabase icon displayed next to them.
+
+Otherwise navigate to the [API settings](https://app.supabase.com/project/_/settings/api) and paste them into the Vercel deployment interface. Copy project API keys and paste into the `NEXT_PUBLIC_SUPABASE_ANON_KEY` and `SUPABASE_SERVICE_ROLE_KEY` fields, and copy the project URL and paste to Vercel as `NEXT_PUBLIC_SUPABASE_URL`.
+
+Congrats, this completes the Supabase setup, almost there!
+
+### Configure Stripe
+
+Next, we'll need to configure [Stripe](https://stripe.com/) to handle test payments. If you don't already have a Stripe account, create one now.
+
+For the following steps, make sure you have the ["Test Mode" toggle](https://stripe.com/docs/testing) switched on.
+
+#### Create a Webhook
+
+We need to create a webhook in the `Developers` section of Stripe. Pictured in the architecture diagram above, this webhook is the piece that connects Stripe to your Vercel Serverless Functions.
+
+1. Click the "Add Endpoint" button on the [test Endpoints page](https://dashboard.stripe.com/test/webhooks).
+1. Enter your production deployment URL followed by `/api/webhooks` for the endpoint URL. (e.g. `https://your-deployment-url.vercel.app/api/webhooks`)
+1. Click `Select events` under the `Select events to listen to` heading.
+1. Click `Select all events` in the `Select events to send` section.
+1. Copy `Signing secret` as we'll need that in the next step (e.g `whsec_xxx`) (/!\ be careful not to copy the webook id we_xxxx).
+1. In addition to the `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and the `STRIPE_SECRET_KEY` we've set earlier during deployment, we need to add the webhook secret as `STRIPE_WEBHOOK_SECRET` env var.
+
+#### Redeploy with new env vars
+
+For the newly set environment variables to take effect and everything to work together correctly, we need to redeploy our app in Vercel. In your Vercel Dashboard, navigate to deployments, click the overflow menu button and select "Redeploy" (do NOT enable the "Use existing Build Cache" option). Once Vercel has rebuilt and redeployed your app, you're ready to set up your products and prices.
+
+#### Create product and pricing information
+
+Your application's webhook listens for product updates on Stripe and automatically propagates them to your Supabase database. So with your webhook listener running, you can now create your product and pricing information in the [Stripe Dashboard](https://dashboard.stripe.com/test/products).
+
+Stripe Checkout currently supports pricing that bills a predefined amount at a specific interval. More complex plans (e.g., different pricing tiers or seats) are not yet supported.
+
+For example, you can create business models with different pricing tiers, e.g.:
+
+- Product 1: Hobby
+  - Price 1: 10 USD per month
+  - Price 2: 100 USD per year
+- Product 2: Freelancer
+  - Price 1: 20 USD per month
+  - Price 2: 200 USD per year
+
+Optionally, to speed up the setup, we have added a [fixtures file](fixtures/stripe-fixtures.json) to bootstrap test product and pricing data in your Stripe account. The [Stripe CLI](https://stripe.com/docs/stripe-cli#install) `fixtures` command executes a series of API requests defined in this JSON file. Simply run `stripe fixtures fixtures/stripe-fixtures.json`.
+
+**Important:** Make sure that you've configured your Stripe webhook correctly and redeployed with all needed environment variables.
+
+#### Configure the Stripe customer portal
+
+1. Set your custom branding in the [settings](https://dashboard.stripe.com/settings/branding)
+1. Configure the Customer Portal [settings](https://dashboard.stripe.com/test/settings/billing/portal)
+1. Toggle on "Allow customers to update their payment methods"
+1. Toggle on "Allow customers to update subscriptions"
+1. Toggle on "Allow customers to cancel subscriptions"
+1. Add the products and prices that you want
+1. Set up the required business information and links
+
+### That's it
+
+I know, that was quite a lot to get through, but it's worth it. You're now ready to earn recurring revenue from your customers. 🥳
+
+## Develop locally
+
+If you haven't already done so, clone your Github repository to your local machine.
+
+### Install dependencies
+
+Ensure you have [pnpm](https://pnpm.io/installation) installed and run:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Next, use the [Vercel CLI](https://vercel.com/docs/cli) to link your project:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm dlx vercel login
+pnpm dlx vercel link
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`pnpm dlx` runs a package from the registry, without installing it as a dependency. Alternatively, you can install these packages globally, and drop the `pnpm dlx` part.
 
-## Learn More
+If you don't intend to use a local Supabase instance for development and testing, you can use the Vercel CLI to download the development env vars:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+pnpm dlx vercel env pull .env.local
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Running this command will create a new `.env.local` file in your project folder. For security purposes, you will need to set the `SUPABASE_SERVICE_ROLE_KEY` manually from your [Supabase dashboard](https://app.supabase.io/) (`Settings > API`). If you are not using a local Supabase instance, you should also change the `--local` flag to `--linked' or '--project-id <string>' in the `supabase:generate-types` script in `package.json`.(see -> [https://supabase.com/docs/reference/cli/supabase-gen-types-typescript])
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Local development with Supabase
 
-## Deploy on Vercel
+It's highly recommended to use a local Supabase instance for development and testing. We have provided a set of custom commands for this in `package.json`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+First, you will need to install [Docker](https://www.docker.com/get-started/). You should also copy or rename:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- `.env.local.example` -> `.env.local`
+- `.env.example` -> `.env`
 
-~/Documents/GitHub/OpenCloudMap on main !3 ❯ pnpm create cloudflare@latest opencloudmap
-.../19686b0c553-ac55                     |   +1 +
-.../19686b0c553-ac55                     | Progress: resolved 1, reused 0, downloaded 1, added 1, done
+Next, run the following command to start a local Supabase instance and run the migrations to set up the database schema:
 
-──────────────────────────────────────────────────────────────────────────────────────────────────────────
-👋 Welcome to create-cloudflare v2.46.0!
-🧡 Let's get started.
-📊 Cloudflare collects telemetry about your usage of Create-Cloudflare.
+```bash
+pnpm supabase:start
+```
 
-Learn more at: https://github.com/cloudflare/workers-sdk/blob/main/packages/create-cloudflare/telemetry.md
-──────────────────────────────────────────────────────────────────────────────────────────────────────────
+The terminal output will provide you with URLs to access the different services within the Supabase stack. The Supabase Studio is where you can make changes to your local database instance.
 
-╭ Create an application with Cloudflare Step 1 of 3
-│
-├ In which directory do you want to create your application?
-│ dir ./opencloudmap
-│
-├ What would you like to start with?
-│ category Framework Starter
-│
-╰ Which development framework do you want to use?
-  ● Analog
-  ○ Analog
-  ● Angular
-  ○ Angular
-  ● Astro
-  ○ Astro
-  ● Docusaurus
-  ○ Docusaurus
-  ● Gatsby
-  ○ Gatsby
-  ● Hono
-  ○ Hono
-  ● Next.js
-  ○ Next.js
-  ● Nuxt
-  ○ Nuxt
-  ● Docusaurus
-  ○ Docusaurus
-  ● Gatsby
-  ○ Gatsby
-  ● Hono
-  ○ Hono
-  ● Next.js
-  ○ Next.js
-  ● Nuxt
-  ● Analog
-  ○ Analog
-  ○ Angular
-  ○ Astro
-  ○ Docusaurus
-  ○ Gatsby
-  ○ Hono
-  ○ Next.js
-  ○ Nuxt
-├ Which development framework do you want to use?
-│ framework Next.js
-│
-├ Select your deployment platform
-│ platform Workers with Assets
-│
-├ Continue with Next.js (using Node.js compat + Workers Assets) via `pnpm dlx create-next-app@~15.3.0 opencloudmap`
-│
+Copy the value for the `service_role_key` and paste it as the value for the `SUPABASE_SERVICE_ROLE_KEY` in your `.env.local` file.
 
-Packages: +1
-+
-Progress: resolved 1, reused 1, downloaded 0, added 1, done
-✔ Would you like to use TypeScript? … No / Yes
-✔ Would you like to use ESLint? … No / Yes
-✔ Would you like to use Tailwind CSS? … No / Yes
-✔ Would you like your code inside a `src/` directory? … No / Yes
-✔ Would you like to use App Router? (recommended) … No / Yes
-✔ Would you like to use Turbopack for `next dev`? … No / Yes
-✔ Would you like to customize the import alias (`@/*` by default)? … No / Yes
-✔ What import alias would you like configured? … @/*
-Creating a new Next.js app in /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap.
+You can print out these URLs at any time with the following command:
 
-Using pnpm.
+```bash
+pnpm supabase:status
+```
 
-Initializing project with template: app-tw 
+To link your local Supabase instance to your project, run the following command, navigate to the Supabase project you created above, and enter your database password.
 
+```bash
+pnpm supabase:link
+```
 
-Installing dependencies:
-- react
-- react-dom
-- next
+If you need to reset your database password, head over to [your database settings](https://supabase.com/dashboard/project/_/settings/database) and click "Reset database password", and this time copy it across to a password manager! 😄
 
-Installing devDependencies:
-- typescript
-- @types/node
-- @types/react
-- @types/react-dom
-- @tailwindcss/postcss
-- tailwindcss
+🚧 Warning: This links our Local Development instance to the project we are using for `production`. Currently, it only has test records, but once it has customer data, we recommend using [Branching](https://supabase.com/docs/guides/platform/branching) or manually creating a separate `preview` or `staging` environment, to ensure your customer's data is not used locally, and schema changes/migrations can be thoroughly tested before shipping to `production`.
 
-Packages: +48
-++++++++++++++++++++++++++++++++++++++++++++++++
-Progress: resolved 94, reused 47, downloaded 2, added 48, done
+Once you've linked your project, you can pull down any schema changes you made in your remote database with:
 
-dependencies:
-+ next 15.3.1
-+ react 19.1.0
-+ react-dom 19.1.0
+```bash
+pnpm supabase:pull
+```
 
-devDependencies:
-+ @tailwindcss/postcss 4.1.4
-+ @types/node 20.17.32 (22.15.3 is available)
-+ @types/react 19.1.2
-+ @types/react-dom 19.1.3
-+ tailwindcss 4.1.4
-+ typescript 5.8.3
+You can seed your local database with any data you added in your remote database with:
 
-╭ Warning ───────────────────────────────────────────────────────────────────────────────────╮
-│                                                                                            │
-│   Ignored build scripts: sharp.                                                            │
-│   Run "pnpm approve-builds" to pick which dependencies should be allowed to run scripts.   │
-│                                                                                            │
-╰────────────────────────────────────────────────────────────────────────────────────────────╯
+```bash
+pnpm supabase:generate-seed
+pnpm supabase:reset
+```
 
-Done in 8.1s using pnpm v10.6.3
-Success! Created opencloudmap at /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
+🚧 Warning: this is seeding data from the `production` database. Currently, this only contains test data, but we recommend using [Branching](https://supabase.com/docs/guides/platform/branching) or manually setting up a `preview` or `staging` environment once this contains real customer data.
 
-├ Copying template files
-│ files copied to project directory
-│
-╰ Application created 
+You can make changes to the database schema in your local Supabase Studio and run the following command to generate TypeScript types to match your schema:
 
-╭ Configuring your application for Cloudflare Step 2 of 3
-│
-├ Installing wrangler A command line tool for building Cloudflare Workers
-│ installed via `pnpm install wrangler --save-dev`
-│
-├ Installing @cloudflare/workers-types
-│ installed via pnpm
-│
-├ Adding latest types to `tsconfig.json`
-│ added @cloudflare/workers-types/2023-07-01
-│
-├ Adding the Cloudflare adapter
-│ installed @opennextjs/cloudflare)}
-│
-├ Updating `next.config.ts`
-│ updated `next.config.ts`
-│
-├ Adding Wrangler files to the .gitignore file
-│ updated .gitignore file
-│
-├ Updating `package.json` scripts
-│ updated `package.json`
-│
-├ You're in an existing git repository. Do you want to use git for version control?
-│ yes git
-│
-╰ Application configured 
+```bash
+pnpm supabase:generate-types
+```
 
-╭ Deploy with Cloudflare Step 3 of 3
-│
-├ Do you want to deploy your application?
-│ yes deploy via `pnpm run deploy`
-│
-├ Logging into Cloudflare checking authentication status
-│ not logged in
-│
-├ Logging into Cloudflare This will open a browser window
-│ allowed via `wrangler login`
-│
-├ Selecting Cloudflare account retrieving accounts
-│ account Mathewlewallen@gmail.com's Account
-│
+You can also automatically generate a migration file with all the changes you've made to your local database schema with the following command:
 
-> opencloudmap@0.1.0 deploy /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
-> opennextjs-cloudflare build && opennextjs-cloudflare deploy
+```bash
+pnpm supabase:generate-migration
+```
 
+And push those changes to your remote database with:
 
-┌─────────────────────────────┐
-│ OpenNext — Cloudflare build │
-└─────────────────────────────┘
+```bash
+pnpm supabase:push
+```
 
-App directory: /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
-Next.js version : 15.3.1
-@opennextjs/cloudflare version: 1.0.0-beta.4
-@opennextjs/aws version: 3.5.7
+Remember to test your changes thoroughly in your `local` and `staging` or `preview` environments before deploying them to `production`!
 
-┌─────────────────────────────────┐
-│ OpenNext — Building Next.js app │
-└─────────────────────────────────┘
+### Use the Stripe CLI to test webhooks
 
+Use the [Stripe CLI](https://stripe.com/docs/stripe-cli) to [login to your Stripe account](https://stripe.com/docs/stripe-cli#login-account):
 
-> opencloudmap@0.1.0 build /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap
-> next build
+```bash
+pnpm stripe:login
+```
 
-   ▲ Next.js 15.3.1
+This will print a URL to navigate to in your browser and provide access to your Stripe account.
 
-Using vars defined in .dev.vars
-Using vars defined in .dev.vars
-   Creating an optimized production build ...
-Using vars defined in .dev.vars
-Using vars defined in .dev.vars
-Using vars defined in .dev.vars
- ✓ Compiled successfully in 5.0s
- ✓ Linting and checking validity of types    
- ✓ Collecting page data    
- ✓ Generating static pages (5/5)
- ✓ Collecting build traces    
- ✓ Finalizing page optimization    
+Next, start local webhook forwarding:
 
-Route (app)                                 Size  First Load JS    
-┌ ○ /                                    5.61 kB         107 kB
-└ ○ /_not-found                            978 B         103 kB
-+ First Load JS shared by all             102 kB
-  ├ chunks/770-76939705ff65587a.js       46.5 kB
-  ├ chunks/96e220d1-21a0fdc894793ec0.js  53.2 kB
-  └ other shared chunks (total)          1.89 kB
+```bash
+pnpm stripe:listen
+```
 
+Running this Stripe command will print a webhook secret (such as, `whsec_***`) to the console. Set `STRIPE_WEBHOOK_SECRET` to this value in your `.env.local` file. If you haven't already, you should also set `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` and `STRIPE_SECRET_KEY` in your `.env.local` file using the **test mode**(!) keys from your Stripe dashboard.
 
-○  (Static)  prerendered as static content
+### Run the Next.js client
 
+In a separate terminal, run the following command to start the development server:
 
-┌──────────────────────────────┐
-│ OpenNext — Generating bundle │
-└──────────────────────────────┘
+```bash
+pnpm dev
+```
 
-Bundling middleware function...
-Bundling static assets...
-Bundling cache assets...
-Building server function: default...
-Applying code patches: 3.635s
-# copyPackageTemplateFiles
-⚙️ Bundling the OpenNext server...
+Note that webhook forwarding and the development server must be running concurrently in two separate terminals for the application to work correctly.
 
-Applying code patches:
- - patching require
- - patching cacheHandler
- - patching 'require(this.middlewareManifestPath)'
- - patching `require.resolve` call
-All 4 patches applied
+Finally, navigate to [http://localhost:3000](http://localhost:3000) in your browser to see the application rendered.
 
-Worker saved in `/Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap/.open-next/worker.js` 🚀
+## Going live
 
-OpenNext build complete.
+### Archive testing products
 
-┌──────────────────────────────┐
-│ OpenNext — Cloudflare deploy │
-└──────────────────────────────┘
+Archive all test mode Stripe products before going live. Before creating your live mode products, make sure to follow the steps below to set up your live mode env vars and webhooks.
 
-Incremental cache does not need populating
-Tag cache does not need populating
+### Configure production environment variables
 
-Cloudflare collects anonymous telemetry about your usage of Wrangler. Learn more at https://github.com/cloudflare/workers-sdk/tree/main/packages/wrangler/telemetry.md
+To run the project in live mode and process payments with Stripe, switch Stripe from "test mode" to "production mode." Your Stripe API keys will be different in production mode, and you will have to create a separate production mode webhook. Copy these values and paste them into Vercel, replacing the test mode values.
 
- ⛅️ wrangler 4.14.0
--------------------
+### Redeploy
 
-🌀 Building list of assets...
-✨ Read 38 files from the assets directory /Users/mathewlewallen/Documents/GitHub/OpenCloudMap/opencloudmap/.open-next/assets
-🌀 Starting asset upload...
-🌀 Found 26 new or modified static assets to upload. Proceeding with upload...
-+ /BUILD_ID
-+ /_next/static/chunks/pages/_error-124d86105653e7ca.js
-+ /file.svg
-+ /_next/static/chunks/app/layout-70e1e1c50f309fdc.js
-+ /_next/static/chunks/app/_not-found/page-fc03ad80c386bbf7.js
-+ /_next/static/media/9610d9e46709d722-s.woff2
-+ /_next/static/media/8d697b304b401681-s.woff2
-+ /_next/static/media/93f479601ee12b01-s.p.woff2
-+ /_next/static/chunks/770-76939705ff65587a.js
-+ /vercel.svg
-+ /_next/static/chunks/pages/_app-0693f4868892b9c9.js
-+ /_next/static/chunks/main-app-bd687684fa46af10.js
-+ /globe.svg
-+ /_next/static/chunks/webpack-a05f68e3d168c82d.js
-+ /_next/static/media/747892c23ea88013-s.woff2
-+ /_next/static/media/ba015fad6dcf6784-s.woff2
-+ /_next/static/chunks/main-33dc44b75745a853.js
-+ /_next/static/chunks/framework-1158a0cb627c4f82.js
-+ /_next/static/chunks/app/page-1f71a4305cf8a15f.js
-+ /window.svg
-+ /_next/static/vvQAo48Boluubl5qzJ5SV/_buildManifest.js
-+ /next.svg
-+ /_next/static/css/46c36fc8a744cf8b.css
-+ /_next/static/chunks/299-3d800a9d82a8b555.js
-+ /_next/static/media/569ce4b8f30dc480-s.p.woff2
-+ /_next/static/chunks/96e220d1-21a0fdc894793ec0.js
-Uploaded 9 of 26 assets
-Uploaded 18 of 26 assets
-Uploaded 26 of 26 assets
-✨ Success! Uploaded 26 files (3 already uploaded) (2.26 sec)
+Afterward, you will need to rebuild your production deployment for the changes to take effect. Within your project Dashboard, navigate to the "Deployments" tab, select the most recent deployment, click the overflow menu button (next to the "Visit" button) and select "Redeploy" (do NOT enable the "Use existing Build Cache" option).
 
-Total Upload: 13982.27 KiB / gzip: 2309.95 KiB
-Worker Startup Time: 26 ms
-Your Worker has access to the following bindings:
-- Assets:
-  - Binding: ASSETS
-Uploaded opencloudmap (19.24 sec)
-Deployed opencloudmap triggers (1.33 sec)
-  https://opencloudmap.mathewlewallen.workers.dev
-Current Version ID: a9aae92d-9b97-483c-88c5-b6b802652230
-├ Waiting for DNS to propagate. This might take a few minutes.
-│ DNS propagation complete.
-│
-├ Waiting for deployment to become available
-│ deployment is ready at: https://opencloudmap.mathewlewallen.workers.dev
-│
-├ Opening browser
-│
-╰ Done 
-
-──────────────────────────────────────────────────────────────────────────────────
-🎉  SUCCESS  Application deployed successfully!
-
-🔍 View Project
-Visit: https://opencloudmap.mathewlewallen.workers.dev
-Dash: https://dash.cloudflare.com/?to=/:account/workers/services/view/opencloudmap
-
-💻 Continue Developing
-Change directories: cd opencloudmap
-Start dev server: pnpm run dev
-Deploy again: pnpm run deploy
-
-📖 Explore Documentation
-https://developers.cloudflare.com/workers
-
-🐛 Report an Issue
-https://github.com/cloudflare/workers-sdk/issues/new/choose
-
-💬 Join our Community
-https://discord.cloudflare.com
-────────────────────────────────
+To verify you are running in production mode, test checking out with the [Stripe test card](https://stripe.com/docs/testing). The test card should not work.
