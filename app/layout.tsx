@@ -1,39 +1,43 @@
-import { Metadata } from 'next';
-import Footer from '@/components/ui/Footer';
-import Navbar from '@/components/ui/Navbar';
-import { Toaster } from '@/components/ui/Toasts/toaster';
-import { PropsWithChildren, Suspense } from 'react';
-import { getURL } from '@/utils/helpers';
-import 'styles/main.css';
-
-const title = 'Next.js Subscription Starter';
-const description = 'Brought to you by Vercel, Stripe, and Supabase.';
+import './globals.css';
+import type { Metadata, Viewport } from 'next';
+import { Manrope } from 'next/font/google';
+import { getUser, getTeamForUser } from '@/lib/db/queries';
+import { SWRConfig } from 'swr';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(getURL()),
-  title: title,
-  description: description,
-  openGraph: {
-    title: title,
-    description: description
-  }
+  title: 'Next.js SaaS Starter',
+  description: 'Get started quickly with Next.js, Postgres, and Stripe.'
 };
 
-export default async function RootLayout({ children }: PropsWithChildren) {
+export const viewport: Viewport = {
+  maximumScale: 1
+};
+
+const manrope = Manrope({ subsets: ['latin'] });
+
+export default function RootLayout({
+  children
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="en">
-      <body className="bg-black">
-        <Navbar />
-        <main
-          id="skip"
-          className="min-h-[calc(100dvh-4rem)] md:min-h[calc(100dvh-5rem)]"
+    <html
+      lang="en"
+      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
+    >
+      <body className="min-h-[100dvh] bg-gray-50">
+        <SWRConfig
+          value={{
+            fallback: {
+              // We do NOT await here
+              // Only components that read this data will suspend
+              '/api/user': getUser(),
+              '/api/team': getTeamForUser()
+            }
+          }}
         >
           {children}
-        </main>
-        <Footer />
-        <Suspense>
-          <Toaster />
-        </Suspense>
+        </SWRConfig>
       </body>
     </html>
   );
