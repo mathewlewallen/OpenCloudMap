@@ -1,0 +1,2 @@
+map/data/airportRaw.json filter=lfs diff=lfs merge=lfs -text
+map/data/airspaceRaw.json filter=lfs diff=lfs merge=lfs -text
