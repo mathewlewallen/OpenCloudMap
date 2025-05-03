@@ -43,4 +43,6 @@ postgres_data/
 
 .drizzle/
 
-/map/data/*.json
+/map/data/navaidRaw.json
+/map/data/airportRaw.json
+/map/data/airspaceRaw.json
