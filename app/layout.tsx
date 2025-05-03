@@ -3,10 +3,12 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 import { getUser, getTeamForUser } from '@/lib/db/queries';
 import { SWRConfig } from 'swr';
+import { Footer } from '@/components/shared/Footer';
+import { ThemeProvider } from '@/components/shared/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Next.js SaaS Starter',
-  description: 'Get started quickly with Next.js, Postgres, and Stripe.'
+  title: 'Open Cloud Map',
+  description: 'A modern aviation planning tool that lets you map routes, track altitudes, and visualize your mission from takeoff to touchdown.'
 };
 
 export const viewport: Viewport = {
@@ -21,23 +23,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      className={`bg-white dark:bg-gray-950 text-black dark:text-white ${manrope.className}`}
-    >
-      <body className="min-h-[100dvh] bg-gray-50">
-        <SWRConfig
-          value={{
-            fallback: {
-              // We do NOT await here
-              // Only components that read this data will suspend
-              '/api/user': getUser(),
-              '/api/team': getTeamForUser()
+    <html lang="en" suppressHydrationWarning className={`bg-background text-primary ${manrope.className}`}>
+      <body className="min-h-[100dvh]">
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+          <SWRConfig
+            value={{
+              fallback: {
+                // We do NOT await here
+                // Only components that read this data will suspend
+                '/api/user': getUser(),
+                '/api/team': getTeamForUser()
             }
           }}
         >
           {children}
         </SWRConfig>
+        <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

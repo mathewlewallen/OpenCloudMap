@@ -35,7 +35,7 @@ export default function SecurityPage() {
 
   return (
     <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium bold text-gray-900 mb-6">
+      <h1 className="text-lg lg:text-2xl font-medium bold text-primary mb-6">
         Security Settings
       </h1>
       <Card className="mb-8">
@@ -89,14 +89,14 @@ export default function SecurityPage() {
               />
             </div>
             {passwordState.error && (
-              <p className="text-red-500 text-sm">{passwordState.error}</p>
+              <p className="text-destructive text-sm">{passwordState.error}</p>
             )}
             {passwordState.success && (
-              <p className="text-green-500 text-sm">{passwordState.success}</p>
+              <p className="text-chart-2 text-sm">{passwordState.success}</p>
             )}
             <Button
               type="submit"
-              className="bg-orange-500 hover:bg-orange-600 text-white"
+              className="bg-chart-2 hover:bg-chart-2 text-white"
               disabled={isPasswordPending}
             >
               {isPasswordPending ? (
@@ -120,7 +120,7 @@ export default function SecurityPage() {
           <CardTitle>Delete Account</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-gray-500 mb-4">
+          <p className="text-sm text-primary mb-4">
             Account deletion is non-reversable. Please proceed with caution.
           </p>
           <form action={deleteAction} className="space-y-4">
@@ -139,7 +139,7 @@ export default function SecurityPage() {
               />
             </div>
             {deleteState.error && (
-              <p className="text-red-500 text-sm">{deleteState.error}</p>
+              <p className="text-destructive text-sm">{deleteState.error}</p>
             )}
             <Button
               type="submit"

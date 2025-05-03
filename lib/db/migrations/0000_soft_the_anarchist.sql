@@ -51,6 +51,90 @@ CREATE TABLE IF NOT EXISTS "users" (
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "airports" (
+  "id"                 TEXT            PRIMARY KEY NOT NULL,
+  "name"               TEXT            NOT NULL,
+  "icao_code"          TEXT,
+  "iata_code"          TEXT,
+  "alt_identifier"     TEXT,
+  "type"               INTEGER,
+  "country"            TEXT,
+  "geometry"           JSONB           NOT NULL,
+  "elevation"          JSONB,
+  "elevation_geoid"    JSONB,
+  "traffic_type"       JSONB,
+  "magnetic_declination" NUMERIC,
+  "ppr"                BOOLEAN,
+  "private"            BOOLEAN,
+  "skydive_activity"   BOOLEAN,
+  "winch_only"         BOOLEAN,
+  "services"           JSONB,
+  "frequencies"        JSONB,
+  "runways"            JSONB,
+  "hours_of_operation" JSONB,
+  "contact"            TEXT,
+  "remarks"            TEXT,
+  "telephone_services" JSONB,
+  "images"             JSONB,
+  "created_by"         TEXT,
+  "updated_by"         TEXT,
+  "created_at"         TIMESTAMPTZ     DEFAULT now() NOT NULL,
+  "updated_at"         TIMESTAMPTZ     DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "airspaces" (
+  "id"                   TEXT            PRIMARY KEY NOT NULL,
+  "name"                 TEXT            NOT NULL,
+  "data_ingestion"       BOOLEAN,
+  "type"                 INTEGER,
+  "icao_class"           INTEGER,
+  "activity"             INTEGER,
+  "on_demand"            BOOLEAN,
+  "on_request"           BOOLEAN,
+  "by_notam"             BOOLEAN,
+  "special_agreement"    BOOLEAN,
+  "request_compliance"   BOOLEAN,
+  "geometry"             JSONB           NOT NULL,
+  "country"              TEXT,
+  "upper_limit"          JSONB,
+  "lower_limit"          JSONB,
+  "upper_limit_max"      JSONB,
+  "lower_limit_min"      JSONB,
+  "frequencies"          JSONB,
+  "transponder_settings" JSONB,
+  "hours_of_operation"   JSONB,
+  "active_from"          TIMESTAMPTZ     NOT NULL,
+  "active_until"         TIMESTAMPTZ     NOT NULL,
+  "remarks"              TEXT,
+  "created_by"           TEXT,
+  "updated_by"           TEXT,
+  "created_at"           TIMESTAMPTZ     DEFAULT now() NOT NULL,
+  "updated_at"           TIMESTAMPTZ     DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
+CREATE TABLE IF NOT EXISTS "navaids" (
+  "id"                   TEXT            PRIMARY KEY NOT NULL,
+  "name"                 TEXT            NOT NULL,
+  "type"                 INTEGER,
+  "identifier"           TEXT,
+  "country"              TEXT,
+  "geometry"             JSONB           NOT NULL,
+  "elevation"            JSONB,
+  "elevation_geoid"      JSONB,
+  "magnetic_declination" NUMERIC,
+  "aligned_true_north"   BOOLEAN,
+  "channel"              TEXT,
+  "frequency"            JSONB,
+  "range"                JSONB,
+  "hours_of_operation"   JSONB,
+  "images"               JSONB,
+  "remarks"              TEXT,
+  "created_by"           TEXT,
+  "updated_by"           TEXT,
+  "created_at"           TIMESTAMPTZ     DEFAULT now() NOT NULL,
+  "updated_at"           TIMESTAMPTZ     DEFAULT now() NOT NULL
+);
+--> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "activity_logs" ADD CONSTRAINT "activity_logs_team_id_teams_id_fk" FOREIGN KEY ("team_id") REFERENCES "public"."teams"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
