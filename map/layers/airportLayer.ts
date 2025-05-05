@@ -2,8 +2,10 @@ import VectorLayer from "ol/layer/Vector";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
 import { Style, Fill, Circle as CircleStyle } from "ol/style";
-import rawAirports from "@/map/data/airportRaw.json";
 import type { Airport } from "@/map/types/airport";
+
+const projectId = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID!;
+const GEOJSON_URL =`https://${projectId}.supabase.co/storage/v1/object/public/aerodata/airportRaw.json`;
 
 const airportData = {
   type: "FeatureCollection" as const,
@@ -33,7 +35,6 @@ const airportData = {
     },
   })),
 };
-
 const pointStyle = new Style({
   image: new CircleStyle({
     radius: 1,
@@ -42,11 +43,13 @@ const pointStyle = new Style({
 });
 
 const source = new VectorSource({
-  features: new GeoJSON().readFeatures(airportData, { 
+  url: GEOJSON_URL,
+  format: new GeoJSON({
     dataProjection: "EPSG:4326",
-    featureProjection: "EPSG:3857" 
-  }),
-});
+    featureProjection: "EPSG:3857"
+  })
+})
+
 
 export const airportLayer = new VectorLayer({
   source,

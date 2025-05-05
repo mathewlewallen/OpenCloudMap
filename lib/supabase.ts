@@ -487,7 +487,7 @@ export type Database = {
         Row: {
           continent: Database["public"]["Enums"]["continents"] | null
           id: number
-          iso2: string
+          full_name: string
           iso3: string | null
           local_name: string | null
           name: string | null
@@ -495,7 +495,7 @@ export type Database = {
         Insert: {
           continent?: Database["public"]["Enums"]["continents"] | null
           id?: number
-          iso2: string
+          full_name: string
           iso3?: string | null
           local_name?: string | null
           name?: string | null
@@ -503,7 +503,7 @@ export type Database = {
         Update: {
           continent?: Database["public"]["Enums"]["continents"] | null
           id?: number
-          iso2?: string
+          full_name?: string
           iso3?: string | null
           local_name?: string | null
           name?: string | null

@@ -11,7 +11,6 @@ export default function MapPage() {
 
   return (
     <main className="relative flex h-screen w-full">
-      {/* Toggle Sidebar Button */}
       <Button
         variant="ghost"
         size="icon"
@@ -21,8 +20,6 @@ export default function MapPage() {
         <LayersIcon className="h-6 w-6" />
       </Button>
       <LayersModal opened={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-
-      {/* Map renders full viewport behind sidebar */}
       <div className="flex-1">
         <MapContainer />
       </div>

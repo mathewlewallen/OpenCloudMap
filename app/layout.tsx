@@ -10,7 +10,7 @@ import { siteConfig } from '@/config/site'
 import { ReactQueryClientProvider } from '@/components/react-query-client-provider'
 import { Toaster } from "@/components/ui/toaster"
 import { SiteHeader } from "@/components/site-header"
-import { SiteFooter } from "@/components/site-footer"
+import { Footer } from "@/components/shared/Footer"
 import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { cn } from "@/lib/utils"
 
@@ -149,16 +149,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
             enableSystem
             disableTransitionOnChange
           >
-             <div className="relative flex min-h-screen flex-col">
-              <SiteHeader />
+             <div className="relative flex min-h-screen flex-col bg-background">
+              <SiteHeader/>
               <div className="flex-1">
-                {children}
+                  {children}
                 <Toaster/>
                 <Analytics/>
                 <SpeedInsights/>
               </div>
             </div>           
-          <SiteFooter/>
+          <Footer/>
           {/*TODO: 
           enter your api info from termly.io or a provider of your choice
           <Script type="text/javascript"

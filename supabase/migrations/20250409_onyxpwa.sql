@@ -13,7 +13,7 @@ ALTER TABLE public.chat ENABLE ROW LEVEL SECURITY;
 CREATE TABLE public.countries (
   id bigint primary key generated always as identity,
   name text NULL,
-  iso2 text NOT NULL,
+  full_name text NOT NULL,
   iso3 text NOT NULL,
   local_name text NULL,
   continent public.continents NULL
@@ -112,6 +112,4 @@ CREATE POLICY "Individuals can view their own todos." ON public.todos FOR SELECT
 CREATE POLICY "Individuals can insert their own todos." ON public.todos FOR INSERT TO authenticated WITH CHECK ((select auth.uid()) = user_id);
 CREATE POLICY "Individuals can update their own todos." ON public.todos FOR UPDATE TO authenticated USING ((select auth.uid()) = user_id) WITH CHECK ((select auth.uid()) = user_id);
 CREATE POLICY "Individuals can delete their own todos." ON public.todos FOR DELETE TO authenticated USING ((select auth.uid()) = user_id);
-```
 
--- Remember to create RLS policies for this table before using it with Supabase APIs.

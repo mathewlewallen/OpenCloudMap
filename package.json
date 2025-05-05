@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "clean": "git clean -xdf .next node_modules && pnpm store prune",
+    "restart:dev": "pnpm clean && pnpm i && pnpm dev"
   },
   "engines": {
     "node": "22.x"

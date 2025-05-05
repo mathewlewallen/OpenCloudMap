@@ -1,59 +1,123 @@
-import Link from "next/link"
-import { siteConfig } from "@/config/site"
-import { buttonVariants } from "@/components/ui/button"
-import { readUserSession } from "@/utils/actions";
-import Featurez from "@/components/features"
-import { redirect } from "next/navigation";
-import Cta from "@/components/cta";
-import AnimatedInfographic from "@/components/animated-infographic";
-import WhyOnyxWrapper from "@/components/whyonyxwrapper";
-import PrismContainer from "@/components/prism-container"
+import { Button } from '@/components/ui/button';
+import { PlaneTakeoff, Map, Settings2, ArrowRight } from 'lucide-react';
+import { Globe } from '@/components/landing/globe';
 
-export default async function IndexPage() {
-  const { data: userSession } = await readUserSession();
-
-        if (userSession.session) {
-                return redirect("/dashboard");
-        }
+export default function HomePage() {
   return (
-   
-<section className="relative max-w-dvw w-full overflow-hidden bg-arctic-gradient pb-16">
-<div className="container px-4 py-8 mx-auto flex flex-col space-y-16 items-center pb-16 pt-16 sm:pt-16 sm:pb-24">
-      <div className="flex mx-auto flex-col px-4 md:px-6 lg:px-8 w-full items-center gap-y-12">
-        <h1 className="text-4xl sm:text-5xl lg:text-7xl font-extrabold leading-tight tracking-tighter md:text-6xl text-center">
-          Onyx SaaS PWA Template
-        </h1>
-
-     {/* The PrismContainer uses dynamic client-side rendering to display the FeaturesAnimation component. I wanted to demo the usage of Fibonacci's Golden Ratio in an interactive 3D component for devs who may be interested in expanding upon the general concept of the animation. Theres a working implementation running NextJS 15 and React 19 at github.com/rmoure y26/3d-prism-infographic and 3d-prism-infographic.vercel.app. The Onyx version needs some tinkering to work properly with React 18.3. I should be able to get that done by 05-10-2025. We'll see. 
-        <PrismContainer />
-      */}
-        <p className="max-w-3xl text-lg lg:text-xl xs:text-justify text-muted-foreground">
-         Secure user authentication + RBAC, Zod validated Supabase Postgres DB CRUD ops, Rust serverless API runtime, TanStack queries with Supabase cache helpers, Resend, SID.ai, NextMDX, admin dashboard, and more. Onboard users and receive inquiries immediately. 
-        </p>
-      </div>
-      <Cta />
-      <div className="flex gap-6 mb-8">
-        <Link
-          href={siteConfig.links.login}
-          target="_blank"
-          rel="noreferrer"
-          className={buttonVariants()}
-        >
-          Login
-        </Link>
-        <Link
-          target="_blank"
-          rel="noreferrer"
-          href={siteConfig.links.signup}
-          className={buttonVariants({ variant: "outline" })}
-        >
-          Sign Up
-        </Link>
+    <main>
+      <section className="pt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-12 lg:gap-8">
+            <div className="sm:text-center md:max-w-2xl md:mx-auto lg:col-span-6 lg:text-left">
+              <h1 className="text-4xl font-bold text-primary tracking-tight sm:text-5xl md:text-6xl">
+                Plan Your Flight
+                <span className="block text-chart-2">Faster Than Ever</span>
+              </h1>
+              <p className="mt-3 text-base text-primary sm:mt-5 sm:text-xl lg:text-lg xl:text-xl">
+              A modern aviation planning tool that lets you map routes, track altitudes,
+              and visualize your mission from takeoff to touchdown.
+              </p>
+              <div className="mt-8 sm:max-w-lg sm:mx-auto sm:text-center lg:text-left lg:mx-0">
+                <a
+                  href="https://github.com/mathewlewallen/opencloudmap"
+                  target="_blank"
+                >
+                  <Button
+                    size="lg"
+                    variant="outline"
+                    className="text-lg rounded-full"
+                  >
+                    Contribute to the Mission
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </a>
+              </div>
+            </div>
+            <div className="mt-12 relative sm:max-w-lg sm:mx-auto lg:mt-0 lg:max-w-none lg:mx-0 lg:col-span-6 lg:flex lg:items-center">
+            <Globe />
+            </div>
+          </div>
         </div>
-      </div>
-      <AnimatedInfographic />
-   <Featurez/>
-   <WhyOnyxWrapper />
-    </section>
-  )
+      </section>
+
+      <section className="py-16 bg-background w-full">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-3 lg:gap-8">
+            <div>
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-chart-2 text-white">
+              <PlaneTakeoff className="h-6 w-6" />
+              </div>
+              <div className="mt-5">
+                <h2 className="text-lg font-medium text-primary">
+                Flight Route Creation
+                </h2>
+                <p className="mt-2 text-base text-primary">
+                Define and edit custom flight plans with waypoints, altitudes, and speed profiles.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-10 lg:mt-0">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-chart-2 text-white">
+                <Map className="h-6 w-6" />
+              </div>
+              <div className="mt-5">
+                <h2 className="text-lg font-medium text-primary">
+                Live Map Visualization
+                </h2>
+                <p className="mt-2 text-base text-primary">
+                View your route, terrain overlays, and FIR/UIR boundaries using React + OpenLayers.
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-10 lg:mt-0">
+              <div className="flex items-center justify-center h-12 w-12 rounded-md bg-chart-2 text-white">
+                <Settings2 className="h-6 w-6" />
+              </div>
+              <div className="mt-5">
+                <h2 className="text-lg font-medium text-primary">
+                Custom Altitude Profiles
+                </h2>
+                <p className="mt-2 text-base text-primary">
+                  Plan climb, cruise, and descent segments precisely, with altitude hover details.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-16 bg-background">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="lg:grid lg:grid-cols-2 lg:gap-8 lg:items-center">
+            <div>
+              <h2 className="text-3xl font-bold text-primary sm:text-4xl underline underline-offset-4 decoration-chart-2">
+                What is the mission?
+              </h2>
+              <p className="mt-3 max-w-3xl text-lg text-primary">
+                We are starting with a simple flight planning tool that allows you to plan your flight route, visualize it, and share it with your team.
+                Then, we are going to add an AI agent that will help you plan your flight route, and make it even easier to plan your flight.
+                We will also add a chat interface that will allow you to chat with the AI agent, and get help with your flight planning.
+                There are also many documents that guide flight around the world, and we will add a tool that will allow you to search for documents,
+                and have AI agents available to answer questions about the documents.
+              </p>
+            </div>
+            <div className="mt-8 lg:mt-0 flex justify-center lg:justify-end">
+              <a href="https://github.com/mathewlewallen/opencloudmap" target="_blank">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="text-lg rounded-full"
+                >
+                  We can't do it alone
+                  <ArrowRight className="ml-3 h-6 w-6" />
+                </Button>
+                </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  );
 }
