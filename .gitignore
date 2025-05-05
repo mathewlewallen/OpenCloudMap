@@ -41,8 +41,6 @@ next-env.d.ts
 postgres_data/
 .env*.local
 
-.drizzle/
-
 /map/data/navaidRaw.json
 /map/data/airportRaw.json
 /map/data/airspaceRaw.json

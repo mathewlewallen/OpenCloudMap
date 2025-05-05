@@ -4,14 +4,7 @@ import Map from 'ol/Map'
 import View from 'ol/View'
 import { layerList } from '@/map/layers/layerList'
 
-type MapContainerProps = {
-    children: React.ReactNode
-}
-
-const MapContainer = forwardRef(function MapContainer(
-    { children, ...props }: MapContainerProps,
-    ref: ForwardedRef<Map>
-) {
+const MapContainer = forwardRef(function MapContainer() {
     const mapLayers = useAppSelector((state) => state.map.mapLayers)
     const [mapObj, setMapObj] = useState<Map>()
 
@@ -63,9 +56,7 @@ const MapContainer = forwardRef(function MapContainer(
 
     return (
         <>
-            <div className="mapContainer" id="map">
-                {children}
-            </div>
+            <div className="mapContainer" id="map" />
         </>
     )
 })

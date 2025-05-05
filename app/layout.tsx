@@ -1,51 +1,172 @@
-import './globals.css';
-import type { Metadata, Viewport } from 'next';
-import { Manrope } from 'next/font/google';
-import { getUser, getTeamForUser } from '@/lib/db/queries';
-import { SWRConfig } from 'swr';
-import { Footer } from '@/components/shared/Footer';
-import { ThemeProvider } from '@/components/shared/theme-provider';
+ import type { Metadata, Viewport } from 'next'
+import { Inter } from 'next/font/google'
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/next"
+import './globals.css'
+import { ThemeProvider } from "@/components/theme-provider"
+import { CookieButton } from "@/components/cookie-button"
+import { fontSans } from "@/lib/font"
+import { siteConfig } from '@/config/site'
+import { ReactQueryClientProvider } from '@/components/react-query-client-provider'
+import { Toaster } from "@/components/ui/toaster"
+import { SiteHeader } from "@/components/site-header"
+import { SiteFooter } from "@/components/site-footer"
+import { TailwindIndicator } from "@/components/tailwind-indicator"
+import { cn } from "@/lib/utils"
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Open Cloud Map',
-  description: 'A modern aviation planning tool that lets you map routes, track altitudes, and visualize your mission from takeoff to touchdown.'
-};
+  title: {
+    default: siteConfig.name,
+    template: `%s - ${siteConfig.name}`,
+  },
 
-export const viewport: Viewport = {
-  maximumScale: 1
-};
+  description: siteConfig.description/*,
+  manifest: 'https://opencloudmap.com/manifest.json',
+  metadataBase: new URL('https://opencloudmap.com'),
 
-const manrope = Manrope({ subsets: ['latin'] });
+  alternates: {
+    canonical: '/',
+    languages: {
+      'en-US': '/en-US',
+      'de-DE': '/de-DE',
+      'es-ES': '/es-ES',
+      'fr-FR': '/fr-FR',
+      'jp-JP': '/jp-JP',
+      'ko-KO': '/ko-KP',
+      'zh-ZH': '/zh-ZH',
+      'pt-PT': '/pt-PT',
+    },
+  },
 
-export default function RootLayout({
-  children
-}: {
-  children: React.ReactNode;
-}) {
+  referrer: 'origin-when-cross-origin',
+
+  keywords: ['NextJS 14 TypeScript', 'Supabase SSR', 'TanStack React Query', 'vercel', 'openai', 'MVP Template', 'Onyx SaaS PWA template', 'Zod', 'Shadcn-UI', 'Tailwind CSS', 'SaaS', 'NextJS Supabase Postgres Tailwind TanStack', 'NextJS CSP',
+             'PWA', 'NextJS SaaS PWA Template', 'CRUD ops', 'secure headers', 'NextJS templates with user authentication, RBAC, and CRUD ops', 'NextJS templates with data validation and database integration',
+            'Rust API runtime for vercel serverless functions', 'NextJS secure headers', 'NextJS NextMDX'],
+
+  authors: [{ name: 'Mathew Lewallen' }],
+  creator: 'Mathew Lewallen',
+  publisher: 'Mathew Lewallen',
+
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+
+  generator: 'NextJS',
+
+  icons: {
+    icon: "../public/favicon.ico",
+    apple: "../public/apple-touch-icon.png",
+  },
+
+  robots: {
+    index: false,
+    follow: true,
+    nocache: true,
+    googleBot: {
+      index: true,
+      follow: false,
+      noimageindex: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+
+  openGraph: {
+    title: siteConfig.name,
+    description: siteConfig.description,
+    siteName: siteConfig.name,
+    url: "https://opencloudmap.com",
+    images: [
+      {
+        url: 'https://opencloudmap.com/og-image.jpg', // Must be an absolute URL
+        width: 1230,
+        height: 640,
+      },
+      {
+        url: 'https://opencloudmap.com/opengraph-image.jpg', // Must be an absolute URL
+        width: 1800,
+        height: 1600,
+        alt: 'blockchain business',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+
+  twitter: {
+       title: siteConfig.name,
+       description: siteConfig.description,
+       site: '@mathewlewallen',
+       creator: '@mathewlewallen',
+       images: [
+    {
+      url: 'https://opencloudmap.com/twitter-image.jpg', // Must be an absolute URL
+      width: 1800,
+      height: 900,
+    },
+    {
+      url: 'https://opencloudmap.com/twitter-image.jpg',
+      width: 1800,
+      height: 900,
+    },
+   ],
+ }*/
+}
+export const viewport: Viewport =  {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "white" },
+    { media: "(prefers-color-scheme: dark)", color: "black" },
+  ],
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
+
+interface RootLayoutProps {
+  children: React.ReactNode
+}
+
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning className={`bg-background text-primary ${manrope.className}`}>
-      <body className="min-h-[100dvh]">
-      <ThemeProvider
-        attribute="class"
-        defaultTheme="system"
-        enableSystem
-        disableTransitionOnChange
-      >
-          <SWRConfig
-            value={{
-              fallback: {
-                // We do NOT await here
-                // Only components that read this data will suspend
-                '/api/user': getUser(),
-                '/api/team': getTeamForUser()
-            }
-          }}
+    <ReactQueryClientProvider>
+    <html lang="en" suppressHydrationWarning>
+      <body className={cn(
+            "min-h-screen bg-background font-sans antialiased",
+            fontSans.variable
+          )}
         >
-          {children}
-        </SWRConfig>
-        <Footer />
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+             <div className="relative flex min-h-screen flex-col">
+              <SiteHeader />
+              <div className="flex-1">
+                {children}
+                <Toaster/>
+                <Analytics/>
+                <SpeedInsights/>
+              </div>
+            </div>           
+          <SiteFooter/>
+          {/*TODO: 
+          enter your api info from termly.io or a provider of your choice
+          <Script type="text/javascript"
+          src="https://app.termly.io/resource-blocker/123456789abcdefg"/>*/}
+          <CookieButton />
         </ThemeProvider>
       </body>
     </html>
-  );
+  </ReactQueryClientProvider>
+  )
 }
