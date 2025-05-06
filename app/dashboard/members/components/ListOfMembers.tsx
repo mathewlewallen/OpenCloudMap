@@ -2,7 +2,6 @@ import React from "react";
 import { TrashIcon } from "@radix-ui/react-icons";
 import { Button } from "@/components/ui/button";
 import EditMember from "./edit/EditMember";
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 export default function ListOfMembers() {

@@ -9,7 +9,7 @@ export function getCountryById(client: TypedSupabaseClient, countryId: number) {
       name
     `
     )
-    .eq('id', countryId)
+    .eq('id', countryId.toString())
     .throwOnError()
     .single()
 }
