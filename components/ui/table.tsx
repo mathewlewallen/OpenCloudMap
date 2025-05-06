@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+function UITable({ className, ...props }: React.ComponentProps<"table">) {
   return (
     <div
       data-slot="table-container"
@@ -104,7 +104,7 @@ function TableCaption({
 }
 
 export {
-  Table,
+  UITable,
   TableHeader,
   TableBody,
   TableFooter,
