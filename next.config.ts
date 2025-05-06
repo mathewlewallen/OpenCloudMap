@@ -1,5 +1,6 @@
 import type { NextConfig } from 'next';
 import createMDX from '@next/mdx';
+import path from 'path';
 
 const cspHeader = `
   default-src 'self';
@@ -24,6 +25,7 @@ const nextConfig: NextConfig = {
   },
   turbopack: {
     resolveAlias: {
+      "@": path.resolve(__dirname, "."),
       underscore: 'lodash',
     },
     resolveExtensions: ['.js', '.jsx', '.ts', '.tsx', '.mdx', '.md'],

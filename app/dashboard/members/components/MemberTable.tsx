@@ -1,6 +1,6 @@
 import React from "react";
 import ListOfMembers from "./ListOfMembers";
-import { Table, TableHeader, TableBody, TableRow, TableCell, TableHead } from "@/components/ui/Table";
+import { Table, TableHeader, TableRow, TableHead } from "@/components/ui/Table";
 
 export default function MemberTable() {
 	const tableHeader = ["Name", "Role", "Joined", "Status"];
