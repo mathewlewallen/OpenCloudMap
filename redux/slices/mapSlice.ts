@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import VectorTileLayer from "ol/layer/VectorTile";
 import TileLayer from "ol/layer/Tile";
 import VectorLayer from "ol/layer/Vector";
@@ -26,6 +26,7 @@ export type LayerObjList = {
 
 interface MapState {
   mapLayers: LayerPropsList;
+  baseStyleUrl: string | null;
   viewProperties?: {
     zoom?: number;
     center?: [number, number];
@@ -41,23 +42,27 @@ const initialState: MapState = {
     airspaces: { visible: true, layerName: "Airspaces" },
     navaids: { visible: true, layerName: "Navaids" },
   },
+  baseStyleUrl: null,
 };
 
 export const mapSlice = createSlice({
   name: "layers",
   initialState,
   reducers: {
-    addLayerToMap: (state, action) => {
+    addLayerToMap(state, action: PayloadAction<string>) {
       const lyrName = action.payload;
       state.mapLayers[lyrName].visible = true;
     },
-    removeLayerFromMap: (state, action) => {
+    removeLayerFromMap(state, action: PayloadAction<string>) {
       const lyrName = action.payload;
       state.mapLayers[lyrName].visible = false;
+    },
+    setBaseStyleUrl(state, action: PayloadAction<string | null>) {
+      state.baseStyleUrl = action.payload;
     },
   },
 });
 
-export const { addLayerToMap, removeLayerFromMap } = mapSlice.actions;
+export const { addLayerToMap, removeLayerFromMap, setBaseStyleUrl } = mapSlice.actions;
 
 export default mapSlice.reducer;

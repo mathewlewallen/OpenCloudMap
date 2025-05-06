@@ -6,8 +6,35 @@ import { Fill } from 'ol/style'
 import { Style } from 'ol/style'
 import CircleStyle from 'ol/style/Circle';
 
-const projectId = process.env.NEXT_PUBLIC_SUPABASE_PROJECT_ID!;
-const GEOJSON_URL =`https://${projectId}.supabase.co/storage/v1/object/public/aerodata/navaidRaw.json`;
+const GEOJSON_ENDPOINT = '/api/navaids'
+const rawNavaids = await fetch(GEOJSON_ENDPOINT).then(res => res.json())
+
+const navaidData = {
+  type: "FeatureCollection" as const,
+  features: (rawNavaids as Navaid[]).map((doc) => ({
+    type: "Feature" as const,
+    geometry: doc.geometry,
+    properties: {
+      id: doc._id,
+      name: doc.name,
+      type: doc.type,
+      identifier: doc.identifier,
+      country: doc.country,
+      elevation: doc.elevation,
+      elevationGeoid: doc.elevationGeoid,
+      magneticDeclination: doc.magneticDeclination,
+      alignedTrueNorth: doc.alignedTrueNorth,
+      channel: doc.channel,
+      frequency: doc.frequency,
+      range: doc.range,
+      hoursOfOperation: doc.hoursOfOperation,
+      images: doc.images,
+      remarks: doc.remarks,
+      createdBy: doc.createdBy,
+      updatedBy: doc.updatedBy,
+    },
+  })),
+};
 
 const pointStyle = new Style({
   image: new CircleStyle({
@@ -17,15 +44,13 @@ const pointStyle = new Style({
 });
 
 const source = new VectorSource({
-  url: GEOJSON_URL,
-  format: new GeoJSON({
+  features: new GeoJSON().readFeatures(navaidData, { 
     dataProjection: "EPSG:4326",
-    featureProjection: "EPSG:3857"
-  })
-})
+    featureProjection: "EPSG:3857" 
+  }),
+});
 
 export const navaidLayer = new VectorLayer({
   source,
   style: [pointStyle],
 });
-

@@ -1,18 +1,15 @@
-import { useState, useEffect, forwardRef, ForwardedRef } from 'react'
+import { useState, useEffect, forwardRef } from 'react'
 import { useAppSelector } from '@/redux/hooks'
 import Map from 'ol/Map'
 import View from 'ol/View'
 import { layerList } from '@/map/layers/layerList'
+import apply from 'ol-mapbox-style'
 
-const MapContainer = forwardRef(function MapContainer() {
+const MapContainer = forwardRef(function MapContainer(_, ref) {
     const mapLayers = useAppSelector((state) => state.map.mapLayers)
+    const baseStyleUrl = useAppSelector((state) => state.map.baseStyleUrl)
     const [mapObj, setMapObj] = useState<Map>()
 
-    ////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Initialize the map with default layers
-    //
-    ///////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         // Get layers from global state to initially display on the map
         const initialLyrs = Object.entries(mapLayers)
@@ -36,11 +33,6 @@ const MapContainer = forwardRef(function MapContainer() {
         setMapObj(map)
     }, [])
 
-    ////////////////////////////////////////////////////////////////////////////////////////
-    //
-    // Add and remove layers from the map
-    //
-    ////////////////////////////////////////////////////////////////////////////////////////
     useEffect(() => {
         if (!mapObj) return;
       
@@ -52,12 +44,31 @@ const MapContainer = forwardRef(function MapContainer() {
             layer.setVisible(visible);
           }
         });
-      }, [mapLayers]);
+      }, [mapLayers, mapObj]);
+
+      useEffect(() => {
+        if (!mapObj) return
+      
+        mapObj.getLayers()
+          .getArray()
+          .filter(l => l.get('mapbox') === true)
+          .forEach(l => mapObj.removeLayer(l))
+      
+        if (baseStyleUrl) {
+          apply(mapObj as any, baseStyleUrl)
+            .then(() => {
+              mapObj.getLayers().getArray().forEach(l => {
+                if ((l as any).getSource()?.getFormat) {
+                  l.set('mapbox', true)
+                }
+              })
+            })
+            .catch(console.error)
+        }
+      }, [baseStyleUrl, mapObj])
 
     return (
-        <>
-            <div className="mapContainer" id="map" />
-        </>
+        <div className="mapContainer" id="map" />
     )
 })
 

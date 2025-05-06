@@ -6,6 +6,8 @@ import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Layers, X } from 'lucide-react';
+import { styles } from '@/map/styles/styles'
+import { setBaseStyleUrl } from '@/redux/slices/mapSlice';
 
 interface LayersModalProps {
   opened: boolean;
@@ -15,7 +17,7 @@ interface LayersModalProps {
 export const LayersModal = ({ opened, onClose }: LayersModalProps) => {
   const dispatch = useAppDispatch();
   const mapLayers = useAppSelector((state) => state.map.mapLayers);
-
+  const baseStyleUrl = useAppSelector((state) => state.map.baseStyleUrl);
   const handleToggle = (key: string, visible: boolean) => {
     if (visible) {
       dispatch(removeLayerFromMap(key));
@@ -59,7 +61,21 @@ export const LayersModal = ({ opened, onClose }: LayersModalProps) => {
               ))}
           </div>
         </ScrollArea>
-
+        <Divider className="mt-6 mb-2" />
+      <h3 className="text-lg font-semibold mb-2">Base Style</h3>
+      {styles.map(({ id, title, url }) => (
+        <button
+          key={id}
+          className={`block w-full text-left px-2 py-1 mb-1 rounded ${
+            baseStyleUrl === url
+              ? 'bg-blue-600 text-white'
+              : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+          }`}
+          onClick={() => dispatch(setBaseStyleUrl(baseStyleUrl === url ? null : url))}
+        >
+          {title}
+        </button>
+      ))}
         <Divider className="mt-4 mb-2" />
         <div className="text-center">
           <Button variant="outline" size="sm" className="w-full" onClick={() => window.location.reload()}>
