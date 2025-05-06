@@ -1,6 +1,6 @@
 "use client"
 
-import useBrowserClient from "@/utils/supabase/client"
+import { useBrowserClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 import type { User } from "@supabase/supabase-js"
 

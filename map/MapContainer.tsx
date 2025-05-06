@@ -55,7 +55,7 @@ const MapContainer = forwardRef(function MapContainer(_, ref) {
           .forEach(l => mapObj.removeLayer(l))
       
         if (baseStyleUrl) {
-          apply(mapObj as any, baseStyleUrl)
+          apply('mapObj' as any, baseStyleUrl)
             .then(() => {
               mapObj.getLayers().getArray().forEach(l => {
                 if ((l as any).getSource()?.getFormat) {

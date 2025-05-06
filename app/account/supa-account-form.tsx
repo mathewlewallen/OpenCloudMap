@@ -3,7 +3,7 @@
 import { buttonVariants } from "@/components/ui/button" 
 import { cn } from '@/lib/utils'   
 import { useCallback, useEffect, useState } from 'react'
-import useBrowserClient from '@/utils/supabase/client'
+import { useBrowserClient } from '@/utils/supabase/client'
 import { type User } from '@supabase/supabase-js'
 import Avatar from './avatar'
 

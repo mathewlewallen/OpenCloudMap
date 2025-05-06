@@ -1,6 +1,6 @@
 'use client'
 
-import useBrowserClient from '@/utils/supabase/client'
+import { useBrowserClient } from '@/utils/supabase/client'
 import { getCountryById } from '@/queries/country-by-id'
 import { useQuery } from '@supabase-cache-helpers/postgrest-react-query'
 

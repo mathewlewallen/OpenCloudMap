@@ -129,6 +129,7 @@
     "ol-ext": "4.0.31",
     "ol-mapbox-style": "12.6.0",
     "openapi-fetch": "0.13.5",
+    "pmtiles-protocol": "1.0.5",
     "postcss": "^8.5.3",
     "postcss-flexbugs-fixes": "^5.0.2",
     "postcss-preset-env": "^10.0.0",

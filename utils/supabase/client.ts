@@ -15,7 +15,7 @@ import { useMemo } from 'react'
 
 let client: TypedSupabaseClient | undefined
 
-function getBrowserClient() {
+export function getBrowserClient() {
   if (client) { return client }
   client = createBrowserClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -24,6 +24,6 @@ function getBrowserClient() {
   return client
 }
 
-export default function useBrowserClient() {
+export function useBrowserClient() {
   return useMemo(getBrowserClient, [])
 }

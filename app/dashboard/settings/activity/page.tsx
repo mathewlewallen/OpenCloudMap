@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Settings,
   LogOut,
@@ -10,117 +10,109 @@ import {
   Mail,
   CheckCircle,
   type LucideIcon,
-} from 'lucide-react';
-import { ActivityType } from '@/lib/db/schema';
-import { getActivityLogs } from '@/lib/db/queries';
+} from 'lucide-react'
+import { createCookieClient } from '@/utils/supabase/server'
+import type { Database } from '@/lib/supabase'
+import { cookies } from 'next/headers'
 
-const iconMap: Record<ActivityType, LucideIcon> = {
-  [ActivityType.SIGN_UP]: UserPlus,
-  [ActivityType.SIGN_IN]: UserCog,
-  [ActivityType.SIGN_OUT]: LogOut,
-  [ActivityType.UPDATE_PASSWORD]: Lock,
-  [ActivityType.DELETE_ACCOUNT]: UserMinus,
-  [ActivityType.UPDATE_ACCOUNT]: Settings,
-  [ActivityType.CREATE_TEAM]: UserPlus,
-  [ActivityType.REMOVE_TEAM_MEMBER]: UserMinus,
-  [ActivityType.INVITE_TEAM_MEMBER]: Mail,
-  [ActivityType.ACCEPT_INVITATION]: CheckCircle,
-};
+type ActivityType = Database['public']['Enums']['activity_type']
+type ActivityRow  = Database['public']['Tables']['activity_log']['Row']
 
-function getRelativeTime(date: Date) {
-  const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+async function getActivityLogs(): Promise<ActivityRow[]> {
+  const cookieStore = await cookies()
+  const supabase    = await createCookieClient(cookieStore)
 
-  if (diffInSeconds < 60) return 'just now';
-  if (diffInSeconds < 3600)
-    return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-  if (diffInSeconds < 86400)
-    return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-  if (diffInSeconds < 604800)
-    return `${Math.floor(diffInSeconds / 86400)} days ago`;
-  return date.toLocaleDateString();
+  const { data, error } = await supabase
+    .from('activity_log')
+    .select('*')
+    .order('timestamp', { ascending: false })
+
+  if (error || !data) {
+    console.error(error)
+    return []
+  }
+  return data
 }
 
-function formatAction(action: ActivityType): string {
-  switch (action) {
-    case ActivityType.SIGN_UP:
-      return 'You signed up';
-    case ActivityType.SIGN_IN:
-      return 'You signed in';
-    case ActivityType.SIGN_OUT:
-      return 'You signed out';
-    case ActivityType.UPDATE_PASSWORD:
-      return 'You changed your password';
-    case ActivityType.DELETE_ACCOUNT:
-      return 'You deleted your account';
-    case ActivityType.UPDATE_ACCOUNT:
-      return 'You updated your account';
-    case ActivityType.CREATE_TEAM:
-      return 'You created a new team';
-    case ActivityType.REMOVE_TEAM_MEMBER:
-      return 'You removed a team member';
-    case ActivityType.INVITE_TEAM_MEMBER:
-      return 'You invited a team member';
-    case ActivityType.ACCEPT_INVITATION:
-      return 'You accepted an invitation';
-    default:
-      return 'Unknown action occurred';
+const iconMap: Record<ActivityType, LucideIcon> = {
+  SIGN_UP:              UserPlus,
+  SIGN_IN:              UserCog,
+  SIGN_OUT:             LogOut,
+  UPDATE_PASSWORD:      Lock,
+  DELETE_ACCOUNT:       UserMinus,
+  UPDATE_ACCOUNT:       Settings,
+  CREATE_TEAM:          UserPlus,
+  REMOVE_TEAM_MEMBER:   UserMinus,
+  INVITE_TEAM_MEMBER:   Mail,
+  ACCEPT_INVITATION:    CheckCircle,
+}
+
+function getRelativeTime(ts: string) {
+  const then = new Date(ts).getTime()
+  const now  = Date.now()
+  const d    = Math.floor((now - then) / 1000)
+  if (d < 60)   return 'just now'
+  if (d < 3600) return `${Math.floor(d/60)} minutes ago`
+  if (d < 86400)return `${Math.floor(d/3600)} hours ago`
+  if (d < 604800)return `${Math.floor(d/86400)} days ago`
+  return new Date(ts).toLocaleDateString()
+}
+
+function formatAction(a: ActivityType): string {
+  switch (a) {
+    case 'SIGN_UP':            return 'You signed up'
+    case 'SIGN_IN':            return 'You signed in'
+    case 'SIGN_OUT':           return 'You signed out'
+    case 'UPDATE_PASSWORD':    return 'You changed your password'
+    case 'DELETE_ACCOUNT':     return 'You deleted your account'
+    case 'UPDATE_ACCOUNT':     return 'You updated your account'
+    case 'CREATE_TEAM':        return 'You created a new team'
+    case 'REMOVE_TEAM_MEMBER': return 'You removed a team member'
+    case 'INVITE_TEAM_MEMBER': return 'You invited a team member'
+    case 'ACCEPT_INVITATION':  return 'You accepted an invitation'
   }
 }
 
 export default async function ActivityPage() {
-  const logs = await getActivityLogs();
+  const logs = await getActivityLogs()
 
   return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium text-primary mb-6">
-        Activity Log
-      </h1>
+    <section className="p-8">
+      <h1 className="text-2xl font-bold mb-4">Activity Log</h1>
       <Card>
-        <CardHeader>
-          <CardTitle>Recent Activity</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle>Recent Activity</CardTitle></CardHeader>
         <CardContent>
-          {logs.length > 0 ? (
+          {logs.length === 0 ? (
+            <div className="text-center py-12">
+              <AlertCircle className="mx-auto mb-4 h-12 w-12 text-chart-2" />
+              <p className="text-sm text-primary">No activity yet.</p>
+            </div>
+          ) : (
             <ul className="space-y-4">
               {logs.map((log) => {
-                const Icon = iconMap[log.action as ActivityType] || Settings;
-                const formattedAction = formatAction(
-                  log.action as ActivityType
-                );
-
+                // log.action is already guessed as ActivityType
+                const Icon = iconMap[log.action] || Settings
                 return (
                   <li key={log.id} className="flex items-center space-x-4">
                     <div className="bg-chart-2 rounded-full p-2">
-                      <Icon className="w-5 h-5 text-chart-2" />
+                      <Icon className="h-5 w-5 text-chart-2" />
                     </div>
                     <div className="flex-1">
                       <p className="text-sm font-medium text-primary">
-                        {formattedAction}
-                        {log.ipAddress && ` from IP ${log.ipAddress}`}
+                        {formatAction(log.action)}
+                        {log.ip_address && ` from IP ${log.ip_address}`}
                       </p>
-                      <p className="text-xs text-primary">
-                        {getRelativeTime(new Date(log.timestamp))}
-                      </p>
+                      <time className="text-xs text-primary">
+                        {getRelativeTime(log.timestamp)}
+                      </time>
                     </div>
                   </li>
-                );
+                )
               })}
             </ul>
-          ) : (
-            <div className="flex flex-col items-center justify-center text-center py-12">
-              <AlertCircle className="h-12 w-12 text-chart-2 mb-4" />
-              <h3 className="text-lg font-semibold text-primary mb-2">
-                No activity yet
-              </h3>
-              <p className="text-sm text-primary max-w-sm">
-                When you perform actions like signing in or updating your
-                account, they'll appear here.
-              </p>
-            </div>
           )}
         </CardContent>
       </Card>
     </section>
-  );
+  )
 }

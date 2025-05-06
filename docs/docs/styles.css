@@ -189,7 +189,7 @@ pre > code {
 }
 
 .rehype-code-title {
-  @apply px-2 -mb-10 w-full text-sm pb-5 font-medium mt-5 font-code flex items-center gap-2;
+  @apply px-2 -mb-10 w-full text-sm pb-5 font-medium mt-5 font-mono flex items-center gap-2;
 }
 
 .highlight-comp > code {

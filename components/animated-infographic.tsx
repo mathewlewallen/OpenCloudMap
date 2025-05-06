@@ -44,7 +44,7 @@ const InfoGraphicItem = ({
         animate={{ scale: 1 }}
         transition={{ delay: 0.2 + index * 0.2, type: "spring", stiffness: 100 }}
       >
-        <Icon className="mr-2 text-primary" size={32} />
+        {Icon && typeof Icon === 'function' && <Icon className="mr-2 text-primary" size={32} />}
         {percentage}%
       </motion.div>
       <motion.div

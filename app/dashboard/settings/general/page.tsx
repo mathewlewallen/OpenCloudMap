@@ -1,121 +1,31 @@
-'use client';
+import GeneralSettingsForm from './GeneralSettingsForm'
+import { cookies } from 'next/headers'
+import { createCookieClient } from '@/utils/supabase/server'
 
-import { useActionState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Loader2 } from 'lucide-react';
-import { updateAccount } from '@/app/(login)/actions';
-import { User } from '@/lib/db/schema';
-import useSWR from 'swr';
-import { Suspense } from 'react';
+export default async function SettingsGeneralPage() {
+  const cookieStore = await cookies()
+  const supabase = createCookieClient(cookieStore)
+  const { data: { session } } = await supabase.auth.getSession()
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+  if (!session?.user) {
+    // could also redirect()
+    return <p className="p-8">Please log in to edit your settings.</p>
+  }
 
-type ActionState = {
-  name?: string;
-  error?: string;
-  success?: string;
-};
-
-type AccountFormProps = {
-  state: ActionState;
-  nameValue?: string;
-  emailValue?: string;
-};
-
-function AccountForm({
-  state,
-  nameValue = '',
-  emailValue = ''
-}: AccountFormProps) {
-  return (
-    <>
-      <div>
-        <Label htmlFor="name" className="mb-2">
-          Name
-        </Label>
-        <Input
-          id="name"
-          name="name"
-          placeholder="Enter your name"
-          defaultValue={state.name || nameValue}
-          required
-        />
-      </div>
-      <div>
-        <Label htmlFor="email" className="mb-2">
-          Email
-        </Label>
-        <Input
-          id="email"
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          defaultValue={emailValue}
-          required
-        />
-      </div>
-    </>
-  );
-}
-
-function AccountFormWithData({ state }: { state: ActionState }) {
-  const { data: user } = useSWR<User>('/api/user', fetcher);
-  return (
-    <AccountForm
-      state={state}
-      nameValue={user?.name ?? ''}
-      emailValue={user?.email ?? ''}
-    />
-  );
-}
-
-export default function GeneralPage() {
-  const [state, formAction, isPending] = useActionState<ActionState, FormData>(
-    updateAccount,
-    {}
-  );
+  const userId = session.user.id
+  const { data: profile } = await supabase
+    .from('users')
+    .select('name,email')
+    .eq('id', userId)
+    .single()
 
   return (
-    <section className="flex-1 p-4 lg:p-8">
-      <h1 className="text-lg lg:text-2xl font-medium text-primary mb-6">
-        General Settings
-      </h1>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Account Information</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4" action={formAction}>
-            <Suspense fallback={<AccountForm state={state} />}>
-              <AccountFormWithData state={state} />
-            </Suspense>
-            {state.error && (
-              <p className="text-destructive text-sm">{state.error}</p>
-            )}
-            {state.success && (
-              <p className="text-chart-2 text-sm">{state.success}</p>
-            )}
-            <Button
-              type="submit"
-              className="bg-chart-2 hover:bg-chart-2 text-white"
-              disabled={isPending}
-            >
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                'Save Changes'
-              )}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+    <section className="p-8">
+      <h1 className="text-2xl font-bold mb-4">General Settings</h1>
+      <GeneralSettingsForm
+        nameValue={profile?.name ?? ''}
+        emailValue={profile?.email ?? ''}
+      />
     </section>
-  );
+  )
 }

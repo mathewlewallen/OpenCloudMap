@@ -6,21 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { Lock, Trash2, Loader2 } from 'lucide-react';
 import { useActionState } from 'react';
-import { updatePassword, deleteAccount } from '@/app/(login)/actions';
-
-type PasswordState = {
-  currentPassword?: string;
-  newPassword?: string;
-  confirmPassword?: string;
-  error?: string;
-  success?: string;
-};
-
-type DeleteState = {
-  password?: string;
-  error?: string;
-  success?: string;
-};
+import { updatePassword, deleteAccount, PasswordState, DeleteState } from './actions'
 
 export default function SecurityPage() {
   const [passwordState, passwordAction, isPasswordPending] = useActionState<
