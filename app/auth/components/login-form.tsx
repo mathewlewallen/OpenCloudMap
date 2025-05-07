@@ -54,7 +54,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'github',
         options: {
-          redirectTo: `${window.location.origin}/auth/oauth?next=/`,
+          redirectTo: `${window.location.origin}/auth/oauth?next=/protected`,
         },
       })
 
@@ -116,7 +116,11 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
               </Link>
             </div>
           </form>
-          <form onSubmit={handleSocialLogin}>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+        <form onSubmit={handleSocialLogin}>
             <div className="flex flex-col gap-6">
               {error && <p className="text-sm text-destructive-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
