@@ -49,7 +49,7 @@ importers:
         version: 1.0.0
       '@next/mdx':
         specifier: ^15.3.1
-        version: 15.3.1(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.8(esbuild@0.25.4)))(@mdx-js/react@3.1.0(@types/react@19.1.2)(react@19.1.0))
+        version: 15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.8(esbuild@0.25.4)))(@mdx-js/react@3.1.0(@types/react@19.1.2)(react@19.1.0))
       '@protobuf-ts/runtime':
         specifier: 2.10.0
         version: 2.10.0
@@ -238,7 +238,7 @@ importers:
         version: 0.31.1
       drizzle-orm:
         specifier: ^0.43.1
-        version: 0.43.1(@neondatabase/serverless@1.0.0)(@types/pg@8.12.0)(postgres@3.4.5)
+        version: 0.43.1(@neondatabase/serverless@1.0.0)(@types/pg@8.15.0)(postgres@3.4.5)
       embla-carousel-react:
         specifier: 8.6.0
         version: 8.6.0(react@19.1.0)
@@ -2013,8 +2013,8 @@ packages:
   '@next/env@15.3.1':
     resolution: {integrity: sha512-cwK27QdzrMblHSn9DZRV+DQscHXRuJv6MydlJRpFSqJWZrTYMLzKDeyueJNN9MGd8NNiUKzDQADAf+dMLXX7YQ==}
 
-  '@next/mdx@15.3.1':
-    resolution: {integrity: sha512-dnpuJRfqqCPFfLDy2hIej41JAl424zk1JOgRd7jjWu2aTeX6oi0gXdcnMAK4lhf7Xl9zSkL2stzDc1YtlB1xyg==}
+  '@next/mdx@15.3.2':
+    resolution: {integrity: sha512-D6lSSbVzn1EiPwrBKG5QzXClcgdqiNCL8a3/6oROinzgZnYSxbVmnfs0UrqygtGSOmgW7sdJJSEOy555DoAwvw==}
     peerDependencies:
       '@mdx-js/loader': '>=0.15.0'
       '@mdx-js/react': '>=0.15.0'
@@ -3760,8 +3760,8 @@ packages:
   '@types/parse-json@4.0.2':
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==}
 
-  '@types/pg@8.12.0':
-    resolution: {integrity: sha512-a9Z11ecnpNPFu2iT4Qo9SSYgM2r1l4UqLIQ454zhCDRzxqOh/vsi57FFovbc64oBGPBotXw5cRhUQtJEHCb/OA==}
+  '@types/pg@8.15.0':
+    resolution: {integrity: sha512-JFxVIO0hZCbQXQGbRBQjbRWNCG3CujfEUBD4Ny2l0QqDyE0vqAPiMSyx0AIszMS0KdLZxz2GxZUUF3FBUXhOXA==}
 
   '@types/phoenix@1.6.6':
     resolution: {integrity: sha512-PIzZZlEppgrpoT2QgbnDU+MMzuR6BbCjllj0bM70lWoejMeNJAxCchxnv7J3XFkI8MpygtRpzXrIlmWUBclP5A==}
@@ -9750,11 +9750,11 @@ snapshots:
   '@neondatabase/serverless@1.0.0':
     dependencies:
       '@types/node': 22.15.14
-      '@types/pg': 8.12.0
+      '@types/pg': 8.15.0
 
   '@next/env@15.3.1': {}
 
-  '@next/mdx@15.3.1(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.8(esbuild@0.25.4)))(@mdx-js/react@3.1.0(@types/react@19.1.2)(react@19.1.0))':
+  '@next/mdx@15.3.2(@mdx-js/loader@3.1.0(acorn@8.14.1)(webpack@5.99.8(esbuild@0.25.4)))(@mdx-js/react@3.1.0(@types/react@19.1.2)(react@19.1.0))':
     dependencies:
       source-map: 0.7.4
     optionalDependencies:
@@ -12348,7 +12348,7 @@ snapshots:
 
   '@types/parse-json@4.0.2': {}
 
-  '@types/pg@8.12.0':
+  '@types/pg@8.15.0':
     dependencies:
       '@types/node': 22.15.14
       pg-protocol: 1.9.5
@@ -13199,10 +13199,10 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  drizzle-orm@0.43.1(@neondatabase/serverless@1.0.0)(@types/pg@8.12.0)(postgres@3.4.5):
+  drizzle-orm@0.43.1(@neondatabase/serverless@1.0.0)(@types/pg@8.15.0)(postgres@3.4.5):
     optionalDependencies:
       '@neondatabase/serverless': 1.0.0
-      '@types/pg': 8.12.0
+      '@types/pg': 8.15.0
       postgres: 3.4.5
 
   dunder-proto@1.0.1:

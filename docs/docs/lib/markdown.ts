@@ -21,13 +21,13 @@ import Link from "@/docs/docs/markdown/link";
 import Outlet from "@/docs/docs/markdown/outlet";
 import Files from "@/docs/docs/markdown/files";
 import {
-  UITable,
+  Table,
   TableBody,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/Table";
+} from "@/components/ui/table";
 
 // add custom components
 const components = {
@@ -43,7 +43,7 @@ const components = {
   a: Link,
   Outlet,
   Files,
-  table: UITable,
+  table: Table,
   thead: TableHeader,
   th: TableHead,
   tr: TableRow,

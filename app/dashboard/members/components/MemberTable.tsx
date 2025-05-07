@@ -1,12 +1,12 @@
 import React from "react";
 import ListOfMembers from "./ListOfMembers";
-import { UITable, TableHeader, TableRow, TableHead } from "@/components/ui/Table";
+import { Table, TableHeader, TableRow, TableHead } from "@/components/ui/table";
 
 export default function MemberTable() {
 	const tableHeader = ["Name", "Role", "Joined", "Status"];
 
 	return (
-		<UITable>
+		<Table>
 			<TableHeader>
 				<TableRow>
 					{tableHeader.map((header) => (
@@ -15,6 +15,6 @@ export default function MemberTable() {
 				</TableRow>
 			</TableHeader>
 			<ListOfMembers />
-		</UITable>
+		</Table>
 	);
 }

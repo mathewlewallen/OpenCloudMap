@@ -3,10 +3,14 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Layers as LayersIcon } from 'lucide-react';
-import { LayersModal } from '@/map/LayersModal';
-import MapContainer from '@/map/MapContainer';
+import { LayersModal } from '@/map-utils/LayersModal';
+import dynamic from 'next/dynamic';
 
-export default function MapPage() {
+const MapContainer = dynamic(() => import('@/map-utils/MapContainer'), {
+  ssr: false,
+});
+
+export default function MpPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (

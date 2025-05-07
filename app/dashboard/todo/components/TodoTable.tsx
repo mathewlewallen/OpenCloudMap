@@ -1,12 +1,12 @@
 import React from "react";
 import ListOfTodo from "./ListOfTodo";
-import { UITable, TableHead, TableHeader, TableRow } from "@/components/ui/Table";
+import { Table, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
 export default function TodoTable() {
 	const tableHeader = ["Title", "Status", "Created at", "Created by"];
 
 	return (
-		<UITable>
+		<Table>
 			<TableHeader>
 				<TableRow>
 					{tableHeader.map((header) => (
@@ -15,6 +15,6 @@ export default function TodoTable() {
 				</TableRow>
 			</TableHeader>
 			<ListOfTodo />
-		</UITable>
+		</Table>
 	);
 }
