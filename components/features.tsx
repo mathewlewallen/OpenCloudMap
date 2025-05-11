@@ -5,7 +5,7 @@ import { BitcoinIcon, Cloud, Shield, Zap, type LucideIcon } from 'lucide-react'
 import { motion } from "motion/react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import Link from "next/link"
-import { Icons } from "./icons"
+import { Icons } from "@/components/icons"
 
 interface Feature {
   icon: React.ReactElement<LucideIcon>

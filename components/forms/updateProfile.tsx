@@ -55,9 +55,10 @@ type ProfileFormValues = z.infer<typeof profileFormSchema>
 
 // This can come from your database or API. See contact page for working example using Supabase postgres DB and server actions
 const defaultValues: Partial<ProfileFormValues> = {
-  bio: "Open Cloud Map is a platform for mapping the world's cloud infrastructure.",
+  bio: "A passionate user of Open Cloud Map — exploring global aviation data to power better flight planning and analysis.", 
   urls: [
     { value: "https://opencloudmap.com" },
+    { value: "https://github.com/mathewlewallen" },
     { value: "http://linkedin.com/in/mathewlewallen" },
   ],
 }
@@ -118,9 +119,9 @@ export function ProfileForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  <SelectItem value="mathewlewallen@gmail.com">mathewlewallen@gmail.com</SelectItem>
+                  <SelectItem value="mathewlewallen@yahoo.com">mathewlewallen@yahoo.com</SelectItem>
+                  <SelectItem value="mathewlewallen@cloudcontext.com">mathewlewallen@cloudcontext.com</SelectItem>
                 </SelectContent>
               </Select>
               <FormDescription>

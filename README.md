@@ -1,98 +1,58 @@
-set -a; source .env; set +a
+# 🚀 Mathew Lewallen
+## Aerospace, Aeronautics, Aviation & All Flying Things
 
-curl -X GET -H "Content-Type: application/json" -H "x-openaip-api-key: $OPENAIP_API" 'https://api.core.openaip.net/api/airports?page=1&limit=1000' -o map/data/airportRaw.json
+Welcome to the source code for my **personal website** — a site to showcase my lifelong passion for aviation, space, and aerospace systems. This site is more than a digital resume — it's a mission briefing.
 
-curl -X GET -H "Content-Type: application/json" -H "x-openaip-api-key: $OPENAIP_API" 'https://api.core.openaip.net/api/airspaces?page=1&limit=1000' -o map/data/airspaceRaw.json
+![hero-preview](public/preview.jpg)
 
-curl -X GET -H "Content-Type: application/json" -H "x-openaip-api-key: $OPENAIP_API" 'https://api.core.openaip.net/api/navaids?page=1&limit=1000' -o map/data/navaidRaw.json
+---
 
+## 🌌 Experience the Launch
 
+When you visit [mathewlewallen.com](https://mathewlewallen.com), you’re not just reading about me — you’re watching **my journey lift off**.
 
+- 🛰️ **PhD-level Aviation Research** 
+- ✈️ **Air Traffic Control to Aerospace Ops**
+- 🧭 **Flight Labs** – Experiments in flight planning, space traffic, and AI aviation  
+- 🧠 **Blog** – My thoughts on FAA modernization, NOTAM reform, and aerospace tech
 
+---
 
-<a href="https://onyx-rho-pink.vercel.app/">
-  <img alt="Onyx open graph image." src="https://quantumone.b-cdn.net/onyx-git/og-image.jpg">
-  <h1 align="center">Onyx MVP Template</h1>
-</a>
+## 🧱 Tech Stack
 
-<a href="https://securityheaders.com/">
-  <img alt="Onyx security score image." src="https://quantumone.b-cdn.net/onyx-git/onyx-security-score-ls.jpg">
-  <h2 align="center">Onyx SecurityHeaders.com Score</h2>
-</a>
+| Feature       | Stack                                     |
+|---------------|--------------------------------------------|
+| Framework     | Next.js 15 (App Router) + React 19         |
+| 3D Engine     | [React Three Fiber](https://github.com/pmndrs/react-three-fiber) |
+| Animation     | [Framer Motion](https://www.framer.com/motion/) |
+| 3D Assets     | GLTF + Blender-modeled rocket              |
+| Styling       | Tailwind CSS v4 with OKLCH theme system    |
+| Hosting       | Vercel (Edge)                              |
 
+---
 
-### What is Onyx?
-- Onyx is a turnkey, full stack NextJS 14+ progressive web app written in Typescript that includes role based access control (RBAC),
-complete Supabase SSR Auth and DB integration, Zod validation, Tanstack React Query, Rust serverless function runtime and API, Markdown pages with ability to insert React components, React Hook form, and more. Fork, customize, and deploy on Vercel or elsewhere to have your MVP up and running in a few days or less. Stack details are below. 
+## 🛫  Want to Collaborate?
 
-### Stack and Features
-- NextJS 14 App Router in Typescript 
-- Supabase 
-  - SSR Auth with
-    - Fully configured email/password signup, login, oauth, PKCE and confirm routes 
-    - middleware 
-    - server actions
-    - typed Auth & DB clients
-    - readOnly userSession clients
-  - Postgres DB with CRUD functions configured
-    - User account and profile management configured 
-    - RBAC configured admin dashboard with data visualization, members administration and todo lists
-    - Contact form with toast, Zod validation, server side table insert  
-- TanStack React Query, Table, and Dev Tools
-  - Demo SSR with Supabase DB & cache helpers 
-- Zod data validation, schemas, event handling.
-- Shadcn-UI, Radix-UI primitives, Tailwind CSS
-- Markdown pages with Next/MDX - create page.mdx and layout.tsx for each markdown page
-- Next-PWA
-- Next Compose Plugins  
-- React Hook Form
-- OpenAI playground UI
-- Onboarding, logIn/signUp pages
-- Podcast UI
-- CookieButton component configured to work with Consent Manager from Termly free plan. Just create a free Termly account, add your Script tag on the app/layout page using Next Script and then add your CookieButton to your app/layout just above the ThemeProvider and just below your termly Script tag.  
-- Custom Formik Components with MUI are not used in app but code is solid for use in a "MUI Base X TailwindCSS config". Onyx is NOT currently configured for MUI nor MUI Base X TailwindCSS. 
-- Lucide React Icons with many brand SVGs ready for your props 
-- More..
+I’m open to:
+- Speaking opportunities
+- Research partnerships
+- Aerospace collaborations
+- Expert consulting on ATC or airspace modernization
 
-### API 
-- [Rust runtime for Vercel Serverless Functions](https://github.com/vercel-community/rust)
+---
 
-### Getting started with Onyx:
-- First, configure your environment
-  - Create a file named .env.local in project root
-  - Create a Supabase account and add the following to your env file
-    - NEXT_PUBLIC_SUPABASE_KEY="Your supabase anon key"
-    - SUPABASE_JWT_SECRET="Your supabase JWT secret"
-    - NEXT_PUBLIC_SUPABASE_URL="Your supabase project URL"
-    - SUPABASE_SERVIC_ROLE_KEY="Your supabase service role key"
-    - NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
-   - STRIPE_SECRET_KEY=sk_test_...
-  - Ensure your Supabase tables match the tables and types found in '@/lib/supabase'.
-  - Add authorized development and production URL's to Supabase URL config. 
-### Run  
-- Development server:
+## 📸 Credits & Inspiration
 
-```bash
-npm i && npm run dev
-# or
-yarn i && yarn run dev
-# or
-pnpm i && pnpm dev
-# or
-bun i && bun dev
-```
+## [Hayden Bleasel](https://github.com/haydenbleasel):
+One of the main developers I draw inspiration from. With his code you get memorable designs, easy to follow documentation, expert organization and structure, and an Enterprise-level experience.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
+## Show Support
 
-### Deploy on Vercel
+If this repo inspired you or helped you build your own high-impact site:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Frmourey26%2Fonyx%2Ftree%2Fmain)
-
-
-### Reference/Credit
-- @chensokheng
-
-
-### Tips/Support
-<a href="https://www.buymeacoffee.com/rmoureyjr" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="51" width="217"></a>
+### 1) ⭐️ Star it
+### 2) 🍴 Fork it
+### 3) 🚀 Launch it
+### 4) [Refuel Caffeine](https://buymeacoffee.com/mathewlewallen)

@@ -29,8 +29,8 @@ export const docsConfig: DocsConfig = {
     },
 
     { 
-      title: "Podcasts",
-      href: "/music",
+      title: "Data",
+      href: "/data",
     },
     { 
       title: "Blog",

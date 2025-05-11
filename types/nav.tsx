@@ -10,6 +10,12 @@ export interface NavItem {
   label?: string
 }
 
+export interface NavGroup {
+  title: string
+  authRequired?: boolean
+  items: NavItem[]
+}
+
 export interface NavItemWithChildren extends NavItem {
   items: NavItemWithChildren[]
 }
@@ -17,3 +23,4 @@ export interface NavItemWithChildren extends NavItem {
 export interface MainNavItem extends NavItem {}
 
 export interface SidebarNavItem extends NavItemWithChildren {}
+

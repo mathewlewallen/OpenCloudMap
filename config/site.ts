@@ -1,56 +1,51 @@
-export type SiteConfig = typeof siteConfig
+import type { NavGroup } from "@/types/nav"
 
-export const siteConfig = {
+export const siteConfig: {
+  name: string
+  description: string
+  navGroups: NavGroup[] 
+  links: Record<string, string>
+} = {
   name: "Open Cloud Map",
   description:
-    "Open Cloud Map is a platform for dedicated to advancing the use of open source aviation resources and technologies.",
-  mainNav: [
+  "Open Cloud Map is the free open-source aviation mapping platform to visualize, plan, and analyze aviation data.",
+  navGroups: [
     {
-      title: "Home",
-      href: "/",
-    },
-    {
-      title: "Map",
-      href: "/map",
-    },
-    { 
-      title: "Account",
-      href: "/account",
-    },
-    { 
-      title: "Dashboard",
-      href: "/dashboard",
-    },
-    { 
-      title: "OpenAI",
-      href: "/playground",
-    },
-    { 
-      title: "Podcasts",
-      href: "/music",
-    },
-    { 
-      title: "Blog",
-      href: "/blog",
-    },
-    { 
-      title: "RBAC",
-      href: "/dashboard/members",
-    },
-    { 
-      title: "About",
-      href: "/about",
+      title: "Free",
+      items: [
+        { title: "About", href: "/about" },
+        { title: "Blog", href: "/blog" },
+        { title: "Contact", href: "/contact" },
+        { title: "Data", href: "/data" },
+        { title: "Docs", href: "/docs" },
+        { title: "Map", href: "/map" },
+        { title: "MDX", href: "/mdx" },
+        { title: "Privacy", href: "/privacy" },
+        { title: "Terms", href: "/terms" },
+      ],
     },
     {
-      title: "Contact",
-      href: "/contact",
+      title: "Auth",
+      authRequired: true,
+      items: [
+        { title: "Account", href: "/account" },
+        { title: "Auth", href: "/auth" },
+        { title: "Confirmation", href: "/confirmation" },
+        { title: "Countries", href: "/countries" },
+        { title: "Dashboard", href: "/dashboard" },
+        { title: "Playground", href: "/playground" },
+        { title: "Private", href: "/private" },
+        { title: "Schedule", href: "/schedule" },
+        { title: "SSRCountries", href: "/ssr-countries" },
+      ],
     },
   ],
   links: {
     github: "https://github.com/mathewlewallen/opencloudmap",
     login: "https://opencloudmap.com/auth/login",
     signup: "https://opencloudmap.com/auth/signup",
-    contact: "/contact",
     linkedin:"https://linkedin.com/in/mathewlewallen",
   },
 }
+
+export type SiteConfig = typeof siteConfig

@@ -16,7 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
 
    {
-      url: 'https://opencloudmap.com/onboarding',
+      url: 'https://opencloudmap.com/*',
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.5,

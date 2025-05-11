@@ -22,7 +22,7 @@ import { toast } from "@/components/ui/use-toast";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { cn } from "@/lib/utils";
 import { useTransition, useState } from "react";
-import { updateInqueries } from '@/app/contact/actions'
+import { updateInqueries } from '@/app/(free)/contact/actions'
 
 const ContactSchema = z.object({
         name: z.string().min(1, { message: "Name can not be empty" }),

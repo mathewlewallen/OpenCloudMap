@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import WhyOnyx from "./whyonyx"
+import WhyOnyx from "@/components/whyonyx"
 
 const WhyOnyxWrapper: React.FC = () => {
   return <WhyOnyx />

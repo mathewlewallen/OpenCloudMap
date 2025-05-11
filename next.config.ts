@@ -7,10 +7,10 @@ const cspHeader = `
   script-src 'self' 'unsafe-eval' 'unsafe-inline' *.supabase.co googleapis.com;
   style-src 'self' 'unsafe-inline';
   img-src * blob: data:;
-  media-src *.supabase.co quantumone.b-cdn.net *.unsplash.com youtube.com;
+  media-src *.supabase.co;
   connect-src *;
   font-src 'self' googleapis.com;
-  frame-src *.supabase.co youtube.com quantumone.b-cdn.net;
+  frame-src *.supabase.co;
   object-src 'none';
   base-uri 'self';
   form-action 'self';
@@ -32,52 +32,12 @@ const nextConfig: NextConfig = {
   },
     images : {
       remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'quantumone.b-cdn.net',
-        port: '',
-        pathname: '/onyx/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'unpkg.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'youtube.com',
-        port: '',
-        pathname: '/embed/HR6a2aHhY_c?si=L2O3Cf7pQ-0HHhsP',
-      },
-
-      {
-        protocol: 'https',
-        hostname: 'quantumone.b-cdn.net',
-        port: '',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'images.unsplash.com',
-        port: '',
-        pathname: '/**',
-      },
-
-      {
-
-        protocol: 'https',
-        hostname: 'api.web3modal.com',
-        port: '',
-      
-      },
-    ],
+        {
+          protocol: 'https',
+          hostname: '*.supabase.co/storage/v1/object/public/assets/*',
+          port: '',
+        },
+      ],
   },
   async headers() {
     return [

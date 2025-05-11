@@ -2,7 +2,7 @@
 import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next"
-import './globals.css'
+import '@/app/globals.css'
 import { ThemeProvider } from "@/components/theme-provider"
 import { CookieButton } from "@/components/cookie-button"
 import { fontSans } from "@/lib/font"
@@ -11,8 +11,8 @@ import { ReactQueryClientProvider } from '@/components/react-query-client-provid
 import { Toaster } from "@/components/ui/toaster"
 import { SiteHeader } from "@/components/site-header"
 import { Footer } from "@/components/shared/Footer"
-import { TailwindIndicator } from "@/components/tailwind-indicator"
 import { cn } from "@/lib/utils"
+import { BetaBanner } from '@/components/beta-banner'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -151,6 +151,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           >
              <div className="relative flex min-h-screen flex-col bg-background">
               <SiteHeader/>
+              <BetaBanner/>
               <div className="flex-1">
                   {children}
                 <Toaster/>

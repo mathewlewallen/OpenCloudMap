@@ -1,4 +1,4 @@
-import { OperatingHours } from "./operating-hours";
+import { OperatingHours } from "@/map-utils/types/operating-hours";
 
 export type Navaid = {
     _id: string;
