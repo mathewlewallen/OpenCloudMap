@@ -8,14 +8,13 @@ import { Input } from '@/components/ui/input';
 import { Send } from 'lucide-react';
 import { GrLinkedin, GrGithub } from 'react-icons/gr';
 import BuyMeACoffee from '@/components/shared/buymeacoffee';
-import { page_routes } from '@/docs/docs/lib/routes-config';
 import { buttonVariants } from '@/components/ui/button';
 
 const companyLinks = [
   { name: "Security", href: "/dashboard/security" },
-  { name: "Privacy Policy", href: "/docs/legal/privacy-policy" },
-  { name: "Terms of Service", href: "/docs/legal/terms-of-service" },
-  { name: "Cookie Settings", href: "/docs/legal/cookie-settings" },
+  { name: "Privacy Policy", href: "/docs/privacy-policy" },
+  { name: "Terms of Service", href: "/docs/terms-of-service" },
+  { name: "Cookie Settings", href: "/docs/cookie-settings" },
 ];
 
 const quickLinks = [
@@ -139,7 +138,7 @@ export function Footer() {
             </div>
             {/* Documentation button placed below social icons */}
             <Link
-              href={`/docs${page_routes[0].href}`}
+              href="/docs"
               className={buttonVariants({ size: 'lg', className: 'w-full justify-center' })}
             >
               Documentation

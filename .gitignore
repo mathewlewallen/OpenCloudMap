@@ -47,3 +47,4 @@ postgres_data/
 /map-utils/data/airportRaw.json
 /map-utils/data/airspaceRaw.json
 /supabase/migrations/supabase-backup-2025-05-05.sql
+

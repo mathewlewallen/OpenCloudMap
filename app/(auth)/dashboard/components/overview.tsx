@@ -1,59 +1,28 @@
 "use client"
 
+import * as React from "react"
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis } from "recharts"
 
-const data = [
-  {
-    name: "Jan",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Feb",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Mar",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Apr",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "May",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jun",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jul",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Aug",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Sep",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Oct",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Nov",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Dec",
-    total: Math.floor(Math.random() * 5000) + 1000,
-  },
+const defaultData = [
+  { name: "Jan", total: 1230 },
+  { name: "Feb", total: 2540 },
+  { name: "Mar", total: 3200 },
+  { name: "Apr", total: 2100 },
+  { name: "May", total: 3800 },
+  { name: "Jun", total: 2750 },
+  { name: "Jul", total: 4100 },
+  { name: "Aug", total: 3650 },
+  { name: "Sep", total: 2200 },
+  { name: "Oct", total: 4000 },
+  { name: "Nov", total: 3100 },
+  { name: "Dec", total: 4500 },
 ]
 
-export function Overview() {
+type OverviewProps = {
+  data?: { name: string; total: number }[]
+}
+
+export function Overview({ data = defaultData }: OverviewProps) {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={data}>
@@ -73,7 +42,6 @@ export function Overview() {
         />
         <Bar
           dataKey="total"
-          fill="currentColor"
           radius={[4, 4, 0, 0]}
           className="fill-primary"
         />

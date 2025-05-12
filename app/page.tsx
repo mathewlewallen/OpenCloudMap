@@ -104,17 +104,22 @@ export default function HomePage() {
               </p>
             </div>
             <div className="mt-8 lg:mt-0 flex justify-center lg:justify-end">
-              <a href="https://github.com/mathewlewallen/opencloudmap" target="_blank">
-                <Button
-                  size="lg"
-                  variant="outline"
-                  className="text-lg rounded-full"
-                >
-                  We can't do it alone
-                  <ArrowRight className="ml-3 h-6 w-6" />
-                </Button>
-                </a>
-            </div>
+      <a
+        href="https://github.com/mathewlewallen/opencloudmap"
+        target="_blank"
+        rel="noreferrer"
+      >
+        <Button
+          size="lg"
+          className="group relative flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-chart-2/50 to-chart-2/90 px-14 py-5 shadow-xl transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+        >
+          <span className="bg-gradient-to-r px-4 text-black dark:text-white bg-clip-text text-lg font-extrabold">
+            We can't do it alone
+          </span>
+          <ArrowRight className="h-5 w-5 text-white transition-transform duration-300 group-hover:translate-x-1" />
+        </Button>
+      </a>
+    </div>
           </div>
         </div>
       </section>

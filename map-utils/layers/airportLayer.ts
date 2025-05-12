@@ -25,7 +25,6 @@ const airportData = {
       elevationGeoid: doc.elevationGeoid,
       trafficType: doc.trafficType,
       magneticDeclination: doc.magneticDeclination,
-      ppr: doc.ppr,
       private: doc.private,
       skydiveActivity: doc.skydiveActivity,
       winchOnly: doc.winchOnly,

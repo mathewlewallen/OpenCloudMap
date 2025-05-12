@@ -12,7 +12,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { createCookieClient } from '@/utils/supabase/server'
-import type { Database } from '@/lib/supabase'
+import type { Database } from '@/supabase/db-types'
 import { cookies } from 'next/headers'
 
 type ActivityType = Database['public']['Enums']['activity_type']

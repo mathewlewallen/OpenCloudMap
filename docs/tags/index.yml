@@ -1,0 +1,11 @@
+- name: Aerospace
+  slug: aerospace
+
+- name: Open Source
+  slug: open-source
+
+- name: University
+  slug: university
+
+- name: Documentation
+  slug: documentation

@@ -49,24 +49,24 @@ import {
 
 const groups = [
   {
-    label: "Personal Account",
+    label: "Personal Flight Plans",
     teams: [
       {
-        label: "Alicia Koch",
-        value: "personal",
+        label: "Open Cloud Map",
+        value: "opencloudmap",
       },
     ],
   },
   {
-    label: "Teams",
+    label: "Organizations",
     teams: [
       {
-        label: "Acme Inc.",
-        value: "acme-inc",
+        label: "Aviation Ops",
+        value: "aviation-ops",
       },
       {
-        label: "Monsters Inc.",
-        value: "monsters",
+        label: "Drone Services",
+        value: "drone-services",
       },
     ],
   },
@@ -94,24 +94,31 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
             role="combobox"
             aria-expanded={open}
             aria-label="Select a team"
-            className={cn("w-[200px] justify-between", className)}
+            className={cn("w-[220px] justify-between", className)}
           >
-            <Avatar className="mr-2 h-5 w-5">
+            <Avatar className="mr-2 h-6 w-6">
               <AvatarImage
                 src={`https://avatar.vercel.sh/${selectedTeam.value}.png`}
                 alt={selectedTeam.label}
                 className="grayscale"
               />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>
+                {selectedTeam.label
+                  .split(" ")
+                  .map((n) => n[0])
+                  .join("")
+                  .slice(0, 3)
+                  .toUpperCase()}
+              </AvatarFallback>
             </Avatar>
             {selectedTeam.label}
-            <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
+            <CaretSortIcon className="ml-auto h-4 w-4 opacity-50" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-[200px] p-0">
+        <PopoverContent className="w-[220px] p-0">
           <Command>
             <CommandList>
-              <CommandInput placeholder="Search team..." />
+              <CommandInput placeholder="Search teams..." />
               <CommandEmpty>No team found.</CommandEmpty>
               {groups.map((group) => (
                 <CommandGroup key={group.label} heading={group.label}>
@@ -130,7 +137,14 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                           alt={team.label}
                           className="grayscale"
                         />
-                        <AvatarFallback>SC</AvatarFallback>
+                        <AvatarFallback>
+                          {team.label
+                            .split(" ")
+                            .map((n) => n[0])
+                            .join("")
+                            .slice(0, 3)
+                            .toUpperCase()}
+                        </AvatarFallback>
                       </Avatar>
                       {team.label}
                       <CheckIcon
@@ -157,7 +171,7 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
                     }}
                   >
                     <PlusCircledIcon className="mr-2 h-5 w-5" />
-                    Create Team
+                    Create Organization
                   </CommandItem>
                 </DialogTrigger>
               </CommandGroup>
@@ -165,48 +179,42 @@ export default function TeamSwitcher({ className }: TeamSwitcherProps) {
           </Command>
         </PopoverContent>
       </Popover>
+
+      {/* New Organization Dialog */}
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Create team</DialogTitle>
+          <DialogTitle>Create Organization</DialogTitle>
           <DialogDescription>
-            Add a new team to manage products and customers.
+            Add a new organization to manage aviation datasets & maps.
           </DialogDescription>
         </DialogHeader>
-        <div>
-          <div className="space-y-4 py-2 pb-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Team name</Label>
-              <Input id="name" placeholder="Acme Inc." />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <div className="space-y-4 py-2 pb-4">
+          <div className="space-y-2">
+            <Label htmlFor="name">Organization Name</Label>
+            <Input id="name" placeholder="Aviation Ops" />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="plan">Subscription Plan</Label>
+            <Select>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a plan" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="free">
+                  <span className="font-medium">Free</span> — for hobby use
+                </SelectItem>
+                <SelectItem value="pro">
+                  <span className="font-medium">Pro</span> — $9/month per user
+                </SelectItem>
+              </SelectContent>
+            </Select>
           </div>
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => setShowNewTeamDialog(false)}>
             Cancel
           </Button>
-          <Button type="submit">Continue</Button>
+          <Button type="submit">Create</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

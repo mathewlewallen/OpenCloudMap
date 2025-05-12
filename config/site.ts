@@ -12,16 +12,23 @@ export const siteConfig: {
   navGroups: [
     {
       title: "Free",
+      authRequired: false,
       items: [
         { title: "About", href: "/about" },
-        { title: "Blog", href: "/blog" },
         { title: "Contact", href: "/contact" },
         { title: "Data", href: "/data" },
-        { title: "Docs", href: "/docs" },
         { title: "Map", href: "/map" },
-        { title: "MDX", href: "/mdx" },
-        { title: "Privacy", href: "/privacy" },
-        { title: "Terms", href: "/terms" },
+        { title: "Pricing", href: "/pricing" },
+      ],
+    },
+    {
+      title: "Library",
+      authRequired: false,
+      items: [
+        { title: "Blog", href: "/blog" },
+        { title: "Docs", href: "/docs" },
+        { title: "Guides", href: "/guides" },
+        { title: "Papers", href: "/papers" },
       ],
     },
     {
@@ -31,12 +38,9 @@ export const siteConfig: {
         { title: "Account", href: "/account" },
         { title: "Auth", href: "/auth" },
         { title: "Confirmation", href: "/confirmation" },
-        { title: "Countries", href: "/countries" },
         { title: "Dashboard", href: "/dashboard" },
         { title: "Playground", href: "/playground" },
-        { title: "Private", href: "/private" },
         { title: "Schedule", href: "/schedule" },
-        { title: "SSRCountries", href: "/ssr-countries" },
       ],
     },
   ],

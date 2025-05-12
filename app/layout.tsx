@@ -1,5 +1,4 @@
  import type { Metadata, Viewport } from 'next'
-import { Inter } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from "@vercel/speed-insights/next"
 import '@/app/globals.css'
@@ -14,18 +13,14 @@ import { Footer } from "@/components/shared/Footer"
 import { cn } from "@/lib/utils"
 import { BetaBanner } from '@/components/beta-banner'
 
-const inter = Inter({ subsets: ['latin'] })
-
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
     template: `%s - ${siteConfig.name}`,
   },
-
-  description: siteConfig.description/*,
+  description: siteConfig.description,
   manifest: 'https://opencloudmap.com/manifest.json',
   metadataBase: new URL('https://opencloudmap.com'),
-
   alternates: {
     canonical: '/',
     languages: {
@@ -39,32 +34,53 @@ export const metadata: Metadata = {
       'pt-PT': '/pt-PT',
     },
   },
-
   referrer: 'origin-when-cross-origin',
-
-  keywords: ['NextJS 14 TypeScript', 'Supabase SSR', 'TanStack React Query', 'vercel', 'openai', 'MVP Template', 'Onyx SaaS PWA template', 'Zod', 'Shadcn-UI', 'Tailwind CSS', 'SaaS', 'NextJS Supabase Postgres Tailwind TanStack', 'NextJS CSP',
-             'PWA', 'NextJS SaaS PWA Template', 'CRUD ops', 'secure headers', 'NextJS templates with user authentication, RBAC, and CRUD ops', 'NextJS templates with data validation and database integration',
-            'Rust API runtime for vercel serverless functions', 'NextJS secure headers', 'NextJS NextMDX'],
-
+  keywords: [
+      "Open Cloud Map",
+      "open aviation data",
+      "open source aviation tools",
+      "Next.js 15",
+      "React 19",
+      "TypeScript SaaS",
+      "Supabase backend",
+      "Supabase Auth",
+      "Supabase SSR",
+      "geospatial data visualization",
+      "open aviation mapping",
+      "aviation maps API",
+      "aviation data API",
+      "MapLibre GL JS",
+      "Deck.gl",
+      "Tailwind CSS 4",
+      "shadcn-ui components",
+      "TanStack React Query",
+      "PWA SaaS template",
+      "Next.js SaaS starter",
+      "Next.js app router",
+      "Next.js secure headers",
+      "Next.js CSP",
+      "SaaS template with RBAC",
+      "SaaS template with auth + CRUD",
+      "Next.js templates for open data apps",
+      "Next.js SaaS boilerplate",
+      "Open Source SaaS template",
+      "Supabase + Next.js template"
+    ],
   authors: [{ name: 'Mathew Lewallen' }],
   creator: 'Mathew Lewallen',
   publisher: 'Mathew Lewallen',
-
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-
   generator: 'NextJS',
-
   icons: {
-    icon: "../public/favicon.ico",
-    apple: "../public/apple-touch-icon.png",
+    icon: "/favicon.ico",
+    apple: "/apple-touch-icon.png",
   },
-
   robots: {
-    index: false,
+    index: true,
     follow: true,
     nocache: true,
     googleBot: {
@@ -76,7 +92,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-
   openGraph: {
     title: siteConfig.name,
     description: siteConfig.description,
@@ -84,21 +99,20 @@ export const metadata: Metadata = {
     url: "https://opencloudmap.com",
     images: [
       {
-        url: 'https://opencloudmap.com/og-image.jpg', // Must be an absolute URL
+        url: 'https://ipselheadupsuqjktyxv.supabase.co/storage/v1/object/public/assets/opengraph-image.png', // Must be an absolute URL
         width: 1230,
         height: 640,
       },
       {
-        url: 'https://opencloudmap.com/opengraph-image.jpg', // Must be an absolute URL
+        url: 'https://ipselheadupsuqjktyxv.supabase.co/storage/v1/object/public/assets/opengraph-image.png', // Must be an absolute URL
         width: 1800,
         height: 1600,
-        alt: 'blockchain business',
+        alt: 'Open Cloud Map',
       },
     ],
     locale: 'en_US',
     type: 'website',
   },
-
   twitter: {
        title: siteConfig.name,
        description: siteConfig.description,
@@ -106,18 +120,19 @@ export const metadata: Metadata = {
        creator: '@mathewlewallen',
        images: [
     {
-      url: 'https://opencloudmap.com/twitter-image.jpg', // Must be an absolute URL
+      url: 'https://ipselheadupsuqjktyxv.supabase.co/storage/v1/object/public/assets//twitter-image.png', // Must be an absolute URL
       width: 1800,
       height: 900,
     },
     {
-      url: 'https://opencloudmap.com/twitter-image.jpg',
+      url: 'https://ipselheadupsuqjktyxv.supabase.co/storage/v1/object/public/assets//twitter-image.png',
       width: 1800,
       height: 900,
     },
    ],
- }*/
+ }
 }
+
 export const viewport: Viewport =  {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "white" },
@@ -132,7 +147,6 @@ export const viewport: Viewport =  {
 interface RootLayoutProps {
   children: React.ReactNode
 }
-
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (

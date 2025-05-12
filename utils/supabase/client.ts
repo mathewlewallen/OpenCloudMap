@@ -1,5 +1,5 @@
 import { createBrowserClient } from '@supabase/ssr'
-import type { Database } from '@/lib/supabase'
+import type { Database } from '@/supabase/db-types';
 
 export type TypedSupabaseClient = ReturnType<typeof createClient>
 

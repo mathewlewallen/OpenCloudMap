@@ -1,6 +1,6 @@
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
-import type { Database } from '@/lib/supabase'
+import type { Database } from '@/supabase/db-types';
 
 export type TypedSupabaseServerClient = ReturnType<typeof createClient>
 

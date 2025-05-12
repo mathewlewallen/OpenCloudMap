@@ -13,15 +13,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { useDBAuth } from "@/hooks/use-dbauth"
 
 export function MainNav() {
   const pathname = usePathname()
-  const { user } = useDBAuth()
-
-  const visibleGroups = siteConfig.navGroups.filter(
-    (group) => !group.authRequired || (group.authRequired && user)
-  )
 
   return (
     <div className="mr-2 hidden gap-4 md:flex md:gap-8 bg-background">
@@ -31,11 +25,11 @@ export function MainNav() {
       </Link>
 
       <nav className="flex gap-4">
-        {visibleGroups.map((group) =>
+        {siteConfig.navGroups.map((group) =>
           group.items.length > 1 ? (
             <DropdownMenu key={group.title}>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-medium">
+                <Button variant="outline" className="text-sm font-medium px-10">
                   {group.title}
                 </Button>
               </DropdownMenuTrigger>
