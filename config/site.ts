@@ -11,14 +11,31 @@ export const siteConfig: {
   "Open Cloud Map is the free open-source aviation mapping platform to visualize, plan, and analyze aviation data.",
   navGroups: [
     {
-      title: "Free",
-      authRequired: false,
+      title: "Map",
+      authRequired: true,
       items: [
-        { title: "About", href: "/about" },
-        { title: "Contact", href: "/contact" },
-        { title: "Data", href: "/data" },
         { title: "Map", href: "/map" },
-        { title: "Pricing", href: "/pricing" },
+      ],
+    },
+    {
+      title: "Data",
+      authRequired: true,
+      items: [
+        { title: "Data", href: "/data" },
+      ],
+    },
+    {
+      title: "API",
+      authRequired: true,
+      items: [
+        { title: "API", href: "/api" },
+      ],
+    },
+    {
+      title: "AI",
+      authRequired: true,
+      items: [
+        { title: "Playground", href: "/playground" },
       ],
     },
     {
@@ -32,15 +49,16 @@ export const siteConfig: {
       ],
     },
     {
-      title: "Auth",
+      title: "Account",
       authRequired: true,
       items: [
         { title: "Account", href: "/account" },
         { title: "Auth", href: "/auth" },
         { title: "Confirmation", href: "/confirmation" },
         { title: "Dashboard", href: "/dashboard" },
-        { title: "Playground", href: "/playground" },
         { title: "Schedule", href: "/schedule" },
+        { title: "About", href: "/about" },
+        { title: "Contact", href: "/contact" },
       ],
     },
   ],

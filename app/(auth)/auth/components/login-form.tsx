@@ -15,8 +15,12 @@ import { Label } from '@/components/ui/label'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { Icons } from '@/components/icons'
 
-export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRef<'div'>) {
+export function LoginForm({
+  className,
+  ...props
+}: React.ComponentPropsWithoutRef<'div'>) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -44,7 +48,7 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     }
   }
 
-  const handleSocialLogin = async (e: React.FormEvent) => {
+  const handleGithubLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     const supabase = createClient()
     setIsLoading(true)
@@ -66,22 +70,69 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
     }
   }
 
+  const handleGoogleLogin = async (e: React.FormEvent) => {
+    e.preventDefault()
+    const supabase = createClient()
+    setIsLoading(true)
+    setError(null)
+
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/auth/oauth`,
+        },
+      })
+
+      if (error) throw error
+      router.push('/auth/sign-up-success')
+    } catch (error: unknown) {
+      setError(error instanceof Error ? error.message : 'An error occurred')
+      setIsLoading(false)
+    }
+  }
+
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
-        <CardHeader>
+        <CardHeader className="text-center">
           <CardTitle className="text-2xl">Welcome!</CardTitle>
-          <CardDescription>Sign in to your account to continue</CardDescription>
+          <CardDescription>Login with your Google or Github account</CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleLogin}>
+        <form onSubmit={handleGithubLogin}>
             <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
+              {error && <p className="text-sm text-destructive-500">{error}</p>}
+              <Button type="submit" variant="outline" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : <><Icons.gitHub className="h-5 w-5" /> Continue with Github</>}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+        <CardContent>
+        <form onSubmit={handleGoogleLogin}>
+            <div className="flex flex-col gap-6">
+              {error && <p className="text-sm text-destructive-500">{error}</p>}
+              <Button type="submit" variant="outline" className="w-full" disabled={isLoading}>
+                {isLoading ? 'Logging in...' : <><Icons.google className="h-5 w-5" /> Continue with Google</>}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+        <div className="relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t after:border-border">
+          <span className="relative z-10 bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+        <CardContent>
+          <form onSubmit={handleLogin}>
+            <div className="grid gap-6">
+              <div className="flex flex-col gap-4">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
-                  placeholder="m@example.com"
+                  placeholder="OpenCloudMap@example.com"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
@@ -119,18 +170,11 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
           </form>
         </CardContent>
       </Card>
-      <Card>
-        <CardContent>
-        <form onSubmit={handleSocialLogin}>
-            <div className="flex flex-col gap-6">
-              {error && <p className="text-sm text-destructive-500">{error}</p>}
-              <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Continue with Github'}
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
+      <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
+        By clicking login, you agree to our <a href="/docs/terms-of-service">Terms of Service</a>{" "},
+         <a href="/docs/privacy-policy">Privacy Policy</a>{" "},
+         and <a href="/docs/cookie-policy">Cookie Policy</a>.
+      </div>
     </div>
   )
 }

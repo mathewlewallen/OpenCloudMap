@@ -20,7 +20,6 @@ const companyLinks = [
 const quickLinks = [
   { name: 'Home', href: '/' },
   { name: 'Dashboard', href: '/dashboard' },
-  { name: 'Pricing', href: '/pricing' },
   { name: 'Map', href: '/map' },
   { name: 'Security', href: '/dashboard/security' },
 ];
