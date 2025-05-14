@@ -4,7 +4,6 @@ import { clippy } from '@/ai-utils/docs'
 import { NextRequest, NextResponse } from 'next/server'
 import OpenAI from 'openai'
 
-export const runtime = 'edge'
 /* To avoid OpenAI errors, restrict to the Vercel Edge Function regions that
   overlap with the OpenAI API regions.
 
