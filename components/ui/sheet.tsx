@@ -89,7 +89,7 @@ function SheetHeader({ className, ...props }: React.ComponentProps<"div">) {
       {...props}
     />
   )
-}
+} 
 
 function SheetFooter({ className, ...props }: React.ComponentProps<"div">) {
   return (

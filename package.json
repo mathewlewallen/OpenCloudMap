@@ -1,6 +1,29 @@
 {
   "name": "opencloudmap",
   "version": "0.1.0",
+  "description": "Open source aviation data, tools, and code collection.",
+  "keywords": [
+    "aviation",
+    "map",
+    "nextjs",
+    "react",
+    "opensource",
+    "OSS"
+  ],
+  "license": "AGPL-3.0-or-later",
+  "author": {
+    "name": "Mathew Lewallen",
+    "email": "mathewlewallen@gmail.com",
+    "url": "https://mathewlewallen.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mathewlewallen/opencloudmap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mathewlewallen/opencloudmap/issues"
+  },
+  "homepage": "https://opencloudmap.com",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -24,10 +47,6 @@
     "supabase:push": "npx supabase db push",
     "supabase:pull": "npx supabase db pull"
   },
-  "engines": {
-    "node": "22.x"
-  },
-  "packageManager": "pnpm@10.11.0",
   "dependencies": {
     "@date-fns/tz": "1.2.0",
     "@docsearch/react": "3.9.0",
@@ -205,6 +224,10 @@
     "turbo": "2.5.3",
     "typescript": "5.8.3"
   },
+  "engines": {
+    "node": "22.x"
+  },
+  "packageManager": "pnpm@10.11.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "@tailwindcss/oxide",

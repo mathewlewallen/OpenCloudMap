@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "editor.guides": [],
+  "prettier.mode": "Disabled",
+  "files.exclude": [
+    ".DS_Store",
+    ".git"
+  ],
+  "nodejs.editor.formatOnSave.eslint.mode": "Disabled",
+  "nodejs.editor.formatOnSave.stylelint.mode": "Disabled"
+}
